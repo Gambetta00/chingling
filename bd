@@ -1,0 +1,133 @@
+
+
+Skip to content
+Using Gmail with screen readers
+Enable desktop notifications for Gmail.
+   OK  No thanks
+1 of 319
+(no subject)
+Inbox
+
+Anthony Tiemann
+Attachments
+1:33 PM (4 minutes ago)
+to me
+
+
+ One attachment
+  •  Scanned by Gmail
+1. Requisitos funcionais
+
+RF01 — Cadastro de cliente
+O cliente deve poder criar uma conta informando nome, e-mail, senha, telefone e endereço.
+
+RF02 — Login
+O cliente deve poder entrar na sua conta utilizando e-mail e senha.
+
+RF03 — Visualizar produtos
+O cliente deve poder visualizar os móveis disponíveis na loja.
+
+RF04 — Pesquisar produtos
+O cliente deve poder pesquisar móveis pelo nome.
+
+RF05 — Filtrar produtos
+O cliente deve poder filtrar produtos por categoria, preço e outros critérios.
+
+RF06 — Carrinho de compras
+O cliente deve poder adicionar, remover e alterar a quantidade de produtos no carrinho.
+
+RF07 — Realizar pedido
+O cliente deve poder finalizar a compra dos produtos selecionados.
+
+RF08 — Pagamento
+O sistema deve permitir selecionar uma forma de pagamento.
+
+RF09 — Acompanhar pedido
+O cliente deve poder consultar o status do pedido.
+
+RF10 — Administração de produtos
+O administrador deve poder cadastrar, editar e remover móveis.
+
+RF11 — Gerenciamento de pedidos
+O administrador deve poder visualizar e atualizar o status dos pedidos.
+
+2. Histórias de usuário
+
+Como [usuário], quero [ação], para [objetivo].
+
+ID	História
+HU01	Como cliente, quero criar uma conta para realizar compras.
+HU02	Como cliente, quero fazer login para acessar minha conta.
+HU03	Como cliente, quero pesquisar móveis para encontrar produtos específicos.
+HU04	Como cliente, quero filtrar os produtos para encontrar móveis dentro das minhas preferências.
+HU05	Como cliente, quero adicionar produtos ao carrinho para realizar uma compra.
+HU06	Como cliente, quero alterar a quantidade de produtos no carrinho para ajustar minha compra.
+HU07	Como cliente, quero finalizar meu pedido para comprar os produtos selecionados.
+HU08	Como cliente, quero acompanhar meu pedido para saber o andamento da entrega.
+HU09	Como administrador, quero cadastrar móveis para disponibilizá-los na loja.
+HU10	Como administrador, quero editar produtos para manter suas informações atualizadas.
+HU11	Como administrador, quero gerenciar pedidos para atualizar seus status.
+3. UML — Casos de uso
+
+ dois atores principais:
+
+             LOJA DE MÓVEIS ONLINE
+
+CLIENTE                         ADMINISTRADOR
+   │                                  │
+   ├── Criar conta                    ├── Cadastrar produto
+   ├── Fazer login                    ├── Editar produto
+   ├── Pesquisar produto              ├── Remover produto
+   ├── Visualizar produto             ├── Visualizar pedidos
+   ├── Adicionar ao carrinho          └── Atualizar pedido
+   ├── Finalizar compra
+   └── Acompanhar pedido
+
+4. Banco de dados
+
+
+
+
+5. Documentação
+
+1. Introdução
+Apresentar a ideia da loja de móveis online.
+
+2. Objetivo
+Facilitar a compra de móveis pela internet, permitindo que os clientes pesquisem produtos, adicionem ao carrinho e realizem pedidos.
+
+3. Usuários do sistema
+Cliente
+Administrador
+
+4. Requisitos funcionais
+Coloca os RF01, RF02, RF03 etc.
+
+5. Requisitos não funcionais
+
+O sistema deve possuir uma interface simples e intuitiva.
+O sistema deve proteger os dados dos usuários.
+O sistema deve funcionar em diferentes navegadores.
+O sistema deve apresentar os produtos de forma organizada.
+
+6. Histórias de usuário
+
+Coloca as HU01–HU11.
+
+7. Diagramas UML
+
+Casos de uso
+Classes
+
+8. Banco de dados
+
+ai vem as tabela de relacionamento
+
+9. Regras de negócio
+
+Um produto sem estoque não pode ser comprado.
+O cliente precisa estar cadastrado para finalizar uma compra.
+Todo pedido deve possuir pelo menos um produto.
+O pedido deve possuir uma forma de pagamento.
+trab.txt
+Displaying trab.txt.

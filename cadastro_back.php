@@ -1,5 +1,17 @@
 <?php
 
+$servidor = "localhost";
+$usuario = "root";
+$senha = "";
+$banco = "chingling";
+
+$conexao = new mysqli(
+    $servidor,
+    $usuario,
+    $senha,
+    $banco
+);
+
  if (isset($_POST['email'])){
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -9,7 +21,7 @@
 
 
   $sql = "INSERT INTO usuarios (email, senha, tipo)
-            VALUES (?, ?)";
+            VALUES (?, ?, ?)";
 
             $stmt = $conexao->prepare($sql);
 
@@ -19,11 +31,15 @@
     );
 
     $stmt->bind_param(
-        "ss",
+        "sss",
         $email,
         $Senha_hash,
         $classe
     );
 
     $stmt->execute();
+    $stmt->close();
+
+    header("Location: Login.php");
+    exit();
 

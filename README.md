@@ -1,4 +1,5 @@
 [chingling.txt](https://github.com/user-attachments/files/32070194/chingling.txt)
+
 CREATE DATABASE chingling;
 USE chingling;
 

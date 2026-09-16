@@ -17,8 +17,8 @@
   <label>Escolha uma opção:</label> <br>
 
 <select name="classe">
-    <option value="User">Usuário</option>
-    <option value="Adm">Adiministrador</option>
+    <option value="cliente">Usuário</option>
+    <option value="admin">Adiministrador</option>
 </select>
 
 <br> <br>
