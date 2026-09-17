@@ -13,6 +13,16 @@
     <label for="email">Email</label> <br>
 
     <input type="text" name="email"  required> <br> <br>
+       
+  <label>Escolha uma opção:</label> <br>
+
+<select name="classe">
+    <option value="cliente">Usuário</option>
+    <option value="admin">Adiministrador</option>
+</select>
+
+<br> <br>
+
 
      <label for="senha">Senha</label> <br>
 

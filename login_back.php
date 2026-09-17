@@ -2,19 +2,19 @@
 
 require_once 'conexao_msql.php';
 
- if (isset($_POST['email'])){
+ if (isset($_POST['lemail'])){
     $Lemail = $_POST['Lemail'];
     $Lsenha = $_POST['Lsenha'];
  }
   
- $sql = "select Email, Senha from Usuarios where Email = $Lemail";
+ $sql = "select email, senha from usuarios where email = $Lemail";
  $stmt = $conexao->prepare($sql);
  $stmt->execute();
- $Loja = $stmt->get_result()->fetch_assoc();
+ $chingling = $stmt->get_result()->fetch_assoc();
 
 
 
-    if( $Lemail == $Loja["Lemail"] and (password_verify($Lsenha, $Loja["Lsenha"])) ){
+    if( $Lemail == $chingling["Lemail"] and (password_verify($Lsenha, $chingling["Lsenha"])) ){
 echo "login com Sucesso";
     }else{ echo "erro no login";}
 

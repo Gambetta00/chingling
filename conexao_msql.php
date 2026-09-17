@@ -14,10 +14,8 @@ $conexao = new mysqli(
     $banco
 );
 
-$resultado = $conexao -> query($sql);
+$resultado= $conexao -> query($sql);
 $Loja = $resultado->fetch_assoc();
-
-
 
 if ($conexao->connect_error) {
     die("Erro na conexão: " . $conexao->connect_error);

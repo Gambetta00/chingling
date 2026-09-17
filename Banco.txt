@@ -1,0 +1,313 @@
+CREATE DATABASE IF NOT EXISTS chingling
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE chingling;
+
+
+-- =========================================
+-- 1. USUÁRIOS
+-- =========================================
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    cpf VARCHAR(14) UNIQUE,
+    telefone VARCHAR(20),
+    tipo ENUM('cliente', 'admin') DEFAULT 'cliente',
+    imagem VARCHAR(255),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- =========================================
+-- 2. ENDEREÇOS
+-- =========================================
+
+CREATE TABLE enderecos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    rua VARCHAR(150) NOT NULL,
+    numero VARCHAR(10) NOT NULL,
+    complemento VARCHAR(100),
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(2) NOT NULL,
+
+    FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);
+
+
+-- =========================================
+-- 3. CATEGORIAS
+-- =========================================
+
+CREATE TABLE categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    descricao TEXT,
+    imagem VARCHAR(255),
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+
+-- =========================================
+-- 4. PRODUTOS
+-- =========================================
+
+CREATE TABLE produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    categoria_id INT NOT NULL,
+    nome VARCHAR(150) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
+    preco_promocional DECIMAL(10,2),
+    estoque INT DEFAULT 0,
+    sku VARCHAR(50) UNIQUE,
+    imagem VARCHAR(255),
+    destaque BOOLEAN DEFAULT FALSE,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (categoria_id)
+        REFERENCES categorias(id)
+        ON DELETE RESTRICT
+);
+
+
+-- =========================================
+-- 5. IMAGENS DOS PRODUTOS
+-- =========================================
+
+CREATE TABLE imagens_produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    imagem VARCHAR(255) NOT NULL,
+    ordem INT DEFAULT 1,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+        ON DELETE CASCADE
+);
+
+
+-- =========================================
+-- 6. CARRINHO
+-- =========================================
+
+CREATE TABLE carrinhos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL UNIQUE,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+);
+
+
+-- =========================================
+-- 7. ITENS DO CARRINHO
+-- =========================================
+
+CREATE TABLE itens_carrinho (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    carrinho_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
+
+    FOREIGN KEY (carrinho_id)
+        REFERENCES carrinhos(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+        ON DELETE CASCADE,
+
+    UNIQUE (carrinho_id, produto_id)
+);
+
+
+-- =========================================
+-- 8. PEDIDOS
+-- =========================================
+
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    endereco_id INT NOT NULL,
+
+    subtotal DECIMAL(10,2) NOT NULL,
+    frete DECIMAL(10,2) DEFAULT 0,
+    desconto DECIMAL(10,2) DEFAULT 0,
+    total DECIMAL(10,2) NOT NULL,
+
+    status ENUM(
+        'aguardando_pagamento',
+        'pago',
+        'preparando',
+        'enviado',
+        'entregue',
+        'cancelado'
+    ) DEFAULT 'aguardando_pagamento',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id),
+
+    FOREIGN KEY (endereco_id)
+        REFERENCES enderecos(id)
+);
+
+
+-- =========================================
+-- 9. ITENS DO PEDIDO
+-- =========================================
+
+CREATE TABLE itens_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (pedido_id)
+        REFERENCES pedidos(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+);
+
+
+-- =========================================
+-- 10. PAGAMENTOS
+-- =========================================
+
+CREATE TABLE pagamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT NOT NULL,
+
+    metodo ENUM(
+        'pix',
+        'cartao_credito',
+        'cartao_debito',
+        'boleto'
+    ) NOT NULL,
+
+    status ENUM(
+        'pendente',
+        'aprovado',
+        'recusado',
+        'cancelado'
+    ) DEFAULT 'pendente',
+
+    valor DECIMAL(10,2) NOT NULL,
+    parcelas INT DEFAULT 1,
+    codigo_transacao VARCHAR(100),
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (pedido_id)
+        REFERENCES pedidos(id)
+        ON DELETE CASCADE
+);
+
+
+-- =========================================
+-- 11. AVALIAÇÕES
+-- =========================================
+
+CREATE TABLE avaliacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    nota INT NOT NULL,
+    comentario TEXT,
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+        ON DELETE CASCADE,
+
+    CHECK (nota >= 1 AND nota <= 5),
+
+    UNIQUE (usuario_id, produto_id)
+);
+
+
+-- =========================================
+-- 12. FAVORITOS
+-- =========================================
+
+CREATE TABLE favoritos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    produto_id INT NOT NULL,
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+        ON DELETE CASCADE,
+
+    UNIQUE (usuario_id, produto_id)
+);
+
+
+-- =========================================
+-- 13. CATEGORIAS DA CHINGLING
+-- =========================================
+
+INSERT INTO categorias (nome, descricao)
+VALUES
+('Sala de Estar', 'Móveis para sala de estar'),
+('Quarto', 'Móveis para quarto'),
+('Sala de Jantar', 'Móveis para sala de jantar'),
+('Cozinha', 'Móveis para cozinha'),
+('Escritório', 'Móveis para escritório'),
+('Banheiro', 'Móveis para banheiro'),
+('Decoração', 'Itens de decoração'),
+('Multimóveis', 'Móveis diversos');
+
+
+-- =========================================
+-- 14. USUÁRIO ADMINISTRADOR PARA TESTE
+-- =========================================
+
+INSERT INTO usuarios
+(nome, email, senha, tipo)
+VALUES
+('Administrador', 'admin@chingling.com', '123456', 'admin');
+O que esse único código cria
+👤 Cadastro e login
+👑 Usuário administrador
+🏠 Endereços
+🗂️ Categorias
+🛋️ Produtos
+🖼️ Imagens dos produtos
+🛒 Carrinho
+📦 Pedidos
+💳 Pagamentos
+⭐ Avaliações
+❤️ Favoritos
+📊 Estoque
+🔄 Status do pedido
