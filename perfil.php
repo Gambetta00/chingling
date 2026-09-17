@@ -7,6 +7,60 @@
 
     <style>
 
+
+.pagina {
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    gap: 20px;
+} 
+    
+/*
+.pagina {
+    position: fixed;
+    inset: 0;
+    border: 10px solid blue;
+    box-sizing: border-box;
+    z-index: 9999;
+    pointer-events: none;
+}
+    */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    border: 10px solid blue;
+    box-sizing: border-box;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+.conteudo{
+
+border: 10px solid blue;
+    box-sizing: border-box;
+    z-index: 999999;
+    pointer-events: none;
+
+display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+
+}
+
+.lado{
+
+border: 10px solid blue;
+    box-sizing: border-box;
+    z-index: 999999;
+    pointer-events: none;
+
+ display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 20px;
+
+}
+
 .topo{
 
 background-color: aqua;
@@ -19,9 +73,16 @@ background-color: aqua;
 
         display: flex;
         align-items: center;
+
+         height: 85px;
 }
 
+.topo2{
 
+display: flex;
+    gap: 20px;
+
+}
 
  h1 { 
     
@@ -46,18 +107,23 @@ height: 300px;
  margin-left: 30px;
 
      position: absolute;
-        left: 100%;
+        left: 90%;
         transform: translateX(-50%);
 
-        width: 150px;
-    height: 100px;
+        width: 100px;
+    height: 60px;
     }
 
     </style>
 
 </head>
 <body>
-    <div class="topo">
+   
+<div class="pagina">
+
+<div class="topo">
+
+<div class="topo2"></div>
 
 <h1>Seu perfil</h1>
 
@@ -67,6 +133,19 @@ height: 300px;
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUsY32NgzN46CXhGcXkBOwQ52EUkpAiqigEbxRs4wz_21sOKkrBq6gTsY&s=10" alt="
 " class="foto_de_perfil">
 
-    </div>
+</div>
+
+<div class="conteudo">
+
+<div></div>
+<div></div>
+<div></div>
+
+</div>
+
+<div class="lado"></div>
+
+ </div>
+    
 </body>
 </html>

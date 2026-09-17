@@ -2,7 +2,7 @@
 
 require_once 'conexao_msql.php';
 
- if (isset($_POST['email'])){
+ if (isset($_POST['lemail'])){
     $Lemail = $_POST['Lemail'];
     $Lsenha = $_POST['Lsenha'];
  }
