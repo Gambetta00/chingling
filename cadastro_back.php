@@ -40,6 +40,21 @@ $conexao = new mysqli(
     $stmt->execute();
     $stmt->close();
 
+    $sql = "SELECT email FROM usuarios
+            WHERE email = ?";
+    
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if($stmt->num_rows === 0){
     header("Location: Login.php");
     exit();
+    }else{
+        header('Location: cadastro.php');
+        exit;
+    }
 
+    $stmt->close();
+?>
