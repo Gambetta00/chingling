@@ -1,3 +1,4 @@
+
 <?php
 
 $servidor = "localhost";
@@ -12,49 +13,73 @@ $conexao = new mysqli(
     $banco
 );
 
- if (isset($_POST['email'])){
+if (isset($_POST['email'])) {
+    
+    $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    $cpf = $_POST['cpf'];
+    $telefone = $_POST['telefone'];
     $classe = $_POST['classe'];
- }else echo "ERRO";
+
+} else {
+    echo "ERRO";
+}
 
 
+// VERIFICAR SE O EMAIL JÁ EXISTE
 
-  $sql = "INSERT INTO usuarios (email, senha, tipo)
-            VALUES (?, ?, ?)";
+$sql = "SELECT email FROM usuarios
+        WHERE email = ?";
 
-            $stmt = $conexao->prepare($sql);
+$stmt = $conexao->prepare($sql);
 
-            $Senha_hash = password_hash(
+$stmt->bind_param("s", $email);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+
+if ($stmt->num_rows > 0) {
+
+    echo "O email já está sendo utilizado.";
+
+    $stmt->close();
+
+} else {
+
+    // EMAIL NÃO EXISTE, ENTÃO CADASTRA
+
+    $stmt->close();
+
+    $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conexao->prepare($sql);
+
+    $Senha_hash = password_hash(
         $senha,
         PASSWORD_DEFAULT
     );
 
     $stmt->bind_param(
-        "sss",
+        "ssssss",
+        $nome,
         $email,
         $Senha_hash,
+        $cpf,
+        $telefone,
         $classe
     );
 
     $stmt->execute();
+
     $stmt->close();
 
-    $sql = "SELECT email FROM usuarios
-            WHERE email = ?";
-    
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if($stmt->num_rows === 0){
     header("Location: Login.php");
     exit();
-    }else{
-        header('Location: cadastro.php');
-        exit;
-    }
+}
 
-    $stmt->close();
 ?>
+
