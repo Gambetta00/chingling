@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chingling - Móveis para todos os momentos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        /* 1. BARRA SUPERIOR (AZUL ESCURO) */
+        #topo-beneficios {
+            background-color: #0b2f6b;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 6px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topo-esquerda {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .topo-direita {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .topo-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* 2. BARRA PRINCIPAL (LOGO, PESQUISA, CEP) */
+        #barra-principal {
+            background-color: #ffffff;
+            width: 100%;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            color: #0b2f6b;
+            font-size: 26px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .logo small {
+            font-size: 10px;
+            color: #0b2f6b;
+            font-weight: normal;
+            margin-top: 3px;
+        }
+
+        .busca {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #d0d0d0;
+            border-radius: 20px;
+            padding: 6px 15px;
+            width: 42%;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .busca input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .busca button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            color: #0056cc;
+        }
+
+        .cep {
+            font-size: 12px;
+            color: #0b2f6b;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 3. MENU DE CATEGORIAS (AZUL INTERMÉDIO) */
+        #menu-categorias {
+            background-color: #0056cc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 15px;
+            overflow-x: auto;
+        }
+
+        #menu-categorias button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 3px 6px;
+        }
+
+        #menu-categorias button:hover {
+            text-decoration: underline;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            max-width: 1100px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+
+        /* 4. BANNER PRINCIPAL (HERO) */
+        .banner-hero {
+            background: linear-gradient(135deg, #eef5ff 0%, #ffffff 100%);
+            border: 1px solid #d0e0ff;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .seta-banner {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            color: #0056cc;
+            font-weight: bold;
+        }
+
+        .seta-esquerda { left: -10px; }
+        .seta-direita { right: -10px; }
+
+        .banner-conteudo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 50%;
+        }
+
+        .banner-logo {
+            font-size: 32px;
+            color: #0b2f6b;
+            font-weight: bold;
+        }
+
+        .banner-titulo {
+            font-size: 26px;
+            color: #0b2f6b;
+            font-weight: bold;
+        }
+
+        .banner-descricao {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .btn-oferta {
+            background-color: #0056cc;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            width: fit-content;
+            margin-top: 5px;
+        }
+
+        .banner-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 38%;
+        }
+
+        .card-selo {
+            background-color: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            border-left: 4px solid #0056cc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #0056cc;
+        }
+
+        /* 5. RÉGUA DE BENEFÍCIOS */
+        .regua-beneficios {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin: 15px 0 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .item-beneficio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #0b2f6b;
+            font-weight: bold;
+        }
+
+        /* 6. SECÇÃO "CONHEÇA NOSSAS CATEGORIAS" */
+        .secao-titulo {
+            font-size: 18px;
+            color: #0b2f6b;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .grid-categorias {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+        }
+
+        .card-categoria {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card-categoria:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-categoria img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
+
+        .card-categoria h3 {
+            font-size: 12px;
+            color: #0b2f6b;
+            padding: 8px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BARRA SUPERIOR -->
+    <div id="topo-beneficios">
+        <div class="topo-esquerda">
+            <div class="topo-item">🚚 Entrega para todo o Brasil</div>
+            <div>|</div>
+            <div class="topo-item">✔️ Compra segura</div>
+            <div>|</div>
+            <div class="topo-item">⭐ Qualidade e conforto para o seu lar</div>
+        </div>
+        <div class="topo-direita">
+            <div class="topo-item">👤 Minha conta</div>
+            <div>|</div>
+            <div class="topo-item">🛒 Carrinho 0</div>
+        </div>
+    </div>
+
+    <!-- 2. BARRA PRINCIPAL -->
+    <div id="barra-principal">
+        <div class="logo">
+            🏠 Chingling
+            <small>Móveis para todos os momentos</small>
+        </div>
+        <div class="busca">
+            <input type="text" placeholder="Olá, o que você procura hoje?">
+            <button>🔍</button>
+        </div>
+        <div class="cep">
+            📍 Informe seu CEP
+        </div>
+    </div>
+
+    <!-- 3. MENU DE CATEGORIAS -->
+    <nav id="menu-categorias">
+        <button>Sala de Estar</button>
+        <button>Quarto</button>
+        <button>Sala de Jantar</button>
+        <button>Cozinha</button>
+        <button>Escritório</button>
+        <button>Banheiro</button>
+        <button>Multiuso</button>
+        <button>Decoração</button>
+        <button>Outlet</button>
+        <button>Projetos e ambientes ▾</button>
+        <button>Ver mais ▾</button>
+    </nav>
+
+    <!-- CONTEÚDO DA PÁGINA -->
+    <div class="container">
+
+        <!-- 4. BANNER PRINCIPAL (HERO) -->
+        <div class="banner-hero">
+            <div class="seta-banner seta-esquerda">&lt;</div>
+            
+            <div class="banner-conteudo">
+                <div class="banner-logo">🏠 Chingling</div>
+                <div class="banner-titulo">Seu lar, do seu jeito.</div>
+                <div class="banner-descricao">
+                    Móveis modernos, funcionais e com os melhores preços. Tudo para transformar seu ambiente em um lugar ainda mais especial.
+                </div>
+                <button class="btn-oferta">Ver ofertas →</button>
+            </div>
+
+            <div class="banner-cards">
+                <div class="card-selo">
+                    🚚 Frete grátis para todo o Brasil (a partir de R$ 500)
+                </div>
+                <div class="card-selo">
+                    💳 Até 15x sem juros no cartão
+                </div>
+                <div class="card-selo">
+                    🛡️ Móveis com garantia de fábrica
+                </div>
+            </div>
+
+            <div class="seta-banner seta-direita">&gt;</div>
+        </div>
+
+        <!-- 5. RÉGUA DE BENEFÍCIOS -->
+        <div class="regua-beneficios">
+            <div class="item-beneficio">🚚 Entrega rápida para todo o Brasil</div>
+            <div class="item-beneficio">🔒 Compra segura, seus dados protegidos</div>
+            <div class="item-beneficio">💳 Até 15x sem juros no cartão de crédito</div>
+            <div class="item-beneficio">🎧 Atendimento especializado, tiramos todas as suas dúvidas</div>
+            <div class="item-beneficio">📐 Projetos personalizados, planeje seu ambiente</div>
+        </div>
+
+        <!-- 6. SECÇÃO CONHEÇA NOSSAS CATEGORIAS -->
+        <div class="secao-titulo">Conheça nossas categorias</div>
+        <div class="grid-categorias">
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300" alt="Sala de Estar">
+                <h3>Sala de Estar</h3>
+            </div>
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=300" alt="Quarto">
+                <h3>Quarto</h3>
+            </div>
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=300" alt="Sala de Jantar">
+                <h3>Sala de Jantar</h3>
+            </div>
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=300" alt="Cozinha">
+                <h3>Cozinha</h3>
+            </div>
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=300" alt="Escritório">
+                <h3>Escritório</h3>
+            </div>
+            <div class="card-categoria">
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300" alt="Banheiro">
+                <h3>Banheiro</h3>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
