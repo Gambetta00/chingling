@@ -13,18 +13,12 @@ $conexao = new mysqli(
     $banco
 );
 
-if (isset($_POST['email'])) {
-    
-    $nome = $_POST['nome'];
+ if (isset($_POST['email'])){
     $email = $_POST['email'];
     $senha = $_POST['senha'];
-    $cpf = $_POST['cpf'];
-    $telefone = $_POST['telefone'];
     $classe = $_POST['classe'];
+ }else echo "ERRO";
 
-} else {
-    echo "ERRO";
-}
 
 
 // VERIFICAR SE O EMAIL JÁ EXISTE
