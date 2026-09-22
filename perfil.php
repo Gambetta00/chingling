@@ -34,7 +34,7 @@ body::before {
     z-index: 999999;
     pointer-events: none;
 }
-
+/*
 .conteudo{
 
 border: 10px solid blue;
@@ -60,6 +60,8 @@ border: 10px solid blue;
     gap: 20px;
 
 }
+
+*/
 
 .topo{
 
@@ -114,6 +116,13 @@ height: 300px;
     height: 60px;
     }
 
+  /*  .esquerda div,
+.direita {
+    background-color: black;
+}
+
+*/
+
     </style>
 
 </head>
@@ -123,7 +132,7 @@ height: 300px;
 
 <div class="topo">
 
-<div class="topo2"></div>
+<div class="topo2">
 
 <h1>Seu perfil</h1>
 
@@ -132,6 +141,10 @@ height: 300px;
 
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUsY32NgzN46CXhGcXkBOwQ52EUkpAiqigEbxRs4wz_21sOKkrBq6gTsY&s=10" alt="
 " class="foto_de_perfil">
+
+
+</div>
+
 
 </div>
 

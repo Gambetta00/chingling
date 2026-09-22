@@ -1,24 +1,6 @@
 <?php
 
-$servidor = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "chingling";
-
-$conexao = new mysqli(
-    $servidor,
-    $usuario,
-    $senha,
-    $banco
-);
-
- if (isset($_POST['email'])){
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-    $classe = $_POST['classe'];
- }else echo "ERRO";
-
-
+require_once 'conexao_msql.php';
 
   $sql = "INSERT INTO usuarios (email, senha, tipo)
             VALUES (?, ?, ?)";
