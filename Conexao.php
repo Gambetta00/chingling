@@ -2,13 +2,10 @@
 
 $sql = "";
 
-$resultado= $conexao -> query($sql);
-$Loja = $resultado->fetch_assoc();
-
 $servidor = "localhost";
 $usuario = "root";
 $senha = "";
-$banco = "TEMPORARIO";
+$banco = "chingling";
 
 $conexao = new mysqli(
     $servidor,
@@ -16,6 +13,11 @@ $conexao = new mysqli(
     $senha,
     $banco
 );
+
+$resultado = $conexao -> query($sql);
+$Loja = $resultado->fetch_assoc();
+
+
 
 if ($conexao->connect_error) {
     die("Erro na conexão: " . $conexao->connect_error);
