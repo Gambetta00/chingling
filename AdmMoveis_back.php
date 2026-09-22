@@ -39,7 +39,7 @@ $stmt->close();
 // Mensagem que será enviada para a outra página
 $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
 
-header("Location: AdmProdutos.php");
+header("Location: AdmMoveis.php");
 exit();
 
 ?>

@@ -9,7 +9,7 @@
     
 <h1>CADASTRO DE MÓVEIS AQUI</h1>
 
-<form method="POST" action='AdmProdutos_back.php'>
+<form method="POST" action='AdmMoveis_back.php'>
     <label for="movel_nome">Nome do móvel</label> <br>
 
     <input type="text" name="movel_nome"  required> <br> <br>

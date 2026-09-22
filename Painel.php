@@ -12,7 +12,7 @@
     
     <button type="submit">Logout</button>
 </form>
-<form action="AdmProdutos.php" method="POST">
+<form action="AdmMoveis.php" method="POST">
     <!-- Esse campo oculto envia o "sinal" -->
     <input type="hidden" name="clique" value="ativado">
     
