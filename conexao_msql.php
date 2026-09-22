@@ -14,18 +14,20 @@ $conexao = new mysqli(
     $banco
 );
 
-$resultado= $conexao -> query($sql);
-$Loja = $resultado->fetch_assoc();
+//$resultado= $conexao->query($sql);
+//$Loja = $resultado->fetch_assoc();
 
-if ($conexao->connect_error) {
+if($conexao->connect_error) {
     die("Erro na conexão: " . $conexao->connect_error);
+}else{
+    //die("conectado com sucesso");
 }
 
 $conexao->set_charset("utf8");
 
 
 // $sql = "select * from users where nome = ?";
-$stmt = $conexao->prepare($sql);
+/*$stmt = $conexao->prepare($sql);
 
      $stmt->bind_param(
         "s",
@@ -36,7 +38,7 @@ $stmt = $conexao->prepare($sql);
 
 
     $Loja = $resultado->fetch_assoc();
-
+*/
   
 
 ?>

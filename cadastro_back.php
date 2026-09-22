@@ -1,3 +1,4 @@
+
 <?php
 
 $servidor = "localhost";
@@ -20,26 +21,59 @@ $conexao = new mysqli(
 
 
 
-  $sql = "INSERT INTO usuarios (email, senha, tipo)
-            VALUES (?, ?, ?)";
+// VERIFICAR SE O EMAIL JÁ EXISTE
 
-            $stmt = $conexao->prepare($sql);
+$sql = "SELECT email FROM usuarios
+        WHERE email = ?";
 
-            $Senha_hash = password_hash(
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $email);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+
+if ($stmt->num_rows > 0) {
+
+    echo "O email já está sendo utilizado.";
+
+    $stmt->close();
+
+} else {
+
+    // EMAIL NÃO EXISTE, ENTÃO CADASTRA
+
+    $stmt->close();
+
+    $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conexao->prepare($sql);
+
+    $Senha_hash = password_hash(
         $senha,
         PASSWORD_DEFAULT
     );
 
     $stmt->bind_param(
-        "sss",
+        "ssssss",
+        $nome,
         $email,
         $Senha_hash,
+        $cpf,
+        $telefone,
         $classe
     );
 
     $stmt->execute();
+
     $stmt->close();
 
     header("Location: Login.php");
     exit();
+}
+
+?>
 
