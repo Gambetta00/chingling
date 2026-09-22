@@ -53,6 +53,31 @@
     white-space: nowrap; /* Impede a quebra de linha ou corte */
     
 }
+.navegacao {
+    background-color: #0b2f6b;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+}
+.logo{
+    color: blue;
+    font-size: 21pt;
+}
+
+.navegacao a {
+color: #ffffff;             /* Cor branca para ficar visível contra o fundo azul */
+    text-decoration: none;     /* Remove o sublinhado azul padrão */
+    font-size: 12px;           /* Tamanho de fonte proporcional */
+    font-weight: 600;          /* Negrito leve igual à imagem */
+    white-space: nowrap;       /* Evita que os links quebrem linha */
+    padding: 2px 4px;
+}
+#contBanner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
     </style>
 </head>
 <body>
@@ -83,17 +108,32 @@
             📍 Informe seu CEP
         </div>
         <nav id="menu-categorias">
-    <button type="button">Sala de Estar</button>
-    <button type="button">Quarto</button>
-    <button type="button">Sala de Jantar</button>
-    <button type="button">Cozinha</button>
-    <button type="button">Escritório</button>
-    <button type="button">Banheiro</button>
-    <button type="button">Multiuso</button>
-    <button type="button">Decoração</button>
-    <button type="button">Outlet</button>
-    <button type="button">Projetos e ambientes ▾</button>
-    <button type="button">Ver mais ▾</button>
+ 
+    
 </nav>
+</div>
+<div class="navegacao">
+<a href="#">Sala de Estar</a>
+<a href="#">Quarto</a>
+<a href="#">Sala de Jantar</a>
+<a href="#">Cozinha</a>
+<a href="#">Escritório</a>
+<a href="#">Banheiro</a>
+<a href="#">Multiuso</a>
+<a href="#">Decoração</a>
+<a href="#">Outlet</a>
+<a href="#">Projetos e ambientes ▾</a>
+<a href="#">Ver mais ▾</a>
+
+    </div>
+
+    <div class="navegacao a">
+ 
+
+    </div>
+    <div id="contBanner">
+    <img id="banner" src="banner.png"/>
+    </div>
+
 </body>
 </html>
