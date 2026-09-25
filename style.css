@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+>>>>>>> 311316aef8308e66178b2e24adf9f64eed3eee47
 
 * {
     box-sizing: border-box;
@@ -92,4 +100,10 @@ color: #ffffff;             /* Cor branca para ficar visível contra o fundo azu
     display: flex;
     align-items: center;
     justify-content: center;
+<<<<<<< HEAD
 }
+=======
+}
+
+    
+>>>>>>> 311316aef8308e66178b2e24adf9f64eed3eee47
