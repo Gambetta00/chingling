@@ -1,52 +1,74 @@
-<style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
 
-        #cabecalho {
-            background-color: #0b2f6b;
-            color: white;
-            font-family: sans-serif;
-            font-size: 11px;           
-            font-weight: bold;
-            padding: 8px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-direction: column;
-        }
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+    #cabecalho {
+    background-color: #0b2f6b;
+    color: white;
+    font-family: sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topo-esquerda {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.topo-direita {
+    display: flex;
+    align-items: center;
+}
+
+.topo-direita a {
+    color: white;
+    text-decoration: none;
+}
         #barra-principal {
-            background-color: #ffffff;
-            width: 100%;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .busca {
-            display: flex;
-            align-items: center;
-            background-color: #f2f2f2;
-            border-radius: 20px;
-            padding: 8px 15px;
-            width: 40%;
-        }
+    background-color: #ffffff;
+    width: 100%;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
 
-        .menu {
-            display: flex;
-            justify-content: space-around;
-            gap: 30px;
-        }
-        .cep {
+.busca {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 20px;
+    padding: 8px 15px;
+    width: 40%;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.cep {
     font-size: 12px;
     color: #0b2f6b;
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
-    
 }
+    
 .navegacao {
     background-color: #0b2f6b;
     height: 40px;
@@ -59,11 +81,11 @@
 }
 
 .navegacao a {
-color: #ffffff;             
-    text-decoration: none;     
-    font-size: 12px;           
-    font-weight: 600;          
-    white-space: nowrap;       
+color: #ffffff;             /* Cor branca para ficar visível contra o fundo azul */
+    text-decoration: none;     /* Remove o sublinhado azul padrão */
+    font-size: 12px;           /* Tamanho de fonte proporcional */
+    font-weight: 600;          /* Negrito leve igual à imagem */
+    white-space: nowrap;       /* Evita que os links quebrem linha */
     padding: 2px 4px;
 }
 #contBanner{
@@ -71,5 +93,3 @@ color: #ffffff;
     align-items: center;
     justify-content: center;
 }
-
-    </style>
