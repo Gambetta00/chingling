@@ -86,7 +86,32 @@
     align-items: center;
     justify-content: center;
 }
+.busca input {
+border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 12px;
+}
+.busca button {
+      border: 1px solid #999;
+    background-color: white;
+    cursor: pointer;
+    padding: 3px 6px;
+}
+#slogan{
+    font-size: 15pt;
+}
 
+#underBanner{
+
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.embaixo {
+color: #0b2f6b;
+}
     </style>
 </head>
 <body>
@@ -107,7 +132,7 @@
     <div id="barra-principal">
         <div class="logo">
             🏠 Chingling
-            <span>Moveis para todos os momentos</span>
+            <span id="slogan">Móveis para todos os momentos</span>
         </div>
         <div class="busca">
             <input type="text" placeholder="Olá, o que você procura hoje?">
@@ -143,6 +168,14 @@
     <div id="contBanner">
     <img id="banner" src="banner.png"/>
     </div>
+
+    <div id="underBanner">
+        <img  src="underBanner.png">
+    </div>
+
+<div class="embaixo"> 
+    <h1>Conheça nossas categorias</h1>
+</div>
 
 </body>
 </html>
