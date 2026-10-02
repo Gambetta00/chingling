@@ -10,7 +10,7 @@
 <h1>CADASTRO AQUI</h1>
 
 <form method="POST" action='cadastro_back.php'>
-    <label for="email">Nome de usuário</label> <br>
+    <label for="nome">Nome de usuário</label> <br>
 
     <input type="text" name="nome"  required> <br> <br>
 
@@ -18,7 +18,6 @@
 
     <input type="text" name="email"  required> <br> <br>
     
-       
   <label>Escolha uma opção:</label> <br>
 
 <select name="classe">
@@ -27,7 +26,6 @@
 </select>
 
 <br> <br>
-
 
      <label for="senha">Senha</label> <br>
 
