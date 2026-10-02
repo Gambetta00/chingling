@@ -6,19 +6,19 @@ Class Usuario{
     private $cpf;
     private $telefone;
     private $classe;
+    private $conexao;
 
-    function __construct($nome, $email, $Senha_hash, $cpf, $telefone, $classe){
+    function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
         $this->nome = $nome;
         $this->email = $email;
-        $this->Senha_hash = $Senha_hash;
+        $this->senha = $senha;
         $this->cpf = $cpf;
         $this->telefone = $telefone;
         $this->classe = $classe;
+        $this->conexao = $conexao;
     }
 
-    function Set_Usuario(){
-
-require_once 'conexao_msql.php';
+    function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
 
 $sql = "SELECT email FROM usuarios
         WHERE email = ?";
@@ -72,13 +72,54 @@ if ($stmt->num_rows > 0) {
     exit();
 }
     }
-    function Get_Usuario(){
-        $
+    function Verify_User_Exists($email, $senha){
+    session_start();
+
+
+    $emailusuario = $email;
+    $senhausuario = $senha;
+
+    $conexao = new mysqli(
+        "localhost",
+        "root",
+        "",
+        "chingling"
+    );
+
+    $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
+
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $emailusuario);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows === 1) {
+
+        $stmt->bind_result($emailBanco, $hash);
+        $stmt->fetch();
+
+        if (password_verify($senhausuario, $hash)) {
+
+            $_SESSION['email'] = $emailBanco;
+
+            header("Location: Painel.php");
+            exit;
+
+        } else {
+
+            echo "Senha incorreta.";
+
+        }
+
+    } else {
+
+        echo "Email não encontrado.";
+
     }
-    
 
+    $stmt->close();
+    $conexao->close();
 }
-
-
+    }
 
 ?>
