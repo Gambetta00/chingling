@@ -15,8 +15,8 @@
     <header>
 
         <div class="logo">
-            <span>🛒</span>
-            Chingling
+            <span>🏠</span>
+            <h1>Chingling</h1>
         </div>
 
         <div class="usuario">
@@ -28,7 +28,7 @@
 
 
     <nav>
-        <a href="Painel.php">Início</a>
+              <a href="Painel.php">Início (ADM ONLY)</a>
     </nav>
 
 

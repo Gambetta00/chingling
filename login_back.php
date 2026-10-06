@@ -23,7 +23,7 @@ if (isset($_POST['sinal_clique'])) {
 
         $usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
 
-        $usuario->User_Login($email, $senha);
+        $usuario->User_Login($email, $senha, $conexao);
     }
 }
 

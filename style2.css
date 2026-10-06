@@ -111,6 +111,7 @@ label {
 .caixa select {
     width: 100%;
     padding: 13px;
+    border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 15px;
 }

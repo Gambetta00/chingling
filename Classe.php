@@ -93,17 +93,10 @@ if ($stmt->num_rows > 0) {
 }
     }
 }
-    function User_Login($email, $senha){
+    function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
     $senhausuario = $senha;
-
-    $conexao = new mysqli(
-        "localhost",
-        "root",
-        "",
-        "chingling"
-    );
 
     $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
 
