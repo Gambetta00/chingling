@@ -1,15 +1,16 @@
 <?php
 require_once 'conexao_msql.php';
 
-if (isset($_POST['Pemail'])) {
-    $Pemail = $_POST['Pemail'];
-
-    $sql = "SELECT * FROM usuarios WHERE email = '$Pemail'";
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
 
     $resultado = $conexao->query($sql);
-}
-?>
 
+
+            if (isset($resultado)) {
+                if ($resultado->num_rows > 0) {
+                    echo "Usuário encontrado!";
+                    $usuario = $resultado->fetch_assoc();
+                    ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -261,36 +262,6 @@ label {
 
     <main>
 
-        <h1>👤 Pesquisar usuários</h1>
-        <p class="descricao">
-            Pesquise um usuário cadastrado no sistema.
-        </p>
-
-        <section class="caixa">
-
-            <h2>Pesquisar usuário</h2>
-
-            <form action="" method="POST">
-
-                <label for="Pemail">E-mail do usuário</label>
-
-                <div class="campo-pesquisa">
-                    <input
-                        type="email"
-                        id="Pemail"
-                        name="Pemail"
-                        placeholder="Digite o e-mail do usuário"
-                        required
-                    >
-
-                    <button type="submit">
-                        🔍 Pesquisar
-                    </button>
-                </div>
-
-            </form>
-
-        </section>
 
 
         <section class="resultado">
@@ -340,22 +311,7 @@ label {
                                 <?php echo $usuario["tipo"]; ?>
                             </p>
 
-                        </div>
-                   <a 
-                     href="AdmAlterarUser.php" 
-                     class="botao-alterar"
-                      >
-                       ✏️ Alterar usuário
-                       </a>
-                    </div>
-
-                    <?php
-                } else {
-                    echo "Usuário não encontrado!";
-                }
-            }
-            ?>
-
+                    
         </section>
 
     </main>
