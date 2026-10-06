@@ -1,14 +1,23 @@
-<?php 
-require_once 'conexao_msql.php'; 
- 
-if (isset($_POST['email'])) { 
-    $email = $_POST['email']; 
- 
-    $sql = "SELECT * FROM usuarios WHERE email = '$email'"; 
- 
-    $resultado = $conexao->query($sql); 
-} 
-?> 
+<?php
+require_once 'conexao_msql.php';
+
+function buscarUsuario(mixed $conexao, mixed $email) {
+    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+
+    $resultado = $conexao->query($sql);
+
+    return $resultado;
+}
+
+$resultado = null;
+$email = null;
+
+if (isset($_POST['email'])) {
+    $email = $_POST['email'];
+
+    $resultado = buscarUsuario($conexao, $email);
+}
+?>
  
 <!DOCTYPE html> 
 <html lang="pt-br"> 
@@ -188,6 +197,22 @@ nav a {
     background-color: #005da8; 
 } 
  
+.botao-alterar {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #0875d1;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.botao-alterar:hover {
+    background-color: #005da8;
+}
+
+
 </style> 
  
 </head> 
@@ -255,9 +280,10 @@ nav a {
                 $usuario = $resultado->fetch_assoc(); 
  
         ?> 
- <br>p
+ <br>
  <form action='' method="POST" enctype="multipart/form-data"> 
                 <div class="campo-grupo"> 
+                     <?php echo "Nome Atual: ".$usuario["nome"]; ?>
                     <label for="nome">Nome completo</label> 
                     <input  
                         type="text"  
@@ -269,6 +295,7 @@ nav a {
                 </div> 
  
                 <div class="campo-grupo"> 
+                    <?php echo "Telefone Atual: ".$usuario["telefone"]; ?>
                     <label for="telefone">Telefone</label> 
                     <input  
                         type="text"  
@@ -310,8 +337,60 @@ nav a {
             } 
  
         } 
+
+
+        function alterar(mixed $conexao){
+ if (isset($_POST['email'])) { 
+    $nome = $_POST['nome']; 
+    $telefone = $_POST['telefone']; 
+    $senha = $_POST['senha']; 
+    $imagem = $_POST['imagem']; 
+    $email = $_POST['email']; 
+
+    $sql = "UPDATE usuarios
+SET nome = '$nome',
+telefone = '$telefone',
+senha = '$senha',
+imagem = '$imagem'
+WHERE email = '$email';
+"; 
  
-        ?> 
+    $resultado2 = $conexao->query($sql); 
+
+    return $resultado2;
+  
+} 
+$resultado2 = null;
+   $resultado2 = alterar($conexao);
+        }
+        
+
+         if (isset($resultado2)) { 
+ 
+            if ($resultado2->num_rows > 0) { 
+ ?>
+
+    </div>
+                   <a 
+                     href="AdmMostrarAlt.php" 
+                     class="botao-alterar"
+                      >
+                       ✏️ Ver modificações
+                       </a>
+                    </div>
+
+                    <?php
+
+
+ } else { 
+ 
+                echo "Pesquisar Novamente / Usuário Não encontrado<br>"; 
+ 
+            } 
+ 
+        } 
+
+?>
  </form> 
 
  
