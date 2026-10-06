@@ -24,6 +24,14 @@
 </body>
 </html>
 <?php
-include_once("Verify.php");
-exit;
+require_once 'Classe.php';
+require_once 'conexao_msql.php';
+
+$email = $_POST["Lemail"];
+$senha = $_POST["Lsenha"];
+
+$usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
+
+$usuario->Verify_User_Exists($email, $senha);
+
 ?>
