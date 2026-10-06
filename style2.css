@@ -1,0 +1,125 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+
+/* CABEÇALHO */
+
+header {
+    height: 75px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    color: #0875d1;
+}
+
+.logo span {
+    font-size: 30px;
+}
+
+.usuario {
+    color: #333;
+    font-size: 14px;
+}
+
+.usuario a {
+    color: #0875d1;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+
+/* MENU */
+
+nav {
+    background-color: #006dcc;
+    padding: 12px 30px;
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+
+/* CONTEÚDO */
+
+main {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+h1 {
+    color: #0875d1;
+    font-size: 24px;
+}
+
+.descricao {
+    margin-top: 8px;
+    color: #666;
+}
+
+
+/* CAIXA DO CADASTRO */
+
+.caixa {
+    background-color: white;
+    margin-top: 25px;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.caixa h2 {
+    margin-bottom: 20px;
+    font-size: 19px;
+}
+
+
+/* CAMPOS */
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.caixa input,
+.caixa select {
+    width: 100%;
+    padding: 13px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.caixa input:focus,
+.caixa select:focus {
+    outline: none;
+    border-color: #0875d1;
+}
+
+
+/* BOT
