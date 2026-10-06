@@ -8,7 +8,7 @@
 <body>
     <h1>Login AQUI</h1>
 
-<form method="POST" action='login.php'>
+<form method="POST" action='login_back.php'>
     <label for="Lemail">Seu Email</label> <br>
 
     <input type="text" name="Lemail"  required> <br> <br>
@@ -23,15 +23,3 @@
         <a href="cadastro.php">Cadastrar</a>
 </body>
 </html>
-<?php
-require_once 'Classe.php';
-require_once 'conexao_msql.php';
-
-$email = $_POST["Lemail"];
-$senha = $_POST["Lsenha"];
-
-$usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
-
-$usuario->Verify_User_Exists($email, $senha);
-
-?>

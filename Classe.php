@@ -20,6 +20,8 @@ Class Usuario{
 
     function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
 
+require_once 'conexao_msql.php';
+
 $sql = "SELECT email FROM usuarios
         WHERE email = ?";
 
@@ -72,9 +74,8 @@ if ($stmt->num_rows > 0) {
     exit();
 }
     }
-    function Verify_User_Exists($email, $senha){
-    session_start();
 
+    function User_Login($email, $senha){
 
     $emailusuario = $email;
     $senhausuario = $senha;
@@ -99,8 +100,6 @@ if ($stmt->num_rows > 0) {
         $stmt->fetch();
 
         if (password_verify($senhausuario, $hash)) {
-
-            $_SESSION['email'] = $emailBanco;
 
             header("Location: Painel.php");
             exit;
