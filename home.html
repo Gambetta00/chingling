@@ -7,7 +7,7 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 0;           
         }
 
     #cabecalho {
@@ -116,6 +116,10 @@ color: #0b2f6b;
 .categoria{
     
     display: flex;
+    justify-content: flex-start; /* Alinha todo o bloco à esquerda */
+    width: 100%;
+    gap: 20px
+    
 }
 
 .categoria img {
@@ -125,7 +129,16 @@ color: #0b2f6b;
 }
 
 .categoria > div{
-        margin: 0 20px;
+       margin: 0;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    text-align: left;
+    gap: 8px;
+}
+a {
+color: blue;
+text-decoration: none;
 }
     </style>
 </head>
@@ -193,20 +206,31 @@ color: #0b2f6b;
 </div>
 <div class="categoria">
     <div>
-     <img src="sala_de _estar.jpg" alt="Sala de estar">
-     <br>
-     <p>Sala de estar</p>
+     <img src="sala_de_ estar.jpg" alt="Sala de estar">
+     
+     <a href="outro.html">Sala De Estar</a>
     </div>
 
     <div>
      <img src="quarto.jpg" alt="Quarto">
-         <p>Quarto</p>
+     
+        <a href="outro.html">Quarto</a>
     </div>
     <div>
         <img src="sala_de_jantar.jpg" alt="Sala de jantar">
-        <p>Sala de Jantar</p>
+        <a href="outro.html">Sala De Jantar</a>
     </div>
-
-
+    <div>
+        <img src="cozinha.jpg" alt="Cozinha">
+        <a href="outro.html">Cozinha</a>
+    </div>
+    <div>
+    <img src="escritorio.jpg" alt="Escritório">
+    <a href="outro.html">Escritório</a>
+    </div>
+    <div>
+    <img src="banheiro.jpg" alt="Banheiro">
+    <a href="outro.html">Banheiro</a>
+    </div>
 </body>
 </html>
