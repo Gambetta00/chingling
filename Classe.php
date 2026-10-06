@@ -20,7 +20,27 @@ Class Usuario{
 
     function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
 
-$sql = "SELECT email FROM usuarios
+require_once 'conexao_msql.php';
+
+$sql = "SELECT cpf FROM usuarios
+        WHERE cpf = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $cpf);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+
+    echo "O cpf já está sendo utilizado.";
+
+    $stmt->close();
+
+} else {
+    $sql = "SELECT email FROM usuarios
         WHERE email = ?";
 
 $stmt = $conexao->prepare($sql);
@@ -72,19 +92,11 @@ if ($stmt->num_rows > 0) {
     exit();
 }
     }
-    function Verify_User_Exists($email, $senha){
-    session_start();
-
+}
+    function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
     $senhausuario = $senha;
-
-    $conexao = new mysqli(
-        "localhost",
-        "root",
-        "",
-        "chingling"
-    );
 
     $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
 
@@ -99,8 +111,6 @@ if ($stmt->num_rows > 0) {
         $stmt->fetch();
 
         if (password_verify($senhausuario, $hash)) {
-
-            $_SESSION['email'] = $emailBanco;
 
             header("Location: Painel.php");
             exit;

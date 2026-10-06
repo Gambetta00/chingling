@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once 'conexao_msql.php';
 
@@ -10,34 +11,22 @@ if (isset($_POST['sinal_clique'])) {
     exit();
 
 } else {
+    if (isset($_POST['email'])) {
 
-    if (isset($_POST['Lemail'])) {
+        require_once 'Classe.php';
 
-        $Lemail = $_POST['Lemail'];
-        $Lsenha = $_POST['Lsenha'];
+        $email = $_POST["email"];
+        $senha = $_POST["senha"];
 
-        $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
+        $_SESSION['email'] = $email;
+        $_SESSION['senha'] = $senha;
 
-        $stmt = $conexao->prepare($sql);
+        $usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
 
-        $stmt->bind_param("s", $Lemail);
-
-        $stmt->execute();
-
-        $chingling = $stmt->get_result()->fetch_assoc();
-
-        if ($chingling && 
-            password_verify($Lsenha, $chingling["senha"])) {
-
-            echo "Login com sucesso";
-
-        } else {
-
-            echo "Erro no login";
-
-        }
-
+        $usuario->User_Login($email, $senha, $conexao);
     }
 }
+
+
 
 ?>
