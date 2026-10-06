@@ -8,7 +8,7 @@
 <body>
     <h1>Login AQUI</h1>
 
-<form method="POST" action='login.php'>
+<form method="POST" action='login_back.php'>
     <label for="Lemail">Seu Email</label> <br>
 
     <input type="text" name="Lemail"  required> <br> <br>
@@ -23,7 +23,3 @@
         <a href="cadastro.php">Cadastrar</a>
 </body>
 </html>
-<?php
-include_once("Verify.php");
-exit;
-?>

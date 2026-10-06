@@ -1,25 +1,30 @@
 <?php
+session_start();
 
 require_once 'conexao_msql.php';
- if(isset($_POST['sinal_clique'])){
+
+if (isset($_POST['sinal_clique'])) {
+
     $_POST = array();
+
     header('Location: Login.php');
     exit();
- } else{
- if (isset($_POST['lemail'])){
-    $Lemail = $_POST['Lemail'];
-    $Lsenha = $_POST['Lsenha'];
- }
-  
- $sql = "select email, senha from usuarios where email = $Lemail";
- $stmt = $conexao->prepare($sql);
- $stmt->execute();
- $chingling = $stmt->get_result()->fetch_assoc();
 
+} else {
+    if (isset($_POST['Lemail'])) {
 
+        require_once 'Classe.php';
 
-    if( $Lemail == $chingling["Lemail"] and (password_verify($Lsenha, $chingling["Lsenha"])) ){
-echo "login com Sucesso";
-    }else{ echo "erro no login";}
+        $email = $_POST["Lemail"];
+        $senha = $_POST["Lsenha"];
+
+        $usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
+
+        $usuario->User_Login($email, $senha);
+    }
 }
+
+$_SESSION['email'] = $email;
+$_SESSION['senha'] = $senha;
+
 ?>
