@@ -1,46 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <title>Cadastro</title>
+
+    <link rel="stylesheet" href="style2.css">
 </head>
+
 <body>
-    
-<h1>CADASTRO AQUI</h1>
 
-<form method="POST" action='cadastro_back.php'>
-    <label for="nome">Nome de usuário</label> <br>
+    <header>
 
-    <input type="text" name="nome"  required> <br> <br>
+        <div class="logo">
+            <span>🏠</span>
+            <h1>Chingling</h1>
+        </div>
 
-    <label for="email">Email</label> <br>
+        <div class="usuario">
+            Já possui uma conta?
+            <a href="login.php">Fazer Login</a>
+        </div>
 
-    <input type="text" name="email"  required> <br> <br>
-    
-  <label>Escolha uma opção:</label> <br>
+    </header>
 
-<select name="classe">
-    <option value="cliente">Usuário</option>
-    <option value="admin">Adiministrador</option>
-</select>
 
-<br> <br>
+    <nav>
+              <a href="Painel.php">Início (ADM ONLY)</a>
+    </nav>
 
-     <label for="senha">Senha</label> <br>
 
-    <input type="password" name="senha"  required> <br> <br>
+    <main>
 
-    <label for="cpf">CPF</label> <br>
+        <h1>CADASTRO</h1>
 
-    <input type="text" name="cpf"  required> <br> <br>
+        <p class="descricao">
+            Preencha os dados abaixo para criar sua conta.
+        </p>
 
-    <label for="telefone">Telefone</label> <br>
 
-    <input type="text" name="telefone"  required> <br> <br>
+        <div class="caixa">
 
-    <button type="submit">SALVAR</button> <br> <br>
+            <h2>Dados do usuário</h2>
 
-    <a href="login.php">Fazer Logins</a>
+            <form method="POST" action="cadastro_back.php">
+
+                <label for="nome">Nome de usuário</label>
+
+                <input 
+                    type="text" 
+                    name="nome" 
+                    id="nome"
+                    required
+                >
+
+                <br><br>
+
+
+                <label for="email">Email</label>
+
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="email"
+                    required
+                >
+
+                <br><br>
+
+
+                <label for="classe">Escolha uma opção:</label>
+
+                <select name="classe" id="classe">
+
+                    <option value="cliente">
+                        Usuário
+                    </option>
+
+                    <option value="admin">
+                        Administrador
+                    </option>
+
+                </select>
+
+                <br><br>
+
+
+                <label for="senha">Senha</label>
+
+                <input 
+                    type="password" 
+                    name="senha" 
+                    id="senha"
+                    required
+                >
+
+                <br><br>
+
+
+                <label for="cpf">CPF</label>
+
+                <input 
+                    type="text" 
+                    name="cpf" 
+                    id="cpf"
+                    required
+                >
+
+                <br><br>
+
+
+                <label for="telefone">Telefone</label>
+
+                <input 
+                    type="text" 
+                    name="telefone" 
+                    id="telefone"
+                    required
+                >
+
+                <br><br>
+
+
+                <button type="submit" class="botao-alterar">
+                    SALVAR
+                </button>
+
+                <br><br>
+
+
+
+            </form>
+
+        </div>
+
+    </main>
+
 </body>
+
 </html>

@@ -11,20 +11,22 @@ if (isset($_POST['sinal_clique'])) {
     exit();
 
 } else {
-    if (isset($_POST['Lemail'])) {
+    if (isset($_POST['email'])) {
 
         require_once 'Classe.php';
 
-        $email = $_POST["Lemail"];
-        $senha = $_POST["Lsenha"];
+        $email = $_POST["email"];
+        $senha = $_POST["senha"];
+
+        $_SESSION['email'] = $email;
+        $_SESSION['senha'] = $senha;
 
         $usuario = new Usuario("", $email, $senha, "", "", "", $conexao);
 
-        $usuario->User_Login($email, $senha);
+        $usuario->User_Login($email, $senha, $conexao);
     }
 }
 
-$_SESSION['email'] = $email;
-$_SESSION['senha'] = $senha;
+
 
 ?>

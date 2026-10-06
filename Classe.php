@@ -22,7 +22,25 @@ Class Usuario{
 
 require_once 'conexao_msql.php';
 
-$sql = "SELECT email FROM usuarios
+$sql = "SELECT cpf FROM usuarios
+        WHERE cpf = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $cpf);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+
+    echo "O cpf já está sendo utilizado.";
+
+    $stmt->close();
+
+} else {
+    $sql = "SELECT email FROM usuarios
         WHERE email = ?";
 
 $stmt = $conexao->prepare($sql);
@@ -74,18 +92,11 @@ if ($stmt->num_rows > 0) {
     exit();
 }
     }
-
-    function User_Login($email, $senha){
+}
+    function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
     $senhausuario = $senha;
-
-    $conexao = new mysqli(
-        "localhost",
-        "root",
-        "",
-        "chingling"
-    );
 
     $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
 
