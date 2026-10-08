@@ -253,6 +253,15 @@ nav a {
  
     <h2>Alterar dados</h2> 
     <p class="subtitulo">Atualize as informações do seu perfil de usuário.</p> 
+      </div>
+                   <a 
+                     href="AdmUsuarios.php" 
+                     class="botao-alterar"
+                      >
+                       Voltar
+                       </a>
+                    </div>
+                    <br>
  
     <form  method="POST" enctype="multipart/form-data"> 
  
@@ -306,6 +315,17 @@ nav a {
                         required 
                     > 
                 </div> 
+
+                <div class="campo-grupo"> 
+                    <?php echo "Email atual Atual: ".$usuario["email"]; ?>
+                    <label for="emailN">Email</label>  <small>(Deixe em branco para não alterar)</small>
+                    <input  
+                        type="text"  
+                        id="emailN"  
+                        name="emailN"  
+                        placeholder="Seu Novo email" 
+                    > 
+                </div> 
  
                 <div class="campo-grupo"> 
                     <label for="senha">Nova Senha <small>(Deixe em branco para não alterar)</small></label> 
@@ -352,11 +372,12 @@ nav a {
     $telefone = $_POST['telefone']; 
     $senha = $_POST['senha']; 
     $email = $_POST['email']; 
+       $emailN = $_POST['emailN']; 
 
     $sql = "UPDATE usuarios
 SET nome = '$nome',
 telefone = '$telefone',
-imagem = '',
+email = '$emailN',
 senha = '$senha'
 WHERE email = '$email';
 "; 
@@ -384,22 +405,22 @@ WHERE email = '$email';
                             
                             <p>
                                 <strong>Nome:</strong>
-                                <?php echo "NOVO: ". $usuario["nome"]; ?>
+                                <?php echo "NOVO: ". $_POST["nome"]; ?>
                             </p>
 
                             <p>
                                 <strong>E-mail:</strong>
-                                <?php echo "NOVO: ".$usuario["email"]; ?>
+                                <?php echo "NOVO: ".$_POST["emailN"]; ?>
                             </p>
 
                             <p>
-                                <strong>CPF:</strong>
-                                <?php echo"NOVO: ". $usuario["senha"]; ?>
+                                <strong>Senha</strong>
+                                <?php echo"NOVO: ". $_POST["senha"]; ?>
                             </p>
 
                             <p>
                                 <strong>Telefone:</strong>
-                                <?php echo"NOVO: ". $usuario["telefone"]; ?>
+                                <?php echo"NOVO: ". $_POST["senha"]; ?>
 
                         
                             </p>
