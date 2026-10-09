@@ -42,9 +42,9 @@
 
         <a href="Painel.php">Início</a>
 
-        <a href="Moveis.php">Produtos</a>
+        <a href="Moveis.php">Móveis</a>
 
-        <a href="AdmMoveis.php">Administração de Produtos (ADM ONLY)</a>
+        <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
 
         <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
 
