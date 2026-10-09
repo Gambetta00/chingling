@@ -253,8 +253,17 @@ nav a {
  
     <h2>Alterar dados</h2> 
     <p class="subtitulo">Atualize as informações do seu perfil de usuário.</p> 
+      </div>
+                   <a 
+                     href="AdmUsuarios.php" 
+                     class="botao-alterar"
+                      >
+                       Voltar
+                       </a>
+                    </div>
+                    <br>
  
-    <form action='AdmAlterarUserBack.php' method="POST" enctype="multipart/form-data"> 
+    <form  method="POST" enctype="multipart/form-data"> 
  
         <div class="campo-grupo"> 
             <label for="email">Confirme o Email</label> 
@@ -278,10 +287,11 @@ nav a {
                 echo "Usuário ".$email." selecionado!<br>"; 
  
                 $usuario = $resultado->fetch_assoc(); 
+
  
         ?> 
  <br>
- <form action='' method="POST" enctype="multipart/form-data"> 
+ <form  method="POST" enctype="multipart/form-data"> 
                 <div class="campo-grupo"> 
                      <?php echo "Nome Atual: ".$usuario["nome"]; ?>
                     <label for="nome">Nome completo</label> 
@@ -305,6 +315,17 @@ nav a {
                         required 
                     > 
                 </div> 
+
+                <div class="campo-grupo"> 
+                    <?php echo "Email atual Atual: ".$usuario["email"]; ?>
+                    <label for="emailN">Email</label>  <small>(Deixe em branco para não alterar)</small>
+                    <input  
+                        type="text"  
+                        id="emailN"  
+                        name="emailN"  
+                        placeholder="Seu Novo email" 
+                    > 
+                </div> 
  
                 <div class="campo-grupo"> 
                     <label for="senha">Nova Senha <small>(Deixe em branco para não alterar)</small></label> 
@@ -325,6 +346,12 @@ nav a {
                         accept="image/*" 
                     > 
                 </div> 
+
+                <input
+    type="hidden"
+    name="email"
+    value="<?php echo htmlspecialchars($usuario['email']); ?>"
+>
  
                 <button type="submit" class="btn-principal">Salvar Alterações</button> 
  
@@ -340,55 +367,70 @@ nav a {
 
 
         function alterar(mixed $conexao){
- if (isset($_POST['email'])) { 
+ if (isset($_POST['nome'])) { 
     $nome = $_POST['nome']; 
     $telefone = $_POST['telefone']; 
     $senha = $_POST['senha']; 
-    $imagem = $_POST['imagem']; 
     $email = $_POST['email']; 
+       $emailN = $_POST['emailN']; 
 
     $sql = "UPDATE usuarios
 SET nome = '$nome',
 telefone = '$telefone',
-senha = '$senha',
-imagem = '$imagem'
+email = '$emailN',
+senha = '$senha'
 WHERE email = '$email';
 "; 
  
     $resultado2 = $conexao->query($sql); 
-
+ 
     return $resultado2;
-  
-} 
-$resultado2 = null;
-   $resultado2 = alterar($conexao);
+ }
+
+
         }
-        
+        $resultado2 = null;
+   $resultado2 = alterar($conexao);
 
          if (isset($resultado2)) { 
  
-            if ($resultado2->num_rows > 0) { 
+           
  ?>
+<div class="usuario-card">
 
-    </div>
-                   <a 
-                     href="AdmMostrarAlt.php" 
-                     class="botao-alterar"
-                      >
-                       ✏️ Ver modificações
-                       </a>
-                    </div>
+                        <div class="icone">👤</div>
 
+                        <div class="dados">
+
+                            
+                            <p>
+                                <strong>Nome:</strong>
+                                <?php echo "NOVO: ". $_POST["nome"]; ?>
+                            </p>
+
+                            <p>
+                                <strong>E-mail:</strong>
+                                <?php echo "NOVO: ".$_POST["emailN"]; ?>
+                            </p>
+
+                            <p>
+                                <strong>Senha</strong>
+                                <?php echo"NOVO: ". $_POST["senha"]; ?>
+                            </p>
+
+                            <p>
+                                <strong>Telefone:</strong>
+                                <?php echo"NOVO: ". $_POST["senha"]; ?>
+
+                        
+                            </p>
+                        </div>
                     <?php
 
 
- } else { 
+ } 
  
-                echo "Pesquisar Novamente / Usuário Não encontrado<br>"; 
- 
-            } 
- 
-        } 
+        
 
 ?>
  </form> 
