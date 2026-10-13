@@ -230,7 +230,7 @@ nav a {
     </div> 
  
     <div class="usuario"> 
-        👤 Minha conta 
+        👤 Minha Conta 
     </div> 
 </header> 
  
