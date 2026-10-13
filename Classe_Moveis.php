@@ -18,36 +18,102 @@ public function __construct($nome, $estoque, $preco, $categoria, $imagem, $descr
         $this->conexao = $conexao;
     }
 
-    public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
+public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
 
-require_once 'conexao_msql.php';
+    require_once 'conexao_msql.php';
 
-$sql = "INSERT INTO produtos (nome, estoque, preco, categoria_id, imagem, descricao)
-        VALUES (?, ?, ?, ?, ?, ?)";
+    // Verificar se o móvel já existe
+    $sql = "SELECT nome FROM produtos
+            WHERE nome = ?
+            AND categoria_id = ?";
 
-$stmt = $conexao->prepare($sql);
+    $stmt = $conexao->prepare($sql);
 
-$stmt->bind_param(
-    "ssssss",
-    $nome,
-    $estoque,
-    $preco,
-    $categoria,
-    $imagem,
-    $descricao
-);
+    $stmt->bind_param(
+        "ss",
+        $nome,
+        $categoria,
+    );
 
-$stmt->execute();
+    $stmt->execute();
+    $stmt->store_result();
 
-$stmt->close();
+    // Se encontrou um registro igual
+    if ($stmt->num_rows > 0) {
 
-// Mensagem que será enviada para a outra página
-$_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
+        $_SESSION['mensagem'] = "Este móvel já está cadastrado!";
 
-header("Location: AdmMoveis.php");
-exit();
+        $stmt->close();
 
+        header("Location: AdmMoveis.php");
+        exit();
+
+    }
+
+    $stmt->close();
+
+    // Se não existe, cadastrar
+    $sql = "INSERT INTO produtos
+            (nome, estoque, preco, categoria_id, imagem, descricao)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conexao->prepare($sql);
+
+    $stmt->bind_param(
+        "ssssss",
+        $nome,
+        $estoque,
+        $preco,
+        $categoria,
+        $imagem,
+        $descricao
+    );
+
+    $stmt->execute();
+    $stmt->close();
+
+    $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
+
+    header("Location: AdmMoveis.php");
+    exit();
 }
+
+public function Edit_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
+
+    $sql = "UPDATE produtos
+            SET estoque = ?,
+                preco = ?,
+                imagem = ?,
+                descricao = ?
+            WHERE nome = ?
+            AND categoria_id = ?";
+
+    $stmt = $conexao->prepare($sql);
+
+    $stmt->bind_param(
+        "sdssss",
+        $estoque,
+        $preco,
+        $imagem,
+        $descricao,
+        $nome,
+        $categoria
+    );
+
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        $_SESSION['mensagem'] = "Móvel editado com sucesso!";
+    } else {
+        $_SESSION['mensagem'] = "Nenhum móvel foi alterado.";
+    }
+
+    $stmt->close();
+
+    header("Location: AdmMoveis.php");
+    exit();
+}
+
     }
 
 ?>
