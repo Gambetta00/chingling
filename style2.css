@@ -1,126 +1,123 @@
+/* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
-}
-
-
-/* CABEÇALHO */
-
-header {
-    height: 75px;
+/* Caixa do formulário de cadastro */
+main > .caixa {
+    width: 100%;
+    max-width: 550px;
+    margin: 25px auto;
+    padding: 30px;
     background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    border-bottom: 1px solid #ddd;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 24px;
-    color: #0875d1;
-}
-
-.logo span {
-    font-size: 30px;
-}
-
-.usuario {
-    color: #333;
-    font-size: 14px;
-}
-
-.usuario a {
-    color: #0875d1;
-    text-decoration: none;
-    margin-left: 5px;
-}
-
-
-/* MENU */
-
-nav {
-    background-color: #006dcc;
-    padding: 12px 30px;
-    display: flex;
-    gap: 25px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-
-/* CONTEÚDO */
-
-main {
-    width: 90%;
-    max-width: 1100px;
-    margin: 30px auto;
-}
-
-h1 {
-    color: #0875d1;
-    font-size: 24px;
-}
-
-.descricao {
-    margin-top: 8px;
-    color: #666;
-}
-
-
-/* CAIXA DO CADASTRO */
-
-.caixa {
-    background-color: white;
-    margin-top: 25px;
-    padding: 25px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.caixa h2 {
-    margin-bottom: 20px;
-    font-size: 19px;
+/* Título dentro da caixa */
+main > .caixa h2 {
+    margin-bottom: 25px;
+    font-size: 20px;
+    color: #0875d1;
 }
 
-
-/* CAMPOS */
-
-label {
+/* Campos do formulário */
+main > .caixa input,
+main > .caixa select {
     display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.caixa input,
-.caixa select {
     width: 100%;
-    padding: 13px;
-    border: 1px solid #ddd;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 15px;
+    background-color: white;
 }
 
-.caixa input:focus,
-.caixa select:focus {
-    outline: none;
-    border-color: #0875d1;
+/* Texto dos campos */
+main > .caixa label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
 }
 
+/* Espaçamento do botão */
+main > .caixa .botao-alterar {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+}
 
-/* BOT
+/* Ajuste para telas pequenas */
+@media (max-width: 500px) {
+    main > .caixa {
+        padding: 20px;
+    }
+}
+/* PAINEL ADMINISTRATIVO */
+
+.painel > h1 {
+    color: #0875d1;
+    font-size: 28px;
+}
+
+.painel-caixa {
+    width: 100%;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.painel-caixa h2 {
+    margin-bottom: 12px;
+    color: #0875d1;
+    font-size: 22px;
+}
+
+.painel-caixa .texto {
+    margin-bottom: 25px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.botao-painel {
+    display: inline-block;
+    padding: 14px 20px;
+    background-color: #006dcc;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.botao-painel:hover {
+    background-color: #0055a4;
+}
+
+@media (max-width: 500px) {
+    .painel-caixa {
+        padding: 20px;
+    }
+
+    .botoes {
+        flex-direction: column;
+    }
+
+    .botao-painel {
+        width: 100%;
+    }
+}
+

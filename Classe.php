@@ -8,7 +8,7 @@ Class Usuario{
     private $classe;
     private $conexao;
 
-    function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    public function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
         $this->nome = $nome;
         $this->email = $email;
         $this->senha = $senha;
@@ -18,7 +18,7 @@ Class Usuario{
         $this->conexao = $conexao;
     }
 
-    function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    public function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
 
 require_once 'conexao_msql.php';
 
@@ -93,7 +93,7 @@ if ($stmt->num_rows > 0) {
 }
     }
 }
-    function User_Login($email, $senha, $conexao){
+    public function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
     $senhausuario = $senha;

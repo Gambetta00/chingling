@@ -268,6 +268,22 @@ label {
 
             <h2>Resultado da pesquisa</h2>
 
+             <form  method="POST" enctype="multipart/form-data"> 
+ 
+        <div class="campo-grupo"> 
+            <label for="email">Confirme o Email</label> 
+            <input  
+                type="text"  
+                id="email"  
+                name="email"  
+                placeholder="Digite o seu email" 
+                required 
+            > 
+            
+            <button type="submit" class="btn-principal">Buscar</button> 
+        </div> 
+     </form> 
+
             <?php
             if (isset($resultado)) {
                 if ($resultado->num_rows > 0) {
@@ -315,6 +331,11 @@ label {
         </section>
 
     </main>
-
+  <?php
+                } else {
+                    echo "ERRO!";
+                }
+            }
+            ?>
 </body>
 </html>
