@@ -230,7 +230,7 @@ nav a {
     </div> 
  
     <div class="usuario"> 
-        👤 Minha conta 
+        👤 Minha Conta 
     </div> 
 </header> 
  
@@ -290,51 +290,53 @@ nav a {
 
  
         ?> 
- <br>
+
+ <small>(Deixe em branco para não alterar)</small>
+ <br> <br>
  <form  method="POST" enctype="multipart/form-data"> 
                 <div class="campo-grupo"> 
-                     <?php echo "Nome Atual: ".$usuario["nome"]; ?>
-                    <label for="nome">Nome completo</label> 
-                    <input  
-                        type="text"  
-                        id="nome"  
-                        name="nome"  
-                        placeholder="Digite o seu nome" 
-                        required 
+                   <label for="nome">Nome completo</label>
+                   <input
+    type="text"
+    id="nome"
+    name="nome"
+    value="<?php echo htmlspecialchars($usuario['nome']); ?>"
+
+                        
                     > 
                 </div> 
  
                 <div class="campo-grupo"> 
-                    <?php echo "Telefone Atual: ".$usuario["telefone"]; ?>
-                    <label for="telefone">Telefone</label> 
-                    <input  
-                        type="text"  
-                        id="telefone"  
-                        name="telefone"  
-                        placeholder="(00) 00000-0000" 
-                        required 
-                    > 
+                 <label for="telefone">Telefone</label>
+
+<input
+    type="text"
+    id="telefone"
+    name="telefone"
+    value="<?php echo htmlspecialchars($usuario['telefone']); ?>"
+>
                 </div> 
 
                 <div class="campo-grupo"> 
-                    <?php echo "Email atual Atual: ".$usuario["email"]; ?>
-                    <label for="emailN">Email</label>  <small>(Deixe em branco para não alterar)</small>
-                    <input  
-                        type="text"  
-                        id="emailN"  
-                        name="emailN"  
-                        placeholder="Seu Novo email" 
-                    > 
+                   <label for="emailN">E-mail</label>
+
+<input
+    type="text"
+    id="emailN"
+    name="emailN"
+    value="<?php echo htmlspecialchars($usuario['email']); ?>"
+>
                 </div> 
  
                 <div class="campo-grupo"> 
-                    <label for="senha">Nova Senha <small>(Deixe em branco para não alterar)</small></label> 
-                    <input  
-                        type="password"  
-                        id="senha"  
-                        name="senha"  
-                        placeholder="Digite a nova senha" 
-                    > 
+                 <label for="senha">Nova senha</label>
+
+<input
+    type="password"
+    id="senha"
+    name="senha"
+    placeholder="Digite a nova senha"
+>
                 </div> 
  
                 <div class="campo-grupo"> 
@@ -365,15 +367,23 @@ nav a {
  
         } 
 
+      
 
-        function alterar(mixed $conexao){
- if (isset($_POST['nome'])) { 
-    $nome = $_POST['nome']; 
-    $telefone = $_POST['telefone']; 
-    $senha = $_POST['senha']; 
-    $email = $_POST['email']; 
-       $emailN = $_POST['emailN']; 
+        function alterar(mixed $conexao, mixed $usuario){
 
+  if (isset($usuario) && isset($_POST['emailN'])) { 
+        $emailN = !empty($_POST['emailN']) ? $_POST['emailN'] : $usuario['email'];
+ 
+  $nome = !empty($_POST['nome']) ? $_POST['nome'] : $usuario['nome'];
+
+$telefone = !empty($_POST['telefone']) ? $_POST['telefone'] : $usuario['telefone'];
+
+$senha = !empty($_POST['senha']) ? $_POST['senha'] : $usuario['senha'];
+
+$imagem = !empty($_POST['imagem']) ? $_POST['imagem'] : $usuario['imagem']; 
+
+  
+$email = $usuario['email'];
     $sql = "UPDATE usuarios
 SET nome = '$nome',
 telefone = '$telefone',
@@ -385,12 +395,17 @@ WHERE email = '$email';
     $resultado2 = $conexao->query($sql); 
  
     return $resultado2;
+  }
  }
 
 
-        }
+        
         $resultado2 = null;
-   $resultado2 = alterar($conexao);
+   $resultado2 = alterar($conexao, $usuario);
+   if ($resultado2) {
+    $resultado = buscarUsuario($conexao, $_POST['emailN']);
+    $usuario = $resultado->fetch_assoc();
+}
 
          if (isset($resultado2)) { 
  
@@ -420,7 +435,7 @@ WHERE email = '$email';
 
                             <p>
                                 <strong>Telefone:</strong>
-                                <?php echo"NOVO: ". $_POST["senha"]; ?>
+                                <?php echo"NOVO: ". $_POST["telefone"]; ?>
 
                         
                             </p>
