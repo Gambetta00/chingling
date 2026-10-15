@@ -1,233 +1,123 @@
+/* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
-}
-
-/* CABEÇALHO */
-
-header {
-    min-height: 75px;
+/* Caixa do formulário de cadastro */
+main > .caixa {
+    width: 100%;
+    max-width: 550px;
+    margin: 25px auto;
+    padding: 30px;
     background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 30px;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 24px;
+/* Título dentro da caixa */
+main > .caixa h2 {
+    margin-bottom: 25px;
+    font-size: 20px;
     color: #0875d1;
 }
 
-.logo span {
-    font-size: 30px;
-}
-
-.logo h1 {
-    color: #0875d1;
-    font-size: 24px;
-}
-
-.usuario {
-    color: #333;
-    font-size: 14px;
-}
-
-.usuario a {
-    color: #0875d1;
-    text-decoration: none;
-    margin-left: 5px;
-}
-
-/* BOTÃO SAIR */
-
-.logout {
-    padding: 10px 15px;
-    background-color: #006dcc;
-    color: white;
-    border: none;
+/* Campos do formulário */
+main > .caixa input,
+main > .caixa select {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
+    font-size: 15px;
+    background-color: white;
 }
 
-.logout:hover {
-    background-color: #0055a4;
+/* Texto dos campos */
+main > .caixa label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
 }
 
-/* MENU */
-
-nav {
-    background-color: #006dcc;
-    padding: 12px 30px;
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
+/* Espaçamento do botão */
+main > .caixa .botao-alterar {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
+/* Ajuste para telas pequenas */
+@media (max-width: 500px) {
+    main > .caixa {
+        padding: 20px;
+    }
 }
+/* PAINEL ADMINISTRATIVO */
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-/* CONTEÚDO */
-
-main {
-    width: 90%;
-    max-width: 1400px;
-    margin: 30px auto;
-}
-
-main > h1 {
+.painel > h1 {
     color: #0875d1;
-    font-size: 24px;
+    font-size: 28px;
 }
 
-.descricao {
-    margin-top: 8px;
-    margin-bottom: 15px;
+.painel-caixa {
+    width: 100%;
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.painel-caixa h2 {
+    margin-bottom: 12px;
+    color: #0875d1;
+    font-size: 22px;
+}
+
+.painel-caixa .texto {
+    margin-bottom: 25px;
     color: #666;
     line-height: 1.5;
 }
 
-/* MENSAGEM PHP */
-
-.mensagem {
-    margin-top: 20px;
-    padding: 12px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-/* FORMULÁRIOS LADO A LADO */
-
-.formularios {
+.botoes {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    gap: 25px;
-    width: 100%;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-/* CAIXAS */
-
-.formularios .caixa {
-    flex: 1;
-    min-width: 0;
-    background-color: white;
-    margin-top: 25px;
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.caixa h2 {
-    margin-bottom: 20px;
-    font-size: 19px;
-    color: #0875d1;
-}
-
-/* CAMPOS */
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.caixa input,
-.caixa select {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 15px;
-}
-
-.caixa input:focus,
-.caixa select:focus {
-    outline: none;
-    border-color: #0875d1;
-}
-
-/* BOTÃO DE CADASTRO E EDIÇÃO */
-
-.botao-alterar {
-    width: 100%;
-    padding: 13px;
+.botao-painel {
+    display: inline-block;
+    padding: 14px 20px;
     background-color: #006dcc;
     color: white;
-    border: none;
-    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
     font-size: 15px;
     font-weight: bold;
-    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
 }
 
-.botao-alterar:hover {
+.botao-painel:hover {
     background-color: #0055a4;
 }
 
-/* RESPONSIVIDADE */
+@media (max-width: 500px) {
+    .painel-caixa {
+        padding: 20px;
+    }
 
-@media (max-width: 800px) {
-
-    .formularios {
+    .botoes {
         flex-direction: column;
     }
 
-    .formularios .caixa {
+    .botao-painel {
         width: 100%;
     }
-
-    nav {
-        gap: 15px;
-    }
 }
 
-@media (max-width: 500px) {
-
-    header {
-        padding: 12px 15px;
-        gap: 10px;
-    }
-
-    .logo {
-        font-size: 20px;
-    }
-
-    .logo h1 {
-        font-size: 20px;
-    }
-
-    main {
-        width: 94%;
-    }
-
-    .formularios .caixa {
-        padding: 18px;
-    }
-
-    nav {
-        padding: 12px 15px;
-        flex-direction: column;
-    }
-}
