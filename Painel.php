@@ -1,3 +1,4 @@
+ 
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,17 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Painel Administrativo</title>
+    <title>Inicio</title>
 
     <link rel="stylesheet" href="style2.css">
 </head>
 
 <body>
 
-    <!-- CABEÇALHO -->
-
     <header>
-
         <div class="logo">
             <span>🏠</span>
             <h1>Chingling</h1>
@@ -23,52 +21,35 @@
 
         <div class="usuario">
             <form action="Login.php" method="POST">
+                <input
+                    type="hidden"
+                    name="sinal_clique"
+                    value="ativado"
+                >
 
-                    <input
-                        type="hidden"
-                        name="sinal_clique"
-                        value="ativado"
-                    >
-
-                    <button type="submit" class="logout">
-                        Sair da conta
-                    </button>
-
-                </form>
+                <button type="submit" class="logout">
+                    Sair da conta
+                </button>
+            </form>
         </div>
-
     </header>
 
-
-    <!-- MENU -->
-
     <nav>
-
         <a href="Painel.php">Início</a>
-
         <a href="Moveis.php">Móveis</a>
-
         <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
-
         <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
-
     </nav>
 
-
-    <!-- CONTEÚDO -->
-
-    <main>
+    <main class="painel">
 
         <h1>Início</h1>
 
         <p class="descricao">
-            Tela onde os produtos são mostrados e podem ser pesquisados e analisados.
+            Acesse as opções de gerenciamento da loja Chingling.
         </p>
 
-
-        <!-- CAIXA -->
-
-        <div class="caixa">
+        <div class="caixa painel-caixa">
 
             <h2>Gerenciamento</h2>
 
@@ -76,20 +57,7 @@
                 Escolha uma das opções abaixo para continuar.
             </p>
 
-
             <div class="botoes">
-
-                <!-- ADMINISTRAR PRODUTOS -->
-
-                <form action="AdmMoveis.php" method="POST">
-
-                    <input
-                        type="hidden"
-                        name="clique"
-                        value="ativado"
-                    >
-
-                </form>
 
             </div>
 

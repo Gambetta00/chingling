@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'conexao_msql.php';
 $conexao ;
 
@@ -23,7 +21,7 @@ require_once "Classe_Moveis.php";
 $Movel = new Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao);
 
 if ($Movel->Edit_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao)) {
-    echo "Usuário editado com sucesso!";
+    echo "Móvel editado com sucesso!";
 } else {
     echo "Erro ao cadastrar usuário.";
 }

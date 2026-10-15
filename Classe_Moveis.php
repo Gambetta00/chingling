@@ -20,8 +20,6 @@ public function __construct($nome, $estoque, $preco, $categoria, $imagem, $descr
 
 public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
 
-    require_once 'conexao_msql.php';
-
     // Verificar se o móvel já existe
     $sql = "SELECT nome FROM produtos
             WHERE nome = ?
@@ -112,6 +110,61 @@ public function Edit_Movel($nome, $estoque, $preco, $categoria, $imagem, $descri
 
     header("Location: AdmMoveis.php");
     exit();
+}
+
+public function UnSet_Movel($nome, $categoria, $conexao){
+
+    // Verificar se o móvel existe
+    $sql = "SELECT nome FROM produtos
+            WHERE nome = ?
+            AND categoria_id = ?";
+
+    $stmt = $conexao->prepare($sql);
+
+    $stmt->bind_param(
+        "ss",
+        $nome,
+        $categoria,
+    );
+
+    $stmt->execute();
+    $stmt->store_result();
+
+    // Se encontrou um registro, deleta
+    if ($stmt->num_rows > 0) {
+
+        $sql = "DELETE FROM produtos 
+                WHERE nome = ?
+                AND categoria_id = ?";
+
+        $stmt = $conexao->prepare($sql);
+
+        $stmt->bind_param(
+            "ss",
+            $nome,
+            $categoria,
+        );
+
+        $stmt->execute();
+        $stmt->store_result();
+
+        $_SESSION['mensagem'] = "Movel deletado com sucesso!";
+
+        $stmt->close();
+
+        header("Location: AdmMoveis.php");
+        exit();
+
+    }else{
+
+        $_SESSION['mensagem'] = "Movel não encontrado!";
+
+        $stmt->close();
+
+        header("Location: AdmMoveis.php");
+        exit();
+
+    }
 }
 
     }

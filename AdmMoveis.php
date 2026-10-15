@@ -233,6 +233,46 @@
 
             </div>
 
+            <div class="caixa">
+
+                <h2>Apagar móveis</h2>
+
+                <p class="descricao">
+                    Informe o nome e a categoria do móvel que deseja localizar.
+                    Os demais campos serão usados para excluir um móvel.
+                    AÇÕES AQUI NÃO PODEM SER DESFEITAS!
+                </p>
+
+                <form method="POST" action="AdmMoveisDelete_back.php">
+
+                    <label for="delete_movel_nome">Nome do móvel</label>
+                    <input
+                        type="text"
+                        name="movel_nome"
+                        id="delete_movel_nome"
+                        required
+                    >
+
+                    <br><br>
+
+                    <label for="edit_categoria">Categoria do móvel</label>
+                    <select name="categoria" id="edit_categoria" required>
+                        <option value="1">Cozinha</option>
+                        <option value="2">Sala de Estar</option>
+                        <option value="3">Quarto</option>
+                        <option value="4">Diversos</option>
+                    </select>
+
+                    <br><br>
+
+                    <button type="submit" class="botao-alterar">
+                        Deletar Móvel 
+                    </button>
+
+                </form>
+
+            </div>
+
         </div>
 
     </main>
