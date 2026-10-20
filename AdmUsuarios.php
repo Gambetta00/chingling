@@ -25,9 +25,12 @@ if (isset($_POST['excluir'], $_POST['emailExcluir'])) {
     }
 }
 
-if ($_GET['excluido'] == 1){
-     echo "<script>alert('Usuário excluído com sucesso!');</script>";
-
+if (isset($_GET['excluido']) && $_GET['excluido'] == 1) {
+    echo "<script>alert('Usuário excluído com sucesso!');
+    var url = new URL(window.location.href);
+    url.searchParams.delete('excluido');
+    window.history.replaceState({}, document.title, url);
+    </script>";
 }
 
 ?>
