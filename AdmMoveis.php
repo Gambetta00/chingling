@@ -50,7 +50,7 @@ if (isset($_GET['pesquisar'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Cadastro de Móveis</title>
-
+ <style></style>
     <link rel="stylesheet" href="style2.css">
 </head>
 
@@ -84,6 +84,7 @@ if (isset($_GET['pesquisar'])) {
         <a href="Moveis.php">Móveis</a>
         <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
         <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
+        <a href="AdmCadastroMoveis.php">Cadastro de Móveis (ADM ONLY)</a>
     </nav>
 
     <main>
@@ -95,12 +96,10 @@ if (isset($_GET['pesquisar'])) {
         </p>
 
         <?php
-
         if (isset($_SESSION['mensagem'])) {
             echo '<p class="mensagem">' .
-                htmlspecialchars($_SESSION['mensagem'], ENT_QUOTES, 'UTF-8') .
+                htmlspecialchars($_SESSION['mensagem'], ENT_QUOTES, 'UTF-8').
                 '</p>';
-
             unset($_SESSION['mensagem']);
         }
         ?>
@@ -216,13 +215,25 @@ if (isset($_GET['pesquisar'])) {
 
                         <p>
                             <strong>Preço:</strong>
-                            R$ <?php echo number_format((float) $movel['preco'], 2, ',', '.'); ?>
+                            <br>R$ <?php echo number_format((float) $movel['preco'], 2, ',', '.'); ?>
                         </p>
 
                         <p>
                             <strong>Descrição:</strong>
                             <?php echo htmlspecialchars($movel['descricao'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                         </p>
+
+                <form action="AdmMoveisDelete_back.php" method="post">
+               <input type="hidden" name="delete_id" value="<?= $movel['id'] ?>">
+                <button type="submit" name="fdeletar" value="1" class="botao-alterar">
+                Delete
+                </button>
+                </form>
+
+                <button type="button" onclick="revelarFormulario( <?= json_encode($movel['nome']) ?>,
+                    <?= json_encode($movel['categoria_id']) ?>)">
+                Edit
+                </button>
 
                     </div>
 
@@ -234,6 +245,8 @@ if (isset($_GET['pesquisar'])) {
 
             <?php endif; ?>
 
+        
+
         </div>
 
     <?php endif; ?>
@@ -242,94 +255,7 @@ if (isset($_GET['pesquisar'])) {
 
 <!-- FIM DA PESQUISA -->
 
-        <div class="formularios">
-
-            <!-- FORMULÁRIO DE CADASTRO -->
-
-            <div class="caixa">
-
-                <h2>Cadastro de móveis</h2>
-
-                <p class="descricao">
-                    Cadastre um novo móvel. Não é permitido repetir o nome
-                    e a categoria de um móvel existente.
-                </p>
-
-                
-            </div>
-
-                <form method="POST" action="AdmMoveis_back.php">
-
-                    <label for="cad_movel_nome">Nome do móvel</label>
-                    <input
-                        type="text"
-                        name="movel_nome"
-                        id="cad_movel_nome"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label for="cad_movel_estoque">Estoque do móvel</label>
-                    <input
-                        type="number"
-                        name="movel_estoque"
-                        id="cad_movel_estoque"
-                        min="0"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label for="cad_movel_preco">Preço do móvel</label>
-                    <input
-                        type="number"
-                        name="movel_preco"
-                        id="cad_movel_preco"
-                        step="0.01"
-                        min="0"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label for="cad_categoria">Categoria do móvel</label>
-                    <select name="categoria" id="cad_categoria" required>
-                        <option value="1">Cozinha</option>
-                        <option value="2">Sala de Estar</option>
-                        <option value="3">Quarto</option>
-                        <option value="4">Diversos</option>
-                    </select>
-
-                    <br><br>
-
-                    <label for="cad_movel_imagem">Imagem do móvel</label>
-                    <input
-                        type="text"
-                        name="movel_imagem"
-                        id="cad_movel_imagem"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label for="cad_movel_descricao">Descrição do móvel</label>
-                    <input
-                        type="text"
-                        name="movel_descricao"
-                        id="cad_movel_descricao"
-                        required
-                    >
-
-                    <br><br>
-
-                    <button type="submit" class="botao-alterar">
-                        CADASTRAR
-                    </button>
-
-                </form>
-
-            </div>
+        <div class="formularios" id="formulario_edicao" style="display: none;">
 
             <!-- FORMULÁRIO DE EDIÇÃO -->
 
@@ -360,6 +286,7 @@ if (isset($_GET['pesquisar'])) {
                         name="movel_estoque"
                         id="edit_movel_estoque"
                         min="0"
+                        value="<?php  ?>"
                         required
                     >
 
@@ -415,50 +342,22 @@ if (isset($_GET['pesquisar'])) {
 
             </div>
 
-            <div class="caixa">
-
-                <h2>Apagar móveis</h2>
-
-                <p class="descricao">
-                    Informe o nome e a categoria do móvel que deseja localizar.
-                    Os demais campos serão usados para excluir um móvel.
-                    AÇÕES AQUI NÃO PODEM SER DESFEITAS!
-                </p>
-
-                <form method="POST" action="AdmMoveisDelete_back.php">
-
-                    <label for="delete_movel_nome">Nome do móvel</label>
-                    <input
-                        type="text"
-                        name="movel_nome"
-                        id="delete_movel_nome"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label for="edit_categoria">Categoria do móvel</label>
-                    <select name="categoria" id="edit_categoria" required>
-                        <option value="1">Cozinha</option>
-                        <option value="2">Sala de Estar</option>
-                        <option value="3">Quarto</option>
-                        <option value="4">Diversos</option>
-                    </select>
-
-                    <br><br>
-
-                    <button type="submit" class="botao-alterar">
-                        Deletar Móvel 
-                    </button>
-
-                </form>
-
-            </div>
+            
 
         </div>
 
     </main>
+    <script>
+function revelarFormulario() {
+    const formulario = document.getElementById("formulario_edicao");
 
+    if (formulario.style.display === "none") {
+        formulario.style.display = "block";
+    } else {
+        formulario.style.display = "none";
+    }
+}
+</script>
 </body>
 
 </html>

@@ -19,7 +19,7 @@ public function __construct($nome, $estoque, $preco, $categoria, $imagem, $descr
     }
 
 public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
-
+    session_start();
     // Verificar se o móvel já existe
     $sql = "SELECT nome FROM produtos
             WHERE nome = ?
@@ -72,7 +72,7 @@ public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descric
 
     $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
 
-    header("Location: AdmMoveis.php");
+    header("Location: AdmCadastroMoveis.php");
     exit();
 }
 
@@ -112,19 +112,19 @@ public function Edit_Movel($nome, $estoque, $preco, $categoria, $imagem, $descri
     exit();
 }
 
-public function UnSet_Movel($nome, $categoria, $conexao){
+public static function UnSet_Movel($id, $conexao){
+
 
     // Verificar se o móvel existe
-    $sql = "SELECT nome FROM produtos
-            WHERE nome = ?
-            AND categoria_id = ?";
+    $sql = "SELECT id FROM produtos
+            WHERE id = ?
+            ";
 
     $stmt = $conexao->prepare($sql);
 
     $stmt->bind_param(
-        "ss",
-        $nome,
-        $categoria,
+        "s",
+        $id,
     );
 
     $stmt->execute();
@@ -134,15 +134,14 @@ public function UnSet_Movel($nome, $categoria, $conexao){
     if ($stmt->num_rows > 0) {
 
         $sql = "DELETE FROM produtos 
-                WHERE nome = ?
-                AND categoria_id = ?";
+                WHERE id = ?
+                ";
 
         $stmt = $conexao->prepare($sql);
 
         $stmt->bind_param(
-            "ss",
-            $nome,
-            $categoria,
+            "s",
+            $id,
         );
 
         $stmt->execute();

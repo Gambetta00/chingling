@@ -1,4 +1,30 @@
  
+<?php
+session_start();
+
+$email = $_SESSION['email'];
+
+require_once "conexao_msql.php";
+
+$sql = "SELECT nome FROM usuarios WHERE email = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $email);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+$stmt->bind_result($nome);
+
+$stmt->fetch();
+
+echo "Seja bem vindo $nome !";
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -9,6 +35,7 @@
     <title>Inicio</title>
 
     <link rel="stylesheet" href="style2.css">
+    
 </head>
 
 <body>
@@ -69,27 +96,3 @@
 
 </html>
 
-<?php
-session_start();
-
-$email = $_SESSION['email'];
-
-require_once "conexao_msql.php";
-
-$sql = "SELECT nome FROM usuarios WHERE email = ?";
-
-$stmt = $conexao->prepare($sql);
-
-$stmt->bind_param("s", $email);
-
-$stmt->execute();
-
-$stmt->store_result();
-
-$stmt->bind_result($nome);
-
-$stmt->fetch();
-
-echo "Seja bem vindo $nome !";
-
-?>
