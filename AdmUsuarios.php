@@ -8,6 +8,31 @@ if (isset($_POST['Pemail'])) {
 
     $resultado = $conexao->query($sql);
 }
+
+
+if (isset($_POST['excluir'], $_POST['emailExcluir'])) {
+    $emailExcluir = $_POST['emailExcluir'];
+
+    $sql = "DELETE FROM usuarios WHERE email = ?";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $emailExcluir);
+
+    if ($stmt->execute()) {
+        header("Location: AdmUsuarios.php?excluido=1");
+        exit;
+    } else {
+        echo "Erro ao excluir usuário.";
+    }
+}
+
+if (isset($_GET['excluido']) && $_GET['excluido'] == 1) {
+    echo "<script>alert('Usuário excluído com sucesso!');
+    var url = new URL(window.location.href);
+    url.searchParams.delete('excluido');
+    window.history.replaceState({}, document.title, url);
+    </script>";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -227,6 +252,22 @@ label {
     background-color: #005da8;
 }
 
+.botao-excluir:hover {
+      background-color: #dc3545;
+}
+
+.botao-excluir{
+
+ display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
     </style>
 </head>
 
@@ -347,7 +388,31 @@ label {
                       >
                        ✏️ Alterar usuário
                        </a>
+
+
+
+                       <form action=""  method="POST">
+                        <input
+        type="hidden"
+        name="emailExcluir"
+        value="<?php echo htmlspecialchars($usuario['email']); ?>"
+    >
+
+    <button
+    class="botao-excluir"
+        type="submit"
+        name="excluir"
+        value="1"
+        
+    >
+        🗑️ Excluir usuário
+    </button>
+</form>
                     </div>
+
+                    
+
+
 
                     <?php
                 } else {
