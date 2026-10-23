@@ -17,6 +17,34 @@ if (isset($_POST['email'])) {
 
     $resultado = buscarUsuario($conexao, $email);
 }
+
+//codigo novo
+
+if ($_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+
+        $pasta = 'uploads/';
+
+        // Cria a pasta caso ela não exista
+        if (!is_dir($pasta)) {
+            mkdir($pasta, 0777, true);
+        }
+
+        // Gera um nome único para o arquivo
+        $extensao = strtolower(
+            pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION)
+        );
+
+        $extensoesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+        if (!in_array($extensao, $extensoesPermitidas)) {
+            exit('Formato de imagem não permitido.');
+        }
+
+        $nomeImagem = uniqid('img_', true) . '.' . $extensao;
+        $caminho = $pasta . $nomeImagem;
+
+}
+
 ?>
  
 <!DOCTYPE html> 
@@ -380,7 +408,7 @@ $telefone = !empty($_POST['telefone']) ? $_POST['telefone'] : $usuario['telefone
 
 $senha = !empty($_POST['senha']) ? $_POST['senha'] : $usuario['senha'];
 
-$imagem = !empty($_POST['imagem']) ? $_POST['imagem'] : $usuario['imagem']; 
+$imagem = !empty(  $_FILES['imagem']) ?   $_FILES['imagem'] : $usuario['imagem']; 
 
   
 $email = $usuario['email'];
@@ -388,7 +416,8 @@ $email = $usuario['email'];
 SET nome = '$nome',
 telefone = '$telefone',
 email = '$emailN',
-senha = '$senha'
+senha = '$senha',
+ imagem = '$imagem'
 WHERE email = '$email';
 "; 
  
@@ -436,6 +465,15 @@ WHERE email = '$email';
                             <p>
                                 <strong>Telefone:</strong>
                                 <?php echo"NOVO: ". $_POST["telefone"]; ?>
+
+                        
+                            </p>
+
+                             <p>
+                                <strong>Imagem:</strong>
+                                <img src="<?php echo htmlspecialchars($usuario['imagem']); ?>"
+     alt="Imagem do usuário"
+     width="150">
 
                         
                             </p>
