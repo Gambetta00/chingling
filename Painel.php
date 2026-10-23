@@ -1,6 +1,7 @@
- 
 <?php
 session_start();
+
+if(isset($email)){
 
 $email = $_SESSION['email'];
 
@@ -20,8 +21,11 @@ $stmt->bind_result($nome);
 
 $stmt->fetch();
 
-echo "Seja bem vindo $nome !";
 
+echo "Seja bem vindo $nome !";
+}else{
+    echo "Seja bem vindo!";
+}
 ?>
 
 
