@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -13,7 +14,7 @@ if (isset($_GET['pesquisar'])) {
     $nomeBusca = trim($_GET['nome_busca'] ?? '');
     $categoriaBusca = $_GET['categoria_busca'] ?? '';
 
-    $sql = "SELECT id, nome, estoque, preco, categoria_id, descricao
+    $sql = "SELECT id, nome, estoque, preco, categoria_id, imagem, descricao
             FROM produtos
             WHERE nome LIKE ?";
 
@@ -27,17 +28,23 @@ if (isset($_GET['pesquisar'])) {
 
     $stmt = $conexao->prepare($sql);
 
-    if ($categoriaBusca !== '') {
-        $categoriaId = (int) $categoriaBusca;
-        $stmt->bind_param("si", $nomeLike, $categoriaId);
-    } else {
-        $stmt->bind_param("s", $nomeLike);
-    }
+    if ($stmt) {
 
-    if ($stmt->execute()) {
-        $resultadoPesquisa = $stmt->get_result();
+        if ($categoriaBusca !== '') {
+            $categoriaId = (int) $categoriaBusca;
+            $stmt->bind_param("si", $nomeLike, $categoriaId);
+        } else {
+            $stmt->bind_param("s", $nomeLike);
+        }
+
+        if ($stmt->execute()) {
+            $resultadoPesquisa = $stmt->get_result();
+        } else {
+            $erroPesquisa = 'Não foi possível pesquisar os móveis.';
+        }
+
     } else {
-        $erroPesquisa = 'Não foi possível pesquisar os móveis.';
+        $erroPesquisa = 'Não foi possível preparar a pesquisa.';
     }
 }
 ?>
@@ -49,8 +56,8 @@ if (isset($_GET['pesquisar'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Cadastro de Móveis</title>
- <style></style>
+    <title>Administração de Móveis</title>
+
     <link rel="stylesheet" href="style2.css">
 </head>
 
@@ -92,185 +99,305 @@ if (isset($_GET['pesquisar'])) {
         <h1>ADMINISTRAÇÃO DE MÓVEIS</h1>
 
         <p class="descricao">
-            Cadastre novos móveis ou edite móveis já existentes na loja.
+            Pesquise móveis para acessar suas informações, editar ou excluir.
         </p>
 
         <?php
         if (isset($_SESSION['mensagem'])) {
             echo '<p class="mensagem">' .
-                htmlspecialchars($_SESSION['mensagem'], ENT_QUOTES, 'UTF-8').
+                htmlspecialchars($_SESSION['mensagem'], ENT_QUOTES, 'UTF-8') .
                 '</p>';
+
             unset($_SESSION['mensagem']);
         }
         ?>
 
         <!-- PESQUISA DE MÓVEIS -->
 
-<div class="caixa pesquisa-caixa">
+        <div class="caixa pesquisa-caixa">
 
-    <h2>Pesquisar móveis</h2>
+            <h2>Pesquisar móveis</h2>
 
-    <p class="descricao">
-        Pesquise pelo nome do móvel ou selecione uma categoria.
-    </p>
+            <p class="descricao">
+                Pesquise pelo nome do móvel ou selecione uma categoria.
+            </p>
 
+            <form method="GET" action="AdmMoveis.php">
 
-    <form method="GET" action="">
+                <label for="nome_busca">Nome do móvel</label>
 
-        <label for="nome_busca">Nome do móvel</label>
+                <input
+                    type="text"
+                    name="nome_busca"
+                    id="nome_busca"
+                    placeholder="Digite o nome do móvel"
+                    value="<?php
+                        echo htmlspecialchars(
+                            $nomeBusca,
+                            ENT_QUOTES,
+                            'UTF-8'
+                        );
+                    ?>"
+                >
 
-        <input
-            type="text"
-            name="nome_busca"
-            id="nome_busca"
-            placeholder="Digite o nome do móvel"
-            value="<?php echo htmlspecialchars($nomeBusca, ENT_QUOTES, 'UTF-8'); ?>"
-        >
+                <br><br>
 
-        <br><br>
+                <label for="categoria_busca">Categoria</label>
 
-        <label for="categoria_busca">Categoria</label>
+                <select name="categoria_busca" id="categoria_busca">
 
-        <select name="categoria_busca" id="categoria_busca">
+                    <option value="">Todas as categorias</option>
 
-            <option value="">Todas as categorias</option>
+                    <option
+                        value="1"
+                        <?php echo $categoriaBusca === '1' ? 'selected' : ''; ?>
+                    >
+                        Cozinha
+                    </option>
 
-            <option value="1" <?php echo $categoriaBusca === '1' ? 'selected' : ''; ?>>
-                Cozinha
-            </option>
+                    <option
+                        value="2"
+                        <?php echo $categoriaBusca === '2' ? 'selected' : ''; ?>
+                    >
+                        Sala de Estar
+                    </option>
 
-            <option value="2" <?php echo $categoriaBusca === '2' ? 'selected' : ''; ?>>
-                Sala de Estar
-            </option>
+                    <option
+                        value="3"
+                        <?php echo $categoriaBusca === '3' ? 'selected' : ''; ?>
+                    >
+                        Quarto
+                    </option>
 
-            <option value="3" <?php echo $categoriaBusca === '3' ? 'selected' : ''; ?>>
-                Quarto
-            </option>
+                    <option
+                        value="4"
+                        <?php echo $categoriaBusca === '4' ? 'selected' : ''; ?>
+                    >
+                        Diversos
+                    </option>
 
-            <option value="4" <?php echo $categoriaBusca === '4' ? 'selected' : ''; ?>>
-                Diversos
-            </option>
+                </select>
 
-        </select>
+                <br><br>
 
-        <br><br>
+                <button
+                    type="submit"
+                    name="pesquisar"
+                    value="1"
+                    class="botao-alterar"
+                >
+                    PESQUISAR
+                </button>
 
-        <button type="submit" name="pesquisar" value="1" class="botao-alterar">
-            PESQUISAR
-        </button>
+            </form>
 
-    </form>
+            <!-- RESULTADOS DA PESQUISA -->
 
-    <?php if (isset($_GET['pesquisar'])): ?>
+            <?php if (isset($_GET['pesquisar'])): ?>
 
-        <div class="resultados-pesquisa">
+                <div class="resultados-pesquisa">
 
-            <h2>Resultados da pesquisa</h2>
+                    <h2>Resultados da pesquisa</h2>
 
-            <?php if ($erroPesquisa !== ''): ?>
-
-                <p><?php echo htmlspecialchars($erroPesquisa, ENT_QUOTES, 'UTF-8'); ?></p>
-
-            <?php elseif ($resultadoPesquisa && $resultadoPesquisa->num_rows > 0): ?>
-
-                <p>
-                    Foram encontrados
-                    <?php echo $resultadoPesquisa->num_rows; ?>
-                    móvel(is).
-                </p>
-
-                <?php
-                $categorias = [
-                    1 => 'Cozinha',
-                    2 => 'Sala de Estar',
-                    3 => 'Quarto',
-                    4 => 'Diversos'
-                ];
-                ?>
-
-                <?php while ($movel = $resultadoPesquisa->fetch_assoc()): ?>
-
-                    <div class="produto-resultado">
-                        
-                        <h3>
-                        ID: <?php echo (int) $movel['id']; ?> -
-                        <?php echo htmlspecialchars($movel['nome'], ENT_QUOTES, 'UTF-8'); ?>
-                        </h3>
+                    <?php if ($erroPesquisa !== ''): ?>
 
                         <p>
-                            <strong>Categoria:</strong>
                             <?php
                             echo htmlspecialchars(
-                                $categorias[(int) $movel['categoria_id']] ?? 'Não identificada',
+                                $erroPesquisa,
                                 ENT_QUOTES,
                                 'UTF-8'
                             );
                             ?>
                         </p>
 
-                        <p>
-                            <strong>Estoque:</strong>
-                            <?php echo (int) $movel['estoque']; ?>
-                        </p>
+                    <?php elseif (
+                        $resultadoPesquisa &&
+                        $resultadoPesquisa->num_rows > 0
+                    ): ?>
 
                         <p>
-                            <strong>Preço:</strong>
-                            <br>R$ <?php echo number_format((float) $movel['preco'], 2, ',', '.'); ?>
+                            Foram encontrados
+                            <?php echo $resultadoPesquisa->num_rows; ?>
+                            móvel(is).
                         </p>
+
+                        <?php
+                        $categorias = [
+                            1 => 'Cozinha',
+                            2 => 'Sala de Estar',
+                            3 => 'Quarto',
+                            4 => 'Diversos'
+                        ];
+                        ?>
+
+                        <?php while (
+                            $movel = $resultadoPesquisa->fetch_assoc()
+                        ): ?>
+
+                            <div class="produto-resultado">
+
+                                <h3>
+                                    ID: <?php echo (int) $movel['id']; ?>
+                                    -
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $movel['nome'],
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    );
+                                    ?>
+                                </h3>
+
+                                <p>
+                                    <strong>Categoria:</strong>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $categorias[
+                                            (int) $movel['categoria_id']
+                                        ] ?? 'Não identificada',
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    );
+                                    ?>
+                                </p>
+
+                                <p>
+                                    <strong>Estoque:</strong>
+                                    <?php echo (int) $movel['estoque']; ?>
+                                </p>
+
+                                <p>
+                                    <strong>Preço:</strong>
+                                    R$
+                                    <?php
+                                    echo number_format(
+                                        (float) $movel['preco'],
+                                        2,
+                                        ',',
+                                        '.'
+                                    );
+                                    ?>
+                                </p>
+
+                                <p>
+                                    <strong>Descrição:</strong>
+
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $movel['descricao'] ?? '',
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    );
+                                    ?>
+                                </p>
+
+                                <!-- BOTÃO DE EXCLUIR -->
+
+                                <form
+                                    action="AdmMoveisDelete_back.php"
+                                    method="POST"
+                                    onsubmit="return confirm('Tem certeza de que deseja excluir este móvel?');"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="delete_id"
+                                        value="<?php echo (int) $movel['id']; ?>"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        name="fdeletar"
+                                        value="1"
+                                        class="botao-alterar"
+                                    >
+                                        EXCLUIR
+                                    </button>
+
+                                </form>
+
+                                <br>
+
+                                <!-- BOTÃO DE EDITAR -->
+
+                                <button
+                                    type="button"
+                                    class="botao-alterar"
+                                    onclick="revelarFormulario(this)"
+                                    data-movel="<?php
+                                        echo htmlspecialchars(
+                                            json_encode([
+                                                'id' => $movel['id'],
+                                                'nome' => $movel['nome'],
+                                                'estoque' => $movel['estoque'],
+                                                'preco' => $movel['preco'],
+                                                'categoria' => $movel['categoria_id'],
+                                                'imagem' => $movel['imagem'] ?? '',
+                                                'descricao' => $movel['descricao'] ?? ''
+                                            ]),
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        );
+                                    ?>"
+                                >
+                                    EDITAR
+                                </button>
+
+                            </div>
+
+                        <?php endwhile; ?>
+
+                    <?php else: ?>
 
                         <p>
-                            <strong>Descrição:</strong>
-                            <?php echo htmlspecialchars($movel['descricao'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                            Nenhum móvel encontrado com esses filtros.
                         </p>
 
-                <form action="AdmMoveisDelete_back.php" method="post">
-               <input type="hidden" name="delete_id" value="<?= $movel['id'] ?>">
-                <button type="submit" name="fdeletar" value="1" class="botao-alterar">
-                Delete
-                </button>
-                </form>
+                    <?php endif; ?>
 
-                <button type="button" onclick="revelarFormulario( <?= json_encode($movel['nome']) ?>,
-                    <?= json_encode($movel['categoria_id']) ?>)">
-                Edit
-                </button>
-
-                    </div>
-
-                <?php endwhile; ?>
-
-            <?php else: ?>
-
-                <p>Nenhum móvel encontrado com esses filtros.</p>
+                </div>
 
             <?php endif; ?>
 
-        
-
         </div>
 
-    <?php endif; ?>
+        <!-- FIM DA PESQUISA -->
 
-</div>
+        <!-- FORMULÁRIO DE EDIÇÃO -->
 
-<!-- FIM DA PESQUISA -->
-
-        <div class="formularios" id="formulario_edicao" style="display: none;">
-
-            <!-- FORMULÁRIO DE EDIÇÃO -->
+        <div
+            class="formularios"
+            id="formulario_edicao"
+            style="display: none;"
+        >
 
             <div class="caixa">
 
                 <h2>Edição de móveis</h2>
 
                 <p class="descricao">
-                    Informe o nome e a categoria do móvel que deseja localizar.
-                    Os demais campos serão usados para atualizar seus dados.
+                    Altere as informações do móvel selecionado.
                 </p>
 
-                <form method="POST" action="AdmMoveisEdit_back.php">
+                <form
+                    method="POST"
+                    action="AdmMoveisEdit_back.php"
+                >
 
-                    <label for="edit_movel_nome">Nome do móvel</label>
+                    <!-- ID DO MÓVEL QUE SERÁ EDITADO -->
+
+                    <input
+                        type="hidden"
+                        name="movel_id"
+                        id="edit_movel_id"
+                    >
+
+                    <label for="edit_movel_nome">
+                        Nome do móvel
+                    </label>
+
                     <input
                         type="text"
                         name="movel_nome"
@@ -280,19 +407,24 @@ if (isset($_GET['pesquisar'])) {
 
                     <br><br>
 
-                    <label for="edit_movel_estoque">Estoque do móvel</label>
+                    <label for="edit_movel_estoque">
+                        Estoque do móvel
+                    </label>
+
                     <input
                         type="number"
                         name="movel_estoque"
                         id="edit_movel_estoque"
                         min="0"
-                        value="<?php  ?>"
                         required
                     >
 
                     <br><br>
 
-                    <label for="edit_movel_preco">Preço do móvel</label>
+                    <label for="edit_movel_preco">
+                        Preço do móvel
+                    </label>
+
                     <input
                         type="number"
                         name="movel_preco"
@@ -304,8 +436,15 @@ if (isset($_GET['pesquisar'])) {
 
                     <br><br>
 
-                    <label for="edit_categoria">Categoria do móvel</label>
-                    <select name="categoria" id="edit_categoria" required>
+                    <label for="edit_categoria">
+                        Categoria do móvel
+                    </label>
+
+                    <select
+                        name="categoria"
+                        id="edit_categoria"
+                        required
+                    >
                         <option value="1">Cozinha</option>
                         <option value="2">Sala de Estar</option>
                         <option value="3">Quarto</option>
@@ -314,7 +453,10 @@ if (isset($_GET['pesquisar'])) {
 
                     <br><br>
 
-                    <label for="edit_movel_imagem">Imagem do móvel</label>
+                    <label for="edit_movel_imagem">
+                        Imagem do móvel
+                    </label>
+
                     <input
                         type="text"
                         name="movel_imagem"
@@ -324,7 +466,10 @@ if (isset($_GET['pesquisar'])) {
 
                     <br><br>
 
-                    <label for="edit_movel_descricao">Descrição do móvel</label>
+                    <label for="edit_movel_descricao">
+                        Descrição do móvel
+                    </label>
+
                     <input
                         type="text"
                         name="movel_descricao"
@@ -334,30 +479,66 @@ if (isset($_GET['pesquisar'])) {
 
                     <br><br>
 
-                    <button type="submit" class="botao-alterar">
-                        EDITAR MÓVEL
+                    <button
+                        type="submit"
+                        class="botao-alterar"
+                    >
+                        SALVAR ALTERAÇÕES
+                    </button>
+
+                    <button
+                        type="button"
+                        class="botao-alterar"
+                        onclick="fecharFormulario()"
+                    >
+                        CANCELAR
                     </button>
 
                 </form>
 
             </div>
 
-            
-
         </div>
 
-    </main>
-    <script>
-function revelarFormulario() {
-    const formulario = document.getElementById("formulario_edicao");
+        <!-- FIM DO FORMULÁRIO DE EDIÇÃO -->
 
-    if (formulario.style.display === "none") {
-        formulario.style.display = "block";
-    } else {
-        formulario.style.display = "none";
-    }
-}
-</script>
+    </main>
+
+    <script>
+        function revelarFormulario(botao) {
+
+            // Recupera os dados do móvel selecionado.
+            const movel = JSON.parse(botao.dataset.movel);
+
+            // Preenche os campos do formulário.
+            document.getElementById("edit_movel_id").value = movel.id;
+            document.getElementById("edit_movel_nome").value = movel.nome;
+            document.getElementById("edit_movel_estoque").value = movel.estoque;
+            document.getElementById("edit_movel_preco").value = movel.preco;
+            document.getElementById("edit_categoria").value = movel.categoria;
+            document.getElementById("edit_movel_imagem").value = movel.imagem ?? "";
+            document.getElementById("edit_movel_descricao").value = movel.descricao ?? "";
+
+            // Mostra o formulário.
+            const formulario = document.getElementById("formulario_edicao");
+
+            formulario.style.display = "block";
+
+            // Desce a página até o formulário.
+            formulario.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+        function fecharFormulario() {
+
+            document.getElementById("formulario_edicao").style.display = "none";
+
+        }
+    </script>
+
 </body>
 
 </html>
+
