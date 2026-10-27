@@ -1,4 +1,5 @@
 
+
 <?php
 session_start();
 
@@ -17,11 +18,6 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
-$categorias = $conexao->query(
-    "SELECT id, nome FROM categorias ORDER BY nome ASC"
-);
-
-
 // É necessário estar logado.
 if (!isset($_SESSION['email'])) {
     header("Location: Login.php");
@@ -29,6 +25,11 @@ if (!isset($_SESSION['email'])) {
 }
 
 $emailUsuario = $_SESSION['email'];
+
+// Categorias usadas no formulário de pesquisa.
+$categorias = $conexao->query(
+    "SELECT id, nome FROM categorias ORDER BY nome ASC"
+);
 
 // Token para validar os formulários.
 if (empty($_SESSION['csrf_painel'])) {
@@ -415,6 +416,11 @@ call_user_func_array([$stmtProdutos, 'bind_param'], $argumentos);
 $stmtProdutos->execute();
 $resultadoProdutos = $stmtProdutos->get_result();
 
+$produtos = [];
+while ($produto = $resultadoProdutos->fetch_assoc()) {
+    $produtos[] = $produto;
+}
+$stmtProdutos->close();
 
 function escapar($valor) {
     return htmlspecialchars(
@@ -558,17 +564,8 @@ function escapar($valor) {
 
             <h2>Móveis disponíveis</h2>
 
-            <?php if (count($produtos) === 0): ?>
-
-                <p class="sem-produtos">
-                    Nenhum móvel disponível no momento.
-                </p>
-
-            <?php else: ?>
-
-                <div class="lista-produtos-painel">
-                            
-<form method="GET" action="Painel.php" class="pesquisa-painel">
+            <!-- PESQUISA POR NOME, CATEGORIA E FAIXA DE PREÇO -->
+            <form method="GET" action="Painel.php" class="pesquisa-painel">
 
     <div class="campo-pesquisa-painel">
         <label for="busca_nome">Nome do produto</label>
@@ -577,7 +574,7 @@ function escapar($valor) {
             id="busca_nome"
             name="busca_nome"
             placeholder="Ex.: Mesa, cadeira..."
-            value="<?= htmlspecialchars($buscaNome) ?>"
+            value="<?= escapar($buscaNome) ?>"
         >
     </div>
 
@@ -591,7 +588,7 @@ function escapar($valor) {
                     value="<?= (int)$cat['id'] ?>"
                     <?= $categoriaBusca === (int)$cat['id'] ? 'selected' : '' ?>
                 >
-                    <?= htmlspecialchars($cat['nome']) ?>
+                    <?= escapar($cat['nome']) ?>
                 </option>
             <?php endwhile; ?>
         </select>
@@ -606,7 +603,7 @@ function escapar($valor) {
             min="0"
             step="0.01"
             placeholder="0,00"
-            value="<?= htmlspecialchars($precoMinTexto) ?>"
+            value="<?= escapar($precoMinTexto) ?>"
         >
     </div>
 
@@ -619,7 +616,7 @@ function escapar($valor) {
             min="0"
             step="0.01"
             placeholder="Sem limite"
-            value="<?= htmlspecialchars($precoMaxTexto) ?>"
+            value="<?= escapar($precoMaxTexto) ?>"
         >
     </div>
 
@@ -632,6 +629,18 @@ function escapar($valor) {
     </a>
 
 </form>
+
+            <?php if (count($produtos) === 0): ?>
+
+                <p class="sem-produtos">
+                    Nenhum móvel encontrado com os filtros selecionados.
+                </p>
+
+            <?php else: ?>
+
+                <div class="lista-produtos-painel">
+                            
+
 
                     <?php foreach ($produtos as $produto): ?>
 
