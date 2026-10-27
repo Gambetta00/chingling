@@ -1,5 +1,9 @@
 <?php
+
 require_once 'conexao_msql.php';
+session_start();
+if ($_SESSION['tipo'] === 'admin'){
+
 
 if (isset($_POST['Pemail'])) {
     $Pemail = $_POST['Pemail'];
@@ -449,7 +453,13 @@ label {
                     echo "Usuário não encontrado!";
                 }
             }
-            ?>
+
+            }else{
+                ##header("Location: Painel.php");
+                var_dump($_SESSION);
+} ?> 
+
+            
 
         </section>
 
@@ -457,3 +467,4 @@ label {
 
 </body>
 </html>
+

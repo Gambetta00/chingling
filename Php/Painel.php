@@ -335,6 +335,9 @@ if (!$usuarioAtual) {
     exit;
 }
 
+$_SESSION['usuario'] = $usuarioAtual['nome'];
+$_SESSION['tipo'] = $usuarioAtual['tipo'];
+
 // =====================================
 // BUSCAR PRODUTOS
 // Prioriza categorias mais compradas.
