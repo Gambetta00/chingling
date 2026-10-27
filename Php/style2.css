@@ -1,4 +1,4 @@
-    /* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
+ /* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
 
     /* Caixa do formulário de cadastro */
     main > .caixa {
@@ -493,4 +493,3 @@
         grid-template-columns: 1fr;
     }
 }
-
