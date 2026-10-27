@@ -270,6 +270,17 @@ label {
     font-size: 14px;
 }
 
+.imagem-usuario {
+    width: 100px;
+    height: 100px;
+
+    object-fit: contain;
+
+    display: block;
+    margin: 10px auto;
+
+    background-color: #f5f7fa;
+}
     </style>
 </head>
 
@@ -347,7 +358,26 @@ label {
 
                     <div class="usuario-card">
 
-                        <div class="icone">👤</div>
+                        
+<div class="icone">
+
+    <?php if (!empty($usuario['imagem'])) { ?>
+
+        <img
+            src="<?php echo htmlspecialchars($usuario['imagem']); ?>"
+            alt="Foto de perfil"
+            class="imagem-usuario"
+        >
+
+    <?php } else { ?>
+
+        <span class="emoji-perfil">👤</span>
+
+    <?php } ?>
+
+</div>
+
+                        
 
                         <div class="dados">
 
