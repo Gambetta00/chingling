@@ -117,18 +117,20 @@ if ($stmt->num_rows > 0) {
 
         } else {
 
-            echo "Senha incorreta.";
-
+            $_SESSION['mensagem'] = "Senha incorreta.";
+            
         }
 
     } else {
 
-        echo "Email não encontrado.";
+        echo $_SESSION['mensagem'] = "Email não encontrado.";
 
     }
 
     $stmt->close();
     $conexao->close();
+    header("Location: Login.php");
+            exit;
 }
     }
 

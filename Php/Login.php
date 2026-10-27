@@ -44,6 +44,11 @@
         <div class="caixa">
 
             <h2>Dados do usuário</h2>
+            <h2><?php
+            session_start();
+            if(isset($_SESSION['mensagem'])){
+                echo $_SESSION['mensagem'];
+            } ?></h2>
 
             <form method="POST" action="login_back.php">
                 <br><br>

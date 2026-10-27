@@ -262,14 +262,13 @@ nav a {
     </div> 
 </header> 
  
-<nav> 
-    <a href="#">Sala de Estar</a> 
-    <a href="#">Quarto</a> 
-    <a href="#">Sala de Jantar</a> 
-    <a href="#">Cozinha</a> 
-    <a href="#">Escritório</a> 
-    <a href="#">Banheiro</a> 
-</nav> 
+    <nav>
+        <a href="Painel.php">Início</a>
+        <a href="Moveis.php">Móveis</a>
+        <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
+        <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
+        <a href="AdmCadastroMoveis.php">Cadastro de Móveis (ADM ONLY)</a>
+    </nav>
  
 <main class="main-centralizado"> 
  
