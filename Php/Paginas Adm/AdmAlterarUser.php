@@ -22,7 +22,7 @@ if (isset($_POST['email'])) {
 
 if ($_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
 
-        $pasta = 'uploads/';
+        $pasta = 'imagens/';
 
         // Cria a pasta caso ela não exista
         if (!is_dir($pasta)) {
