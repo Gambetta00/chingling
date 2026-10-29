@@ -1,0 +1,916 @@
+ /* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
+
+    /* Caixa do formulário de cadastro */
+    main > .caixa {
+        width: 100%;
+        max-width: 900px;
+        margin: 25px auto;
+        padding: 30px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Título dentro da caixa */
+    main > .caixa h2 {
+        margin-bottom: 25px;
+        font-size: 20px;
+        color: #0875d1;
+    }
+
+    /* Campos do formulário */
+    main > .caixa input,
+    main > .caixa select {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 18px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 15px;
+        background-color: white;
+    }
+
+    /* Texto dos campos */
+    main > .caixa label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Espaçamento do botão */
+    main > .caixa .botao-alterar {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        padding: 13px;
+    }
+
+    /* Ajuste para telas pequenas */
+    @media (max-width: 500px) {
+        main > .caixa {
+            padding: 20px;
+        }
+    }
+    /* PAINEL ADMINISTRATIVO */
+
+    .painel > h1 {
+        color: #0875d1;
+        font-size: 28px;
+    }
+
+    .painel-caixa {
+        width: 100%;
+        max-width: 850px;
+        margin: 30px auto;
+        padding: 30px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .painel-caixa h2 {
+        margin-bottom: 12px;
+        color: #0875d1;
+        font-size: 22px;
+    }
+
+    .painel-caixa .texto {
+        margin-bottom: 25px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .botoes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .botao-painel {
+        display: inline-block;
+        padding: 14px 20px;
+        background-color: #006dcc;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+
+    .botao-painel:hover {
+        background-color: #0055a4;
+    }
+
+    /* PESQUISA DE MÓVEIS */
+
+    .pesquisa-caixa {
+        width: 100%;
+        margin: 25px 0;
+        padding: 25px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .pesquisa-caixa h2 {
+        margin-bottom: 15px;
+        color: #0875d1;
+        font-size: 21px;
+    }
+
+    .pesquisa-caixa input,
+    .pesquisa-caixa select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 15px;
+    }
+
+    .resultados-pesquisa {
+        margin-top: 25px;
+    }
+
+    .resultados-pesquisa > h2 {
+        margin-bottom: 15px;
+    }
+
+    .produto-resultado {
+        margin-top: 15px;
+        padding: 18px;
+        background-color: #f5f7fa;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow-wrap: anywhere;
+    }
+
+    .produto-resultado h3 {
+        margin-bottom: 12px;
+        color: #0875d1;
+        font-size: 18px;
+    }
+
+    .produto-resultado p {
+        margin-top: 8px;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 500px) {
+        .pesquisa-caixa {
+            padding: 18px;
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f7fa;
+        color: #333;
+    }
+
+
+    /* CABEÇALHO */
+
+    header {
+        height: 75px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 24px;
+        color: #0875d1;
+    }
+
+    .logo span {
+        font-size: 30px;
+    }
+
+    .usuario {
+        color: #333;
+        font-size: 14px;
+    }
+
+    .usuario a {
+        color: #0875d1;
+        text-decoration: none;
+        margin-left: 5px;
+    }
+
+
+    /* MENU */
+
+    nav {
+        background-color: #006dcc;
+        padding: 12px 30px;
+        display: flex;
+        gap: 25px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+
+    /* CONTEÚDO */
+
+    main {
+        width: 90%;
+        max-width: 1100px;
+        margin: 30px auto;
+    }
+
+    h1 {
+        color: #0875d1;
+        font-size: 24px;
+    }
+
+    .descricao {
+        margin-top: 8px;
+        color: #666;
+    }
+
+
+    /* CAIXA DO CADASTRO */
+
+    .caixa {
+        background-color: white;
+        margin-top: 25px;
+        padding: 25px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .caixa h2 {
+        margin-bottom: 20px;
+        font-size: 19px;
+    }
+
+
+    /* CAMPOS */
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .caixa input,
+    .caixa select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 15px;
+    }
+
+    .caixa input:focus,
+    .caixa select:focus {
+        outline: none;
+        border-color: #0875d1;
+    }
+
+
+    @media (max-width: 500px) {
+        .painel-caixa {
+            padding: 20px;
+        }
+
+        .botoes {
+            flex-direction: column;
+        }
+
+        .botao-painel {
+            width: 100%;
+        }
+    }
+
+    /* BOT */
+
+    
+/* GRADE DOS RESULTADOS DA PESQUISA */
+.resultados-pesquisa {
+    margin-top: 25px;
+}
+
+.resultados-pesquisa > h2,
+.resultados-pesquisa > p {
+    margin-bottom: 15px;
+}
+
+/* Até 5 móveis por linha */
+.resultados-pesquisa {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 15px;
+}
+
+/* Título e mensagem ocupam a linha inteira */
+.resultados-pesquisa > h2,
+.resultados-pesquisa > p {
+    grid-column: 1 / -1;
+}
+
+/* Cartão individual de cada móvel */
+.produto-resultado {
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+
+/* Nome do móvel */
+.produto-resultado h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #0875d1;
+}
+
+/* Informações do móvel */
+.produto-resultado p {
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* Formulário de exclusão */
+.produto-resultado form {
+    margin-top: 10px;
+}
+
+/* Botões compactos */
+.produto-resultado button {
+    width: 100%;
+    padding: 8px 5px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Botão de deletar */
+.produto-resultado form button {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Botão de editar */
+.produto-resultado > button {
+    margin-top: 6px;
+    background-color: #0875d1;
+    color: white;
+}
+
+/* Telas médias: 3 móveis por linha */
+@media (max-width: 1000px) {
+    .resultados-pesquisa {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Tablets: 2 móveis por linha */
+@media (max-width: 650px) {
+    .resultados-pesquisa {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Celulares pequenos: 1 móvel por linha */
+@media (max-width: 400px) {
+    .resultados-pesquisa {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* MELHORAR A LEITURA DOS RESULTADOS */
+
+.resultados-pesquisa {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+/* Título e mensagem ocupam a largura inteira */
+.resultados-pesquisa > h2,
+.resultados-pesquisa > p {
+    grid-column: 1 / -1;
+}
+
+/* Cartão de cada móvel */
+.produto-resultado {
+    min-width: 0;
+    margin: 0;
+    padding: 18px;
+    background-color: white;
+    border: 1px solid #d5dce5;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+/* Nome do móvel */
+.produto-resultado h3 {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+/* Informações */
+.produto-resultado p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-top: 10px;
+}
+
+/* Espaço entre os botões */
+.produto-resultado form {
+    margin-top: 16px;
+}
+
+.produto-resultado > button {
+    margin-top: 10px;
+}
+
+/* Botões mais confortáveis */
+.produto-resultado form button,
+.produto-resultado > button {
+    width: 100%;
+    padding: 11px 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: normal;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Até 3 móveis por linha */
+@media (max-width: 1100px) {
+    .resultados-pesquisa {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Até 2 móveis por linha */
+@media (max-width: 750px) {
+    .resultados-pesquisa {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .produto-resultado {
+        padding: 14px;
+    }
+}
+
+/* 1 móvel por linha em telas muito estreitas */
+@media (max-width: 450px) {
+    .resultados-pesquisa {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* PRODUTOS EXIBIDOS NO PAINEL */
+
+main.painel .boas-vindas {
+    margin-top: 18px;
+    color: #333;
+    font-size: 16px;
+}
+
+main.painel .lista-produtos-painel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+main.painel .produto-painel-card {
+    min-width: 0;
+    padding: 20px;
+    background-color: #f5f7fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+main.painel .produto-painel-card h3 {
+    margin-bottom: 15px;
+    color: #0875d1;
+    font-size: 19px;
+    overflow-wrap: anywhere;
+}
+
+main.painel .produto-painel-imagem {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+main.painel .produto-painel-dados p {
+    margin-top: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+main.painel .produto-painel-dados strong {
+    color: #444;
+}
+
+main.painel .sem-imagem {
+    margin-bottom: 15px;
+    color: #777;
+}
+
+@media (max-width: 650px) {
+    main.painel .lista-produtos-painel {
+        grid-template-columns: 1fr;
+    }
+
+    main.painel .produto-painel-card {
+        padding: 15px;
+    }
+}
+
+/* PAINEL PRINCIPAL */
+
+main.painel .topo-painel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 25px;
+    align-items: start;
+    margin-bottom: 25px;
+}
+
+main.painel .boas-vindas h1 {
+    margin-bottom: 12px;
+}
+
+main.painel .boas-vindas p {
+    margin-top: 10px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* SALDO LATERAL */
+
+main.painel .saldo-caixa {
+    padding: 18px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+main.painel .saldo-caixa h2 {
+    color: #0875d1;
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+main.painel .saldo-valor {
+    margin-bottom: 18px;
+    font-size: 23px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+main.painel .saldo-caixa label {
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+main.painel .saldo-caixa select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+main.painel .botao-recarregar {
+    width: 100%;
+    padding: 11px;
+    background-color: #006dcc;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+main.painel .botao-recarregar:hover {
+    background-color: #0055a4;
+}
+
+main.painel .aviso-recarga {
+    margin-top: 12px;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* PRODUTOS */
+
+main.painel .secao-produtos > h2 {
+    margin-bottom: 18px;
+    color: #0875d1;
+}
+
+main.painel .lista-produtos-painel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+main.painel .produto-painel-card {
+    min-width: 0;
+    padding: 18px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow-wrap: anywhere;
+}
+
+main.painel .produto-painel-card h3 {
+    margin-bottom: 15px;
+    color: #0875d1;
+    font-size: 18px;
+}
+
+main.painel .produto-painel-imagem {
+    display: block;
+    width: 100%;
+    height: 180px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    object-fit: contain;
+    background-color: white;
+}
+
+main.painel .sem-imagem {
+    display: flex;
+    min-height: 100px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #777;
+    background-color: #f5f7fa;
+    border-radius: 6px;
+}
+
+main.painel .produto-painel-dados p {
+    margin-top: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+main.painel .preco-antigo {
+    margin-right: 5px;
+    color: #777;
+    text-decoration: line-through;
+}
+
+main.painel .form-comprar {
+    margin-top: 18px;
+}
+
+main.painel .botao-comprar {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #0875d1;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+main.painel .botao-comprar:hover:not(:disabled) {
+    background-color: #0055a4;
+}
+
+main.painel .botao-comprar:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+main.painel .mensagem-painel {
+    margin-bottom: 20px;
+    padding: 14px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+main.painel .sem-produtos {
+    padding: 20px;
+    background-color: white;
+    border-radius: 6px;
+}
+
+/* BOTÃO SAIR */
+
+header .botao-sair {
+    margin-left: 8px;
+    padding: 7px 12px;
+    color: white;
+    background-color: #006dcc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 900px) {
+    main.painel .lista-produtos-painel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    main.painel .topo-painel {
+        grid-template-columns: 1fr;
+    }
+
+    main.painel .saldo-caixa {
+        width: 100%;
+    }
+
+    main.painel .lista-produtos-painel {
+        grid-template-columns: 1fr;
+    }
+}
+
+.lista-produtos-painel {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+.produto-painel-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1000px) {
+    .lista-produtos-painel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 550px) {
+    .lista-produtos-painel {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================================
+   BARRA DE PESQUISA DO PAINEL
+   Regras isoladas para não alterar as outras páginas.
+   ===================================================== */
+
+main.painel .pesquisa-painel {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin: 20px 0 25px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+main.painel .campo-pesquisa-painel {
+    min-width: 0;
+}
+
+main.painel .campo-pesquisa-painel label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+main.painel .campo-pesquisa-painel input,
+main.painel .campo-pesquisa-painel select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 10px 12px;
+    margin: 0;
+    color: #333;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+main.painel .campo-pesquisa-painel input:focus,
+main.painel .campo-pesquisa-painel select:focus {
+    outline: none;
+    border-color: #0875d1;
+    box-shadow: 0 0 0 2px rgba(8, 117, 209, 0.12);
+}
+
+main.painel .botao-pesquisar-painel,
+main.painel .botao-limpar-pesquisa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+    min-width: 0;
+    min-height: 42px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+main.painel .botao-pesquisar-painel {
+    color: white;
+    background-color: #006dcc;
+}
+
+main.painel .botao-pesquisar-painel:hover {
+    background-color: #0055a4;
+}
+
+main.painel .botao-limpar-pesquisa {
+    color: #333;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+}
+
+main.painel .botao-limpar-pesquisa:hover {
+    background-color: #dce1e5;
+}
+
+@media (max-width: 900px) {
+    main.painel .pesquisa-painel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 500px) {
+    main.painel .pesquisa-painel {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 15px;
+    }
+
+    main.painel .botao-pesquisar-painel,
+    main.painel .botao-limpar-pesquisa {
+        width: 100%;
+    }
+}
+
+

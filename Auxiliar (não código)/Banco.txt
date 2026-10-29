@@ -18,8 +18,10 @@ CREATE TABLE usuarios (
     telefone VARCHAR(20),
     tipo ENUM('cliente', 'admin') DEFAULT 'cliente',
     imagem VARCHAR(255),
+    saldo DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 -- =========================================
@@ -273,6 +275,21 @@ CREATE TABLE favoritos (
 );
 
 
+CREATE TABLE compras (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_email VARCHAR(255) NOT NULL,
+    produto_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    preco_pago DECIMAL(10,2) NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
+    data_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX idx_usuario_categoria (usuario_email, categoria_id),
+    INDEX idx_produto (produto_id)
+) ENGINE=InnoDB;
+
+
+
 -- =========================================
 -- 13. CATEGORIAS DA CHINGLING
 -- =========================================
@@ -297,17 +314,6 @@ INSERT INTO usuarios
 (nome, email, senha, tipo)
 VALUES
 ('Administrador', 'admin@chingling.com', '123456', 'admin');
-O que esse único código cria
-👤 Cadastro e login
-👑 Usuário administrador
-🏠 Endereços
-🗂️ Categorias
-🛋️ Produtos
-🖼️ Imagens dos produtos
-🛒 Carrinho
-📦 Pedidos
-💳 Pagamentos
-⭐ Avaliações
-❤️ Favoritos
-📊 Estoque
-🔄 Status do pedido
+
+select * from usuarios;
+select * from produtos;

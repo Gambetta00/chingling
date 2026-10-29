@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;           
+        }
+
+    #cabecalho {
+        background-color: #0b2f6b;
+        color: white;
+        font-family: sans-serif;
+        font-size: 11px;           
+        font-weight: bold;
+        padding: 8px 15px;
+        display: flex;
+        gap: 6px; 
+        justify-content: space-between;
+    }
+    .topo-esquerda {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+    }
+    .topo-direita {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+        #barra-principal {
+            background-color: #ffffff;
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .busca {
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f2;
+            border-radius: 20px;
+            padding: 8px 15px;
+            width: 40%;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+        }
+        .cep {
+        font-size: 12px;
+        color: #0b2f6b;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap; 
+    
+}
+    .navegacao {
+    background-color: blue;
+    height: 20px;
+    display: flex;
+    justify-content: space-around;  
+    align-items: center;
+}
+    .logo{
+    color: blue;
+    font-size: 21pt;
+}
+
+    .navegacao a {
+    color: #ffffff;             
+    text-decoration: none;     
+    font-size: 12px;           
+    font-weight: 600;          
+    white-space: nowrap;       
+    padding: 2px 4px;
+}
+#contBanner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.busca input {
+border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 12px;
+}
+.busca button {
+      border: 1px solid #999;
+    background-color: white;
+    cursor: pointer;
+    padding: 3px 6px;
+}
+#slogan{
+    font-size: 15pt;
+}
+
+#underBanner{
+
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.embaixo {
+color: #0b2f6b;
+}
+
+.categoria{
+    
+    display: flex;
+    justify-content: flex-start; /* Alinha todo o bloco à esquerda */
+    width: 100%;
+    gap: 20px
+    
+}
+
+.categoria img {
+    width: 300px;
+    height: 300px;
+
+}
+
+.categoria > div{
+       margin: 0;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    text-align: left;
+    gap: 8px;
+}
+a {
+color: blue;
+text-decoration: none;
+}
+    </style>
+</head>
+<body>
+
+    <div id="cabecalho">
+        <div class="menu">
+        <div class="topo-esquerda"></div>
+            <div>🚚 Entrega para todo o Brasil</div>
+            <div>|</div>
+            <div>✔️ Compra segura</div>
+            <div>|</div>
+            <div>⭐ Qualidade e conforto para o seu lar</div>
+            </div>
+        <div class="topo-direita">
+            <div>👤 Minha conta | 🛒 Carrinho 0</div>
+        </div>
+    </div>
+    <div id="barra-principal">
+        <div class="logo">
+            🏠 Chingling
+            <span id="slogan">Móveis para todos os momentos</span>
+        </div>
+        <div class="busca">
+            <input type="text" placeholder="Olá, o que você procura hoje?">
+            <button>🔍</button>
+        </div>
+        <div class="cep">
+            📍 Informe seu CEP
+        </div>
+        <nav id="menu-categorias">
+ 
+    
+        </nav>
+</div>
+
+<section class="carrossel">
+    <button class="seta esquerda" id="anterior" type="button">
+        &#8592;
+    </button>
+    <div class="janela" id="trilho">
+        <div class="navegacao">
+        <a href="AdmMoveis.php">Sala de Estar</a>
+        <a href="AdmMoveis.php">Quarto</a>                                                                              
+        <a href="AdmMoveis.php">Sala de Jantar</a>
+        <a href="AdmMoveis.php">Cozinha</a>
+        <a href="AdmMoveis.php">Escritório</a>
+        <a href="AdmMoveis.php">Banheiro</a>
+        <a href="AdmMoveis.php">Multiuso</a>
+        <a href="AdmMoveis.php">Decoração</a>   
+        <a href="AdmMoveis.php">Outlet</a>
+        <a href="AdmMoveis.php">Projetos e ambientes ▾</a>
+        <a href="AdmMoveis.php">Ver mais ▾</a>
+        </div>
+    </div>
+    <button class="seta direita" id="proximo" type="button">
+        &#8594;
+    </button>
+</section>
+
+   
+    <div id="contBanner">
+    <img id="banner" src="banner.png"/>
+    </div>
+
+    <div id="underBanner">
+        <img  src="underBanner.png">
+    </div>
+
+<div class="embaixo"> 
+    <h1>Conheça nossas categorias</h1>
+</div>
+<div class="categoria">
+    <div>
+     <img src="sala_estar.jpg" alt="Sala de estar">
+     
+     <a href="outro.html">Sala De Estar</a>
+    </div>
+
+    <div>
+     <img src="quarto.jpg" alt="Quarto">
+     
+        <a href="outro.html">Quarto</a>
+    </div>
+    <div>
+        <img src="sala_de_jantar.jpg" alt="Sala de jantar">
+        <a href="outro.html">Sala De Jantar</a>
+    </div>
+    <div>
+        <img src="cozinha.jpg" alt="Cozinha">
+        <a href="outro.html">Cozinha</a>
+    </div>
+    <div>
+    <img src="escritorio.jpg" alt="Escritório">
+    <a href="outro.html">Escritório</a>
+    </div>
+    <div>
+    <img src="banheiro.jpg" alt="Banheiro">
+    <a href="outro.html">Banheiro</a>
+    </div>
+</body>
+</html>
