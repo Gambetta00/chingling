@@ -913,4 +913,1168 @@ main.painel .botao-limpar-pesquisa:hover {
     }
 }
 
+/* =========================================================
+   NOVO VISUAL DO PAINEL CHINGLING
+   Regras adicionadas para aproximar o Painel.php do layout
+   de referência, sem remover as regras anteriores.
+   ========================================================= */
 
+body {
+    background-color: #f4f6f9;
+}
+
+/* Barra superior de benefícios */
+#topo-beneficios {
+    min-height: 34px;
+    padding: 6px 25px;
+    background-color: #0b2f6b;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+#topo-beneficios .topo-esquerda,
+#topo-beneficios .topo-direita {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+#topo-beneficios .topo-direita form {
+    display: inline-flex;
+    margin: 0;
+}
+
+#topo-beneficios .separador-topo {
+    opacity: .65;
+}
+
+#topo-beneficios .botao-sair {
+    margin: 0;
+    padding: 5px 11px;
+    color: #0b2f6b;
+    background: #fff;
+    border: 0;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Barra principal */
+#barra-principal {
+    width: 100%;
+    min-height: 82px;
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#barra-principal .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    color: #0b2f6b;
+    text-decoration: none;
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+#barra-principal .logo small {
+    color: #0b2f6b;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+#barra-principal .busca-painel-topo {
+    width: min(520px, 48%);
+    min-height: 40px;
+    margin: 0;
+    padding: 6px 15px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 22px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.05);
+}
+
+#barra-principal .busca-painel-topo input[type="text"] {
+    width: 100%;
+    min-width: 0;
+    padding: 4px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-size: 13px;
+}
+
+#barra-principal .busca-painel-topo button {
+    padding: 3px 5px;
+    border: 0;
+    background: transparent;
+    color: #0056cc;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.atalho-saldo-topo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #0b2f6b;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.atalho-saldo-topo > span {
+    font-size: 24px;
+}
+
+.atalho-saldo-topo div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.atalho-saldo-topo small {
+    color: #555;
+    font-size: 12px;
+}
+
+/* Menu */
+#menu-categorias {
+    min-height: 38px;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    overflow-x: auto;
+    background: #0056cc;
+}
+
+#menu-categorias a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+#menu-categorias a:hover {
+    text-decoration: underline;
+}
+
+/* Conteúdo */
+main.painel,
+.painel-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 18px auto 40px;
+    padding: 0 15px;
+}
+
+/* Banner principal */
+.painel-container .banner-hero {
+    min-height: 230px;
+    padding: 28px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    position: relative;
+    background: linear-gradient(135deg, #eef5ff 0%, #fff 100%);
+    border: 1px solid #d0e0ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
+
+.painel-container .banner-conteudo {
+    max-width: 55%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.painel-container .banner-logo {
+    color: #0b2f6b;
+    font-size: 29px;
+    font-weight: bold;
+}
+
+.painel-container .banner-titulo {
+    color: #0b2f6b;
+    font-size: 27px;
+    line-height: 1.2;
+}
+
+.painel-container .banner-descricao {
+    max-width: 540px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.painel-container .btn-oferta {
+    display: inline-block;
+    width: fit-content;
+    margin-top: 5px;
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 20px;
+    background: #0056cc;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.painel-container .btn-oferta:hover {
+    background: #0b2f6b;
+}
+
+.painel-container .banner-cards {
+    width: 36%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.painel-container .card-selo {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-left: 4px solid #0056cc;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    color: #0056cc;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Régua de benefícios */
+.painel-container .regua-beneficios {
+    margin: 15px 0 25px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.03);
+}
+
+.painel-container .item-beneficio {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #0b2f6b;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Mensagem do sistema */
+main.painel .mensagem-painel,
+.painel-container .mensagem-painel {
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    background: #fff;
+    border: 1px solid #d0e0ff;
+    border-left: 4px solid #0056cc;
+    border-radius: 7px;
+    color: #234;
+}
+
+/* Área do saldo */
+.painel-container .saldo-area {
+    margin: 0 0 30px;
+    padding: 20px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.04);
+}
+
+.painel-container .saldo-texto {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.painel-container .saldo-icone {
+    font-size: 34px;
+}
+
+.painel-container .saldo-texto h2 {
+    margin-bottom: 6px;
+    color: #0b2f6b;
+    font-size: 19px;
+}
+
+.painel-container .saldo-texto p {
+    color: #666;
+    font-size: 13px;
+}
+
+.painel-container .saldo-caixa {
+    width: 280px;
+    flex: 0 0 280px;
+    padding: 17px;
+    background: #f8fbff;
+    border: 1px solid #dce8f8;
+    border-radius: 9px;
+    box-shadow: none;
+}
+
+.painel-container .saldo-caixa h2 {
+    margin-bottom: 8px;
+    color: #0b2f6b;
+    font-size: 16px;
+}
+
+.painel-container .saldo-valor {
+    margin-bottom: 12px;
+    color: #0b2f6b;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.painel-container .saldo-caixa label {
+    margin-bottom: 7px;
+    color: #333;
+    font-size: 12px;
+}
+
+.painel-container .saldo-caixa select {
+    width: 100%;
+    min-height: 38px;
+    margin-bottom: 9px;
+    padding: 8px 10px;
+    border: 1px solid #ccd5e0;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.painel-container .botao-recarregar {
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    background: #0056cc;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.painel-container .botao-recarregar:hover {
+    background: #0b2f6b;
+}
+
+.painel-container .aviso-recarga {
+    margin-top: 8px;
+    color: #777;
+    font-size: 11px;
+}
+
+/* Título e filtros dos produtos */
+.painel-container .titulo-secao-produtos {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.painel-container .subtitulo-secao {
+    color: #0056cc;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.painel-container .titulo-secao-produtos h2 {
+    margin: 5px 0 6px;
+    color: #0b2f6b;
+    font-size: 22px;
+}
+
+.painel-container .titulo-secao-produtos p {
+    color: #666;
+    font-size: 13px;
+}
+
+.painel-container .pesquisa-painel {
+    margin: 18px 0 25px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 13px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 9px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.035);
+}
+
+.painel-container .campo-pesquisa-painel {
+    min-width: 0;
+}
+
+.painel-container .campo-pesquisa-painel label {
+    display: block;
+    margin-bottom: 7px;
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.painel-container .campo-pesquisa-painel input,
+.painel-container .campo-pesquisa-painel select {
+    width: 100%;
+    min-width: 0;
+    height: 39px;
+    padding: 8px 10px;
+    border: 1px solid #ccd5e0;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 13px;
+}
+
+.painel-container .botao-pesquisar-painel,
+.painel-container .botao-limpar-pesquisa {
+    min-height: 39px;
+    align-self: end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.painel-container .botao-pesquisar-painel {
+    background: #0056cc;
+    color: #fff;
+}
+
+.painel-container .botao-pesquisar-painel:hover {
+    background: #0b2f6b;
+}
+
+.painel-container .botao-limpar-pesquisa {
+    background: #edf1f6;
+    border: 1px solid #d9e0e8;
+    color: #334;
+}
+
+/* Cartões dos móveis */
+.painel-container .lista-produtos-painel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 17px;
+    margin: 20px 0;
+}
+
+.painel-container .produto-painel-card {
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 9px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.045);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.painel-container .produto-painel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 14px rgba(0,0,0,.09);
+}
+
+.painel-container .produto-card-imagem-area {
+    width: 100%;
+    height: 190px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8faff;
+}
+
+.painel-container .produto-painel-imagem {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 5px;
+    object-fit: contain;
+    background: transparent;
+}
+
+.painel-container .sem-imagem {
+    width: 100%;
+    min-height: 140px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f1f4f8;
+    border-radius: 5px;
+    color: #777;
+    font-size: 12px;
+}
+
+.painel-container .produto-card-conteudo {
+    padding: 15px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.painel-container .produto-categoria {
+    width: fit-content;
+    margin-bottom: 7px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: #eef5ff;
+    color: #0056cc;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.painel-container .produto-painel-card h3 {
+    margin: 0 0 10px;
+    color: #0b2f6b;
+    font-size: 16px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.painel-container .produto-painel-dados p {
+    margin-top: 7px;
+    color: #555;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.painel-container .produto-painel-dados strong {
+    color: #333;
+}
+
+.painel-container .produto-painel-dados .produto-descricao {
+    min-height: 38px;
+    color: #666;
+}
+
+.painel-container .produto-card-rodape {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.painel-container .produto-preco {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.painel-container .produto-preco strong {
+    color: #0b2f6b;
+    font-size: 20px;
+}
+
+.painel-container .preco-antigo {
+    color: #888;
+    font-size: 12px;
+    text-decoration: line-through;
+}
+
+.painel-container .form-comprar {
+    width: 100%;
+    margin: 0;
+}
+
+.painel-container .botao-comprar {
+    width: 100%;
+    padding: 11px;
+    border: 0;
+    border-radius: 5px;
+    background: #0056cc;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.painel-container .botao-comprar:hover:not(:disabled) {
+    background: #0b2f6b;
+}
+
+.painel-container .botao-comprar:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.painel-container .sem-produtos {
+    padding: 22px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 8px;
+    color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    #topo-beneficios {
+        align-items: flex-start;
+    }
+
+    #topo-beneficios .topo-esquerda {
+        flex-wrap: wrap;
+    }
+
+    .painel-container .lista-produtos-painel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .painel-container .pesquisa-painel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    #topo-beneficios {
+        flex-direction: column;
+        padding: 8px 15px;
+    }
+
+    #topo-beneficios .topo-esquerda,
+    #topo-beneficios .topo-direita {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    #barra-principal {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 13px 15px;
+    }
+
+    #barra-principal .logo {
+        font-size: 22px;
+    }
+
+    #barra-principal .busca-painel-topo {
+        order: 3;
+        width: 100%;
+        max-width: none;
+    }
+
+    #menu-categorias {
+        justify-content: flex-start;
+        gap: 18px;
+    }
+
+    .painel-container .banner-hero {
+        padding: 22px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .painel-container .banner-conteudo,
+    .painel-container .banner-cards {
+        width: 100%;
+        max-width: none;
+    }
+
+    .painel-container .saldo-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .painel-container .saldo-caixa {
+        width: 100%;
+        flex-basis: auto;
+    }
+
+    .painel-container .regua-beneficios {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 500px) {
+    .painel-container .lista-produtos-painel,
+    .painel-container .pesquisa-painel {
+        grid-template-columns: 1fr;
+    }
+
+    .painel-container .produto-card-imagem-area {
+        height: 210px;
+    }
+
+    .painel-container .banner-titulo {
+        font-size: 23px;
+    }
+
+    .painel-container .regua-beneficios {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* =========================================================
+   BANNERS PROMOCIONAIS LATERAIS - PAINEL
+   Usa banner.jpg e banner.png já existentes na pasta Php.
+   Fica nas áreas vazias sem cobrir o conteúdo principal.
+   ========================================================= */
+/* BANNERS PROMOCIONAIS LATERAIS */
+
+/* =====================================================
+   BANNERS LATERAIS GRANDES - CHINGLING
+   ===================================================== */
+
+/* Estrutura dos banners */
+.promocoes-laterais {
+    pointer-events: none;
+}
+
+/* Cada banner */
+.promocao-lateral {
+    position: fixed;
+    top: 159px;
+    bottom: 15px;
+
+    width: clamp(170px, 16vw, 280px);
+
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    border-radius: 12px;
+    border: 1px solid #dce5f2;
+
+    background-color: #fff;
+    box-shadow: 0 5px 18px rgba(11, 47, 107, .12);
+
+    text-decoration: none;
+    pointer-events: auto;
+
+    transition: transform .25s, box-shadow .25s;
+}
+
+/* Posicionamento */
+.promocao-lateral-esquerda {
+    left: 10px;
+}
+
+.promocao-lateral-direita {
+    right: 10px;
+}
+
+/* Imagem de fundo */
+.promocao-lateral img {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition: transform .4s;
+}
+
+/* Efeito ao passar o mouse */
+.promocao-lateral:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 25px rgba(11, 47, 107, .2);
+}
+
+.promocao-lateral:hover img {
+    transform: scale(1.04);
+}
+
+/* Conteúdo sobre a imagem */
+.promocao-conteudo {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    padding: 22px 15px;
+
+    background: linear-gradient(
+        transparent,
+        rgba(5, 28, 65, .95)
+    );
+
+    color: white;
+    text-align: center;
+}
+
+/* Nome da loja */
+.promocao-conteudo h2 {
+    margin-bottom: 12px;
+
+    color: white;
+    font-size: clamp(18px, 1.5vw, 25px);
+}
+
+/* Texto promocional */
+.promocao-conteudo p {
+    margin-bottom: 20px;
+
+    color: white;
+    font-size: clamp(14px, 1.1vw, 19px);
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* Botão visual */
+.promocao-conteudo span {
+    display: block;
+
+    padding: 12px 8px;
+
+    border: 2px solid #39baff;
+    border-radius: 25px;
+
+    background-color: #0056cc;
+    color: white;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* =====================================================
+   AJUSTE DO CONTEÚDO CENTRAL
+   ===================================================== */
+
+@media (min-width: 1051px) {
+
+    .painel-container {
+        width: calc(100% - clamp(380px, 32vw, 560px) - 40px);
+        max-width: 1100px;
+
+        margin: 18px auto 40px;
+        padding: 0;
+    }
+
+}
+
+/* Em telas menores, esconder os banners */
+@media (max-width: 1050px) {
+
+    .promocoes-laterais {
+        display: none;
+    }
+
+    .painel-container {
+        width: 100%;
+        max-width: 1100px;
+        padding: 0 15px;
+    }
+
+}
+/* =========================================================
+   PÁGINA DE CADASTRO - VISUAL CHINGLING
+   Regras isoladas para não prejudicar outras páginas.
+   ========================================================= */
+
+.cadastro-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+/* Introdução */
+
+.cadastro-introducao {
+    margin-bottom: 25px;
+}
+
+.cadastro-introducao .subtitulo-secao {
+    color: #0056cc;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.cadastro-introducao h1 {
+    margin: 8px 0;
+    color: #0b2f6b;
+    font-size: 29px;
+}
+
+.cadastro-introducao p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Caixa principal */
+
+.cadastro-container .cadastro-caixa {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 35px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.045);
+}
+
+/* Cabeçalho do formulário */
+
+.cadastro-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+.cadastro-icone {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef5ff;
+    border-radius: 10px;
+    font-size: 23px;
+}
+
+.cadastro-cabecalho h2 {
+    margin: 0 0 6px;
+    color: #0b2f6b;
+    font-size: 20px;
+}
+
+.cadastro-cabecalho p {
+    color: #777;
+    font-size: 13px;
+}
+
+/* Formulário */
+
+.form-cadastro {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+}
+
+.campo-cadastro {
+    min-width: 0;
+}
+
+.campo-cadastro-completo {
+    grid-column: 1 / -1;
+}
+
+.campo-cadastro label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.campo-cadastro input {
+    display: block;
+    width: 100%;
+    height: 45px;
+    margin: 0;
+    padding: 11px 13px;
+    color: #333;
+    background: #fff;
+    border: 1px solid #ccd5e0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.campo-cadastro input:focus {
+    outline: none;
+    border-color: #0056cc;
+    box-shadow: 0 0 0 3px rgba(0, 86, 204, .10);
+}
+
+/* Botão */
+
+.botao-cadastrar {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 46px;
+    margin-top: 8px;
+    padding: 12px;
+    color: #fff;
+    background: #0056cc;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.botao-cadastrar:hover {
+    background: #0b2f6b;
+}
+
+/* Rodapé do formulário */
+
+.cadastro-rodape {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e8edf3;
+    color: #666;
+    font-size: 13px;
+    text-align: center;
+}
+
+.cadastro-rodape a {
+    color: #0056cc;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cadastro-rodape a:hover {
+    text-decoration: underline;
+}
+
+/* Benefícios */
+
+.cadastro-beneficios {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .03);
+}
+
+.cadastro-beneficios div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #0b2f6b;
+    font-size: 12px;
+}
+
+.cadastro-beneficios strong {
+    font-size: 11px;
+}
+
+/* Cabeçalho de acesso */
+
+.cadastro-acesso {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #555;
+    font-size: 13px;
+}
+
+.cadastro-acesso a {
+    padding: 9px 16px;
+    color: #fff;
+    background: #0056cc;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cadastro-acesso a:hover {
+    background: #0b2f6b;
+}
+
+/* Responsividade */
+
+@media (max-width: 650px) {
+
+    .cadastro-container {
+        margin: 25px auto;
+    }
+
+    .cadastro-container .cadastro-caixa {
+        padding: 22px;
+    }
+
+    .form-cadastro {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
+
+    .campo-cadastro-completo,
+    .botao-cadastrar {
+        grid-column: 1;
+    }
+
+    .cadastro-beneficios {
+        flex-direction: column;
+    }
+
+    #barra-principal {
+        flex-wrap: wrap;
+    }
+
+    .cadastro-acesso {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .cadastro-introducao h1 {
+        font-size: 24px;
+    }
+
+    .cadastro-container .cadastro-caixa {
+        padding: 18px;
+    }
+
+    .cadastro-cabecalho h2 {
+        font-size: 18px;
+    }
+}

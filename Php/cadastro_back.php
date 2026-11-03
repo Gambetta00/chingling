@@ -5,7 +5,7 @@ $email = $_POST["email"];
 $senha = $_POST["senha"];
 $cpf = $_POST['cpf'];
 $telefone = $_POST['telefone'];
-$classe = $_POST["classe"];
+$classe = "cliente";
 
 require_once 'Classe.php';
 
