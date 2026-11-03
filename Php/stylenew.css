@@ -1,0 +1,136 @@
+ body {
+            margin: 0;
+            padding: 0;           
+        }
+
+    #cabecalho {
+        background-color: #0b2f6b;
+        color: white;
+        font-family: sans-serif;
+        font-size: 11px;           
+        font-weight: bold;
+        padding: 8px 15px;
+        display: flex;
+        gap: 6px; 
+        justify-content: space-between;
+    }
+    .topo-esquerda {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+    }
+    .topo-direita {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+        #barra-principal {
+            background-color: #ffffff;
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .busca {
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f2;
+            border-radius: 20px;
+            padding: 8px 15px;
+            width: 40%;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+        }
+        .cep {
+        font-size: 12px;
+        color: #0b2f6b;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap; 
+    
+}
+    .navegacao {
+    background-color: blue;
+    height: 20px;
+    display: flex;
+    justify-content: space-around;  
+    align-items: center;
+}
+    .logo{
+    color: blue;
+    font-size: 21pt;
+}
+
+    .navegacao a {
+    color: #ffffff;             
+    text-decoration: none;     
+    font-size: 12px;           
+    font-weight: 600;          
+    white-space: nowrap;       
+    padding: 2px 4px;
+}
+#contBanner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.busca input {
+border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 12px;
+}
+.busca button {
+      border: 1px solid #999;
+    background-color: white;
+    cursor: pointer;
+    padding: 3px 6px;
+}
+#slogan{
+    font-size: 15pt;
+}
+
+#underBanner{
+
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.embaixo {
+color: #0b2f6b;
+}
+
+.categoria{
+    
+    display: flex;
+    justify-content: flex-start; /* Alinha todo o bloco à esquerda */
+    width: 100%;
+    gap: 20px
+    
+}
+
+.categoria img {
+    width: 300px;
+    height: 300px;
+
+}
+
+.categoria > div{
+       margin: 0;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    text-align: left;
+    gap: 8px;
+}
+a {
+color: blue;
+text-decoration: none;
+}
