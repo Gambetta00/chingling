@@ -70,24 +70,6 @@
 
                 <br><br>
 
-
-                <label for="classe">Escolha uma opção:</label>
-
-                <select name="classe" id="classe">
-
-                    <option value="cliente">
-                        Usuário
-                    </option>
-
-                    <option value="admin">
-                        Administrador
-                    </option>
-
-                </select>
-
-                <br><br>
-
-
                 <label for="senha">Senha</label>
 
                 <input 

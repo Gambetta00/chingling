@@ -433,106 +433,139 @@ function escapar($valor) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Painel - Chingling</title>
-
+    <title>Chingling - Móveis para todos os momentos</title>
     <link rel="stylesheet" href="style2.css">
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">
-            <span>🏠</span>
-            <strong>Chingling</strong>
+    <!-- BARRA SUPERIOR DE BENEFÍCIOS -->
+    <div id="topo-beneficios">
+        <div class="topo-esquerda">
+            <span>🚚 Entrega para todo o Brasil</span>
+            <span class="separador-topo">|</span>
+            <span>✔️ Compra segura</span>
+            <span class="separador-topo">|</span>
+            <span>⭐ Qualidade e conforto para o seu lar</span>
         </div>
 
-        <div class="usuario">
-            Olá, <?= escapar($usuarioAtual['nome']) ?>!
-
-            <form action="Login.php" method="POST" style="display:inline;">
-                <input
-                    type="hidden"
-                    name="sinal_clique"
-                    value="ativado"
-                >
-
-                <button type="submit" class="botao-sair">
-                    Sair
-                </button>
+        <div class="topo-direita">
+            <span>👤 Olá, <?= escapar($usuarioAtual['nome']) ?>!</span>
+            <form action="Login.php" method="POST">
+                <input type="hidden" name="sinal_clique" value="ativado">
+                <button type="submit" class="botao-sair">Sair da conta</button>
             </form>
         </div>
-    </header>
+    </div>
 
-    <nav>
+    <!-- BARRA PRINCIPAL -->
+    <div id="barra-principal">
+        <a href="Painel.php" class="logo">
+            <span>🏠 Chingling</span>
+            <small>Móveis para todos os momentos</small>
+        </a>
+
+        <form method="GET" action="Painel.php" class="busca busca-painel-topo">
+            <input
+                type="text"
+                name="busca_nome"
+                placeholder="Olá, o que você procura hoje?"
+                value="<?= escapar($buscaNome) ?>"
+                aria-label="Pesquisar móveis pelo nome"
+            >
+            <input type="hidden" name="categoria_busca" value="<?= (int)$categoriaBusca ?>">
+            <input type="hidden" name="preco_min" value="<?= escapar($precoMinTexto) ?>">
+            <input type="hidden" name="preco_max" value="<?= escapar($precoMaxTexto) ?>">
+            <button type="submit" aria-label="Pesquisar">🔍</button>
+        </form>
+
+        <div class="atalho-saldo-topo">
+            <span>💳</span>
+            <div>
+                <strong>Meu saldo</strong>
+                <small>R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?></small>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENU DE NAVEGAÇÃO -->
+    <nav id="menu-categorias">
         <a href="Painel.php">Início</a>
-        <a href="Moveis.php">Móveis</a>
-
         <?php if ($usuarioAtual['tipo'] === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
             <a href="AdmUsuarios.php">Administração de Usuários</a>
         <?php endif; ?>
     </nav>
 
-    <main class="painel">
+    <div class="container painel-container">
 
-        <div class="topo-painel">
+        <!-- BANNER PRINCIPAL -->
+        <section class="banner-hero">
+            <div class="banner-conteudo">
+                <div class="banner-logo">🏠 Chingling</div>
+                <h1 class="banner-titulo">Seu lar, do seu jeito.</h1>
 
-            <section class="boas-vindas">
-                <h1>Bem-vindo ao Chingling!</h1>
-
-                <p>
-                    Encontre os móveis ideais para sua casa.
+                <p class="banner-descricao">
+                    Móveis modernos, funcionais e com ótimos preços.
+                    Encontre as peças ideais para transformar sua casa
+                    em um ambiente ainda mais especial.
                 </p>
 
-                <p>
-                    Os móveis das categorias que você mais compra
-                    aparecem primeiro.
-                </p>
-            </section>
+                <a href="#secao-produtos" class="btn-oferta">Ver móveis disponíveis →</a>
+            </div>
 
-            <!-- PAINEL LATERAL DE SALDO -->
-            <aside class="saldo-caixa">
+            <div class="banner-cards">
+                <div class="card-selo">🚚 Entrega para todo o Brasil</div>
+                <div class="card-selo">🔒 Compra segura e protegida</div>
+                <div class="card-selo">🛡️ Qualidade e conforto para seu lar</div>
+            </div>
+        </section>
 
+        <!-- RÉGUA DE BENEFÍCIOS -->
+        <section class="regua-beneficios">
+            <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
+            <div class="item-beneficio">🔒 Compra segura</div>
+            <div class="item-beneficio">💳 Saldo integrado à sua conta</div>
+            <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
+        </section>
+
+        <!-- MENSAGENS DO SISTEMA -->
+        <?php if ($mensagemPainel !== ''): ?>
+            <div class="mensagem-painel" role="status">
+                <?= escapar($mensagemPainel) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- SALDO E RECARGA -->
+        <section class="saldo-area">
+            <div class="saldo-texto">
+                <span class="saldo-icone">💰</span>
+                <div>
+                    <h2>Seu saldo Chingling</h2>
+                    <p>Use seu saldo para comprar os móveis que desejar.</p>
+                </div>
+            </div>
+
+            <div class="saldo-caixa">
                 <h2>Meu saldo</h2>
 
                 <p class="saldo-valor">
-                    R$
-                    <?= number_format(
-                        (float)$usuarioAtual['saldo'],
-                        2,
-                        ',',
-                        '.'
-                    ) ?>
+                    R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?>
                 </p>
 
                 <form method="POST" action="Painel.php">
-
                     <input
                         type="hidden"
                         name="csrf_token"
                         value="<?= escapar($_SESSION['csrf_painel']) ?>"
                     >
+                    <input type="hidden" name="acao" value="recarga">
 
-                    <input
-                        type="hidden"
-                        name="acao"
-                        value="recarga"
-                    >
-
-                    <label for="valor_recarga">
-                        Recarregar saldo
-                    </label>
-
-                    <select
-                        name="valor_recarga"
-                        id="valor_recarga"
-                        required
-                    >
+                    <label for="valor_recarga">Recarregar saldo</label>
+                    <select name="valor_recarga" id="valor_recarga" required>
                         <option value="">Escolha um valor</option>
                         <option value="50">R$ 50,00</option>
                         <option value="100">R$ 100,00</option>
@@ -540,110 +573,93 @@ function escapar($valor) {
                         <option value="500">R$ 500,00</option>
                     </select>
 
-                    <button type="submit" class="botao-recarregar">
-                        Recarregar
-                    </button>
-
+                    <button type="submit" class="botao-recarregar">Recarregar</button>
                 </form>
 
-                <p class="aviso-recarga">
-                    Recarga simulada para testes.
-                </p>
-
-            </aside>
-
-        </div>
-
-        <?php if ($mensagemPainel !== ''): ?>
-            <div class="mensagem-painel" role="status">
-                <?= escapar($mensagemPainel) ?>
+                <p class="aviso-recarga">Recarga simulada para testes.</p>
             </div>
-        <?php endif; ?>
+        </section>
 
-        <section class="secao-produtos">
+        <!-- PRODUTOS E FILTROS -->
+        <section class="secao-produtos" id="secao-produtos">
+            <div class="titulo-secao-produtos">
+                <div>
+                    <span class="subtitulo-secao">ENCONTRE O QUE PROCURA</span>
+                    <h2>Móveis disponíveis</h2>
+                    <p>Confira nossos móveis e encontre o ideal para sua casa.</p>
+                </div>
+            </div>
 
-            <h2>Móveis disponíveis</h2>
-
-            <!-- PESQUISA POR NOME, CATEGORIA E FAIXA DE PREÇO -->
             <form method="GET" action="Painel.php" class="pesquisa-painel">
+                <div class="campo-pesquisa-painel">
+                    <label for="busca_nome">Nome do produto</label>
+                    <input
+                        type="text"
+                        id="busca_nome"
+                        name="busca_nome"
+                        placeholder="Ex.: Mesa, cadeira..."
+                        value="<?= escapar($buscaNome) ?>"
+                    >
+                </div>
 
-    <div class="campo-pesquisa-painel">
-        <label for="busca_nome">Nome do produto</label>
-        <input
-            type="text"
-            id="busca_nome"
-            name="busca_nome"
-            placeholder="Ex.: Mesa, cadeira..."
-            value="<?= escapar($buscaNome) ?>"
-        >
-    </div>
+                <div class="campo-pesquisa-painel">
+                    <label for="categoria_busca">Categoria</label>
+                    <select id="categoria_busca" name="categoria_busca">
+                        <option value="0">Todas as categorias</option>
+                        <?php
+                        if ($categorias instanceof mysqli_result) {
+                            $categorias->data_seek(0);
+                        }
+                        ?>
+                        <?php while ($cat = $categorias->fetch_assoc()): ?>
+                            <option
+                                value="<?= (int)$cat['id'] ?>"
+                                <?= $categoriaBusca === (int)$cat['id'] ? 'selected' : '' ?>
+                            >
+                                <?= escapar($cat['nome']) ?>
+                            </option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
 
-    <div class="campo-pesquisa-painel">
-        <label for="categoria_busca">Categoria</label>
-        <select id="categoria_busca" name="categoria_busca">
-            <option value="0">Todas as categorias</option>
+                <div class="campo-pesquisa-painel">
+                    <label for="preco_min">Preço mínimo (R$)</label>
+                    <input
+                        type="number"
+                        id="preco_min"
+                        name="preco_min"
+                        min="0"
+                        step="0.01"
+                        placeholder="0,00"
+                        value="<?= escapar($precoMinTexto) ?>"
+                    >
+                </div>
 
-            <?php while ($cat = $categorias->fetch_assoc()): ?>
-                <option
-                    value="<?= (int)$cat['id'] ?>"
-                    <?= $categoriaBusca === (int)$cat['id'] ? 'selected' : '' ?>
-                >
-                    <?= escapar($cat['nome']) ?>
-                </option>
-            <?php endwhile; ?>
-        </select>
-    </div>
+                <div class="campo-pesquisa-painel">
+                    <label for="preco_max">Preço máximo (R$)</label>
+                    <input
+                        type="number"
+                        id="preco_max"
+                        name="preco_max"
+                        min="0"
+                        step="0.01"
+                        placeholder="Sem limite"
+                        value="<?= escapar($precoMaxTexto) ?>"
+                    >
+                </div>
 
-    <div class="campo-pesquisa-painel">
-        <label for="preco_min">Preço mínimo (R$)</label>
-        <input
-            type="number"
-            id="preco_min"
-            name="preco_min"
-            min="0"
-            step="0.01"
-            placeholder="0,00"
-            value="<?= escapar($precoMinTexto) ?>"
-        >
-    </div>
-
-    <div class="campo-pesquisa-painel">
-        <label for="preco_max">Preço máximo (R$)</label>
-        <input
-            type="number"
-            id="preco_max"
-            name="preco_max"
-            min="0"
-            step="0.01"
-            placeholder="Sem limite"
-            value="<?= escapar($precoMaxTexto) ?>"
-        >
-    </div>
-
-    <button type="submit" class="botao-pesquisar-painel">
-        Pesquisar
-    </button>
-
-    <a href="Painel.php" class="botao-limpar-pesquisa">
-        Limpar filtros
-    </a>
-
-</form>
+                <button type="submit" class="botao-pesquisar-painel">Pesquisar</button>
+                <a href="Painel.php" class="botao-limpar-pesquisa">Limpar filtros</a>
+            </form>
 
             <?php if (count($produtos) === 0): ?>
-
                 <p class="sem-produtos">
                     Nenhum móvel encontrado com os filtros selecionados.
                 </p>
-
             <?php else: ?>
 
                 <div class="lista-produtos-painel">
-                            
-
-
                     <?php foreach ($produtos as $produto): ?>
-
                         <?php
                         $precoFinal = (float)$produto['preco'];
 
@@ -659,135 +675,89 @@ function escapar($valor) {
                         ?>
 
                         <article class="produto-painel-card">
-
-                            <h3>
-                                <?= escapar($produto['nome']) ?>
-                            </h3>
-
-                            <?php if (!empty($produto['imagem'])): ?>
-
-                                <img
-                                    src="<?= escapar($produto['imagem']) ?>"
-                                    alt="<?= escapar($produto['nome']) ?>"
-                                    class="produto-painel-imagem"
-                                    loading="lazy"
-                                >
-
-                            <?php else: ?>
-
-                                <div class="sem-imagem">
-                                    Imagem não disponível
-                                </div>
-
-                            <?php endif; ?>
-
-                            <div class="produto-painel-dados">
-
-                                <p>
-                                    <strong>Categoria:</strong>
-                                    <?= escapar($produto['categoria'] ?? 'Não definida') ?>
-                                </p>
-
-                                <p>
-                                    <strong>Preço:</strong>
-
-                                    <?php if ($precoFinal < (float)$produto['preco']): ?>
-
-                                        <span class="preco-antigo">
-                                            R$
-                                            <?= number_format(
-                                                (float)$produto['preco'],
-                                                2,
-                                                ',',
-                                                '.'
-                                            ) ?>
-                                        </span>
-
-                                    <?php endif; ?>
-
-                                    <strong>
-                                        R$
-                                        <?= number_format(
-                                            $precoFinal,
-                                            2,
-                                            ',',
-                                            '.'
-                                        ) ?>
-                                    </strong>
-                                </p>
-
-                                <p>
-                                    <strong>Estoque:</strong>
-                                    <?= (int)$produto['estoque'] ?>
-                                </p>
-
-                                <p>
-                                    <strong>Descrição:</strong>
-                                    <?= escapar(
-                                        $produto['descricao'] ?: 'Sem descrição.'
-                                    ) ?>
-                                </p>
-
+                            <div class="produto-card-imagem-area">
+                                <?php if (!empty($produto['imagem'])): ?>
+                                    <img
+                                        src="<?= escapar($produto['imagem']) ?>"
+                                        alt="<?= escapar($produto['nome']) ?>"
+                                        class="produto-painel-imagem"
+                                        loading="lazy"
+                                    >
+                                <?php else: ?>
+                                    <div class="sem-imagem">Imagem não disponível</div>
+                                <?php endif; ?>
                             </div>
 
-                            <?php if ($semEstoque): ?>
+                            <div class="produto-card-conteudo">
+                                <span class="produto-categoria">
+                                    <?= escapar($produto['categoria'] ?? 'Não definida') ?>
+                                </span>
 
-                                <button
-                                    type="button"
-                                    class="botao-comprar"
-                                    disabled
-                                >
-                                    Sem estoque
-                                </button>
+                                <h3><?= escapar($produto['nome']) ?></h3>
 
-                            <?php else: ?>
+                                <div class="produto-painel-dados">
+                                    <p>
+                                        <strong>Estoque:</strong>
+                                        <?= (int)$produto['estoque'] ?> unidade(s)
+                                    </p>
 
-                                <form
-                                    method="POST"
-                                    action="Painel.php"
-                                    class="form-comprar"
-                                >
+                                    <p class="produto-descricao">
+                                        <?= escapar($produto['descricao'] ?: 'Sem descrição.') ?>
+                                    </p>
+                                </div>
 
-                                    <input
-                                        type="hidden"
-                                        name="csrf_token"
-                                        value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                                    >
+                                <div class="produto-card-rodape">
+                                    <div class="produto-preco">
+                                        <?php if ($precoFinal < (float)$produto['preco']): ?>
+                                            <span class="preco-antigo">
+                                                R$ <?= number_format((float)$produto['preco'], 2, ',', '.') ?>
+                                            </span>
+                                        <?php endif; ?>
 
-                                    <input
-                                        type="hidden"
-                                        name="acao"
-                                        value="comprar"
-                                    >
+                                        <strong>
+                                            R$ <?= number_format($precoFinal, 2, ',', '.') ?>
+                                        </strong>
+                                    </div>
 
-                                    <input
-                                        type="hidden"
-                                        name="produto_id"
-                                        value="<?= (int)$produto['id'] ?>"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="botao-comprar"
-                                    >
-                                        Comprar
-                                    </button>
-
-                                </form>
-
-                            <?php endif; ?>
-
+                                    <?php if ($semEstoque): ?>
+                                        <button
+                                            type="button"
+                                            class="botao-comprar"
+                                            disabled
+                                        >
+                                            Sem estoque
+                                        </button>
+                                    <?php else: ?>
+                                        <form
+                                            method="POST"
+                                            action="Painel.php"
+                                            class="form-comprar"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="<?= escapar($_SESSION['csrf_painel']) ?>"
+                                            >
+                                            <input type="hidden" name="acao" value="comprar">
+                                            <input
+                                                type="hidden"
+                                                name="produto_id"
+                                                value="<?= (int)$produto['id'] ?>"
+                                            >
+                                            <button type="submit" class="botao-comprar">
+                                                Comprar
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </article>
-
                     <?php endforeach; ?>
-
                 </div>
 
             <?php endif; ?>
-
         </section>
-
-    </main>
+    </div>
 
 </body>
 </html>
