@@ -7,6 +7,8 @@ $cpf = $_POST['cpf'];
 $telefone = $_POST['telefone'];
 $classe = "cliente";
 
+$_SESSION['tipo'] = $classe;
+
 require_once 'Classe.php';
 
 $usuario = new Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao);

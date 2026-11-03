@@ -2,9 +2,22 @@
 
 <?php
 session_start();
-
 require_once "conexao_msql.php";
 
+// Parte para definir o tipo como uma variavel da sessão
+$emailUsuario = $_SESSION['email'];
+
+$sql = "SELECT tipo FROM usuarios
+        WHERE email = ?";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("s", $emailUsuario);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($tipo);
+        $stmt->fetch();
+
+$_SESSION['tipo'] = $tipo;
 
 $buscaNome = trim($_GET['busca_nome'] ?? '');
 $categoriaBusca = (int)($_GET['categoria_busca'] ?? 0);
@@ -24,7 +37,7 @@ if (!isset($_SESSION['email'])) {
     exit;
 }
 
-$emailUsuario = $_SESSION['email'];
+
 
 // Categorias usadas no formulário de pesquisa.
 $categorias = $conexao->query(
@@ -453,11 +466,15 @@ function escapar($valor) {
         </div>
 
         <div class="topo-direita">
+
+            <a class="editar_user" href="UserAlterPerfil.php">Editar Usuário</a>
+
             <span>👤 Olá, <?= escapar($usuarioAtual['nome']) ?>!</span>
             <form action="Login.php" method="POST">
                 <input type="hidden" name="sinal_clique" value="ativado">
                 <button type="submit" class="botao-sair">Sair da conta</button>
             </form>
+            
         </div>
     </div>
 
@@ -496,6 +513,7 @@ function escapar($valor) {
         <?php if ($usuarioAtual['tipo'] === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
             <a href="AdmUsuarios.php">Administração de Usuários</a>
+            
         <?php endif; ?>
     </nav>
 
@@ -506,7 +524,7 @@ function escapar($valor) {
     <a href="#secao-produtos"
        class="promocao-lateral promocao-lateral-esquerda">
 
-        <img src="sala_de_jantar.jpg"
+        <img src="Imagem/sala_de_jantar.jpg"
              alt="Sala de estar com móveis Chingling">
 
         <div class="promocao-conteudo">
@@ -521,7 +539,7 @@ function escapar($valor) {
     <a href="#secao-produtos"
        class="promocao-lateral promocao-lateral-direita">
 
-        <img src="quarto.jpg"
+        <img src="Imagem/quarto.jpg"
              alt="Quarto com móveis Chingling">
 
         <div class="promocao-conteudo">

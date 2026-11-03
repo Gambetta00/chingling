@@ -173,11 +173,13 @@ if (isset($_SESSION['mensagem'])) {
 
                 </div>
 
-
+                
                 <button type="submit" class="botao-cadastrar">
+                    
                     Entrar na minha conta →
+                    
                 </button>
-
+                
             </form>
 
 

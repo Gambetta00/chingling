@@ -2078,3 +2078,7 @@ main.painel .mensagem-painel,
         font-size: 18px;
     }
 }
+.editar_user a {
+    text-decoration: none;
+    color: inherit;
+}

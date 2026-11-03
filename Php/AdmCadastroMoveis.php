@@ -39,10 +39,8 @@
 
     <nav>
         <a href="Painel.php">Início</a>
-        <a href="Moveis.php">Móveis</a>
         <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
         <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
-        <a href="AdmCadastroMoveis.php">Cadastro de Móveis (ADM ONLY)</a>
     </nav>
 
     <main>
