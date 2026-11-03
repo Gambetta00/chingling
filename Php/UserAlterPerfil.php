@@ -402,11 +402,7 @@ nav a {
         Atualize as informações do seu perfil de usuário.
     </p>
 
-    <a href="AdmUsuarios.php" class="botao-alterar">
-        Voltar
-    </a>
-
-    <br><br>
+    
 
     <small>(Deixe em branco para não alterar)</small>
 
