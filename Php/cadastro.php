@@ -1,3 +1,25 @@
+<?php
+
+session_start();
+
+$email = $_SESSION["email"];
+
+require_once "conexao_msql.php";
+
+$sql = "SELECT tipo FROM usuarios
+        WHERE email = ?";
+
+$stmt = $conexao->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($tipo);
+$stmt->fetch();
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,121 +27,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Cadastro</title>
+    <title>Chingling - Cadastro</title>
 
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style2.css?v=5">
 </head>
 
 <body>
 
-    <header>
+    <!-- BARRA SUPERIOR -->
+    <div id="topo-beneficios">
 
-        <div class="logo">
-            <span>🏠</span>
-            <h1>Chingling</h1>
+        <div class="topo-esquerda">
+            <span>🚚 Entrega para todo o Brasil</span>
+            <span class="separador-topo">|</span>
+            <span>✔️ Compra segura</span>
+            <span class="separador-topo">|</span>
+            <span>⭐ Qualidade e conforto para o seu lar</span>
         </div>
 
-        <div class="usuario">
-            Já possui uma conta?
-            <a href="login.php">Fazer Login</a>
+        <div class="topo-direita">
+            <span>👤 Bem-vindo à Chingling!</span>
         </div>
 
-    </header>
+    </div>
 
 
-    <nav>
-              <a href="Painel.php">Início (ADM ONLY)</a>
+    <!-- CABEÇALHO PRINCIPAL -->
+    <div id="barra-principal">
+
+        <a href="Painel.php" class="logo">
+            <span>🏠 Chingling</span>
+            <small>Móveis para todos os momentos</small>
+        </a>
+
+        <div class="cadastro-acesso">
+            <span>Já possui uma conta?</span>
+            <a href="Login.php">Fazer Login</a>
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+    <nav id="menu-categorias">
+        <?php if ($tipo === 'admin'): ?>
+            <a href="AdmMoveis.php">Administração de Móveis</a>
+            <a href="AdmUsuarios.php">Administração de Usuários</a>
+            <a href="Painel.php">Início</a>
+        <?php endif; ?>
     </nav>
 
 
-    <main>
+    <!-- CONTEÚDO DO CADASTRO -->
+    <main class="cadastro-container">
 
-        <h1>CADASTRO</h1>
+        <section class="cadastro-introducao">
 
-        <p class="descricao">
-            Preencha os dados abaixo para criar sua conta.
-        </p>
+            <span class="subtitulo-secao">FAÇA PARTE DA CHINGLING</span>
 
+            <h1>Crie sua conta</h1>
 
-        <div class="caixa">
+            <p>
+                Cadastre-se para aproveitar nossas ofertas e encontrar
+                os móveis ideais para sua casa.
+            </p>
 
-            <h2>Dados do usuário</h2>
-
-            <form method="POST" action="cadastro_back.php">
-
-                <label for="nome">Nome de usuário</label>
-
-                <input 
-                    type="text" 
-                    name="nome" 
-                    id="nome"
-                    required
-                >
-
-                <br><br>
+        </section>
 
 
-                <label for="email">Email</label>
+        <section class="cadastro-caixa">
 
-                <input 
-                    type="email" 
-                    name="email" 
-                    id="email"
-                    required
-                >
+            <div class="cadastro-cabecalho">
 
-                <br><br>
+                <div class="cadastro-icone">👤</div>
 
-                <label for="senha">Senha</label>
+                <div>
+                    <h2>Dados do usuário</h2>
+                    <p>Preencha todos os campos para criar sua conta.</p>
+                </div>
 
-                <input 
-                    type="password" 
-                    name="senha" 
-                    id="senha"
-                    required
-                >
-
-                <br><br>
+            </div>
 
 
-                <label for="cpf">CPF</label>
+            <form method="POST" action="cadastro_back.php" class="form-cadastro">
 
-                <input 
-                    type="text" 
-                    name="cpf" 
-                    id="cpf"
-                    required
-                >
+                <div class="campo-cadastro">
+                    <label for="nome">Nome de usuário</label>
 
-                <br><br>
-
-
-                <label for="telefone">Telefone</label>
-
-                <input 
-                    type="text" 
-                    name="telefone" 
-                    id="telefone"
-                    required
-                >
-
-                <br><br>
+                    <input
+                        type="text"
+                        name="nome"
+                        id="nome"
+                        placeholder="Digite seu nome"
+                        required
+                    >
+                </div>
 
 
-                <button type="submit" class="botao-alterar">
-                    SALVAR
+                <div class="campo-cadastro">
+                    <label for="email">Email</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="exemplo@email.com"
+                        required
+                    >
+                </div>
+
+
+                <div class="campo-cadastro">
+                    <label for="senha">Senha</label>
+
+                    <input
+                        type="password"
+                        name="senha"
+                        id="senha"
+                        placeholder="Crie uma senha"
+                        required
+                    >
+                </div>
+
+
+                <div class="campo-cadastro">
+                    <label for="cpf">CPF</label>
+
+                    <input
+                        type="text"
+                        name="cpf"
+                        id="cpf"
+                        placeholder="Digite seu CPF"
+                        required
+                    >
+                </div>
+
+
+                <div class="campo-cadastro campo-cadastro-completo">
+                    <label for="telefone">Telefone</label>
+
+                    <input
+                        type="text"
+                        name="telefone"
+                        id="telefone"
+                        placeholder="Digite seu telefone"
+                        required
+                    >
+                </div>
+
+
+                <button type="submit" class="botao-cadastrar">
+                    Criar minha conta →
                 </button>
-
-                <br><br>
-
-
 
             </form>
 
-        </div>
+
+            <div class="cadastro-rodape">
+                Já possui uma conta?
+                <a href="Login.php">Entre aqui</a>
+            </div>
+
+        </section>
+
+
+        <!-- BENEFÍCIOS -->
+        <section class="cadastro-beneficios">
+
+            <div>
+                🚚
+                <strong>Entrega nacional</strong>
+            </div>
+
+            <div>
+                🔒
+                <strong>Compra segura</strong>
+            </div>
+
+            <div>
+                ⭐
+                <strong>Qualidade Chingling</strong>
+            </div>
+
+        </section>
 
     </main>
 
 </body>
-
 </html>

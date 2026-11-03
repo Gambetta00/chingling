@@ -336,9 +336,6 @@ if (!$usuarioAtual) {
     exit;
 }
 
-$_SESSION['usuario'] = $usuarioAtual['nome'];
-$_SESSION['tipo'] = $usuarioAtual['tipo'];
-
 // =====================================
 // BUSCAR PRODUTOS
 // Prioriza categorias mais compradas.
@@ -440,7 +437,7 @@ function escapar($valor) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chingling - Móveis para todos os momentos</title>
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style2.css?v=4">
 </head>
 
 <body>
@@ -496,12 +493,46 @@ function escapar($valor) {
 
     <!-- MENU DE NAVEGAÇÃO -->
     <nav id="menu-categorias">
-        <a href="Painel.php">Início</a>
         <?php if ($usuarioAtual['tipo'] === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
             <a href="AdmUsuarios.php">Administração de Usuários</a>
         <?php endif; ?>
     </nav>
+
+    <!-- BANNERS PROMOCIONAIS LATERAIS -->
+<aside class="promocoes-laterais" aria-label="Promoções da Chingling">
+
+    <!-- Banner esquerdo -->
+    <a href="#secao-produtos"
+       class="promocao-lateral promocao-lateral-esquerda">
+
+        <img src="sala_de_jantar.jpg"
+             alt="Sala de estar com móveis Chingling">
+
+        <div class="promocao-conteudo">
+            <h2>Chingling</h2>
+            <p>Encontre seu móvel ideal</p>
+            <span>Ver ofertas →</span>
+        </div>
+
+    </a>
+
+    <!-- Banner direito -->
+    <a href="#secao-produtos"
+       class="promocao-lateral promocao-lateral-direita">
+
+        <img src="quarto.jpg"
+             alt="Quarto com móveis Chingling">
+
+        <div class="promocao-conteudo">
+            <h2>Chingling</h2>
+            <p>Renove seu ambiente</p>
+            <span>Confira agora →</span>
+        </div>
+
+    </a>
+
+</aside>
 
     <div class="container painel-container">
 
@@ -764,4 +795,3 @@ function escapar($valor) {
 
 </body>
 </html>
-
