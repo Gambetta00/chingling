@@ -2,7 +2,7 @@
 <?php
 session_start();
 
-require_once '../conexao_msql.php';
+require_once 'conexao_msql.php';
 
 
 
