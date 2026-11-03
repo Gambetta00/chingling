@@ -1,5 +1,8 @@
+
 <?php
-Class Usuario{
+
+Class Usuario {
+
     private $nome;
     private $email;
     private $senha;
@@ -8,7 +11,7 @@ Class Usuario{
     private $classe;
     private $conexao;
 
-    public function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    public function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao) {
         $this->nome = $nome;
         $this->email = $email;
         $this->senha = $senha;
@@ -18,120 +21,114 @@ Class Usuario{
         $this->conexao = $conexao;
     }
 
-    public function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    public function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao) {
 
-require_once 'conexao_msql.php';
+        require_once 'conexao_msql.php';
 
-$sql = "SELECT cpf FROM usuarios
-        WHERE cpf = ?";
+        $sql = "SELECT cpf FROM usuarios WHERE cpf = ?";
 
-$stmt = $conexao->prepare($sql);
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("s", $cpf);
+        $stmt->execute();
+        $stmt->store_result();
 
-$stmt->bind_param("s", $cpf);
+        if ($stmt->num_rows > 0) {
 
-$stmt->execute();
-
-$stmt->store_result();
-
-if ($stmt->num_rows > 0) {
-
-    echo "O cpf já está sendo utilizado.";
-
-    $stmt->close();
-
-} else {
-    $sql = "SELECT email FROM usuarios
-        WHERE email = ?";
-
-$stmt = $conexao->prepare($sql);
-
-$stmt->bind_param("s", $email);
-
-$stmt->execute();
-
-$stmt->store_result();
-
-
-if ($stmt->num_rows > 0) {
-
-    echo "O email já está sendo utilizado.";
-
-    $stmt->close();
-
-} else {
-
-    // EMAIL NÃO EXISTE, ENTÃO CADASTRA
-
-    $stmt->close();
-
-    $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
-            VALUES (?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conexao->prepare($sql);
-
-    $Senha_hash = password_hash(
-        $senha,
-        PASSWORD_DEFAULT
-    );
-
-    $stmt->bind_param(
-        "ssssss",
-        $nome,
-        $email,
-        $Senha_hash,
-        $cpf,
-        $telefone,
-        $classe
-    );
-
-    $stmt->execute();
-
-    $stmt->close();
-
-    header("Location: Login.php");
-    exit();
-}
-    }
-}
-    public function User_Login($email, $senha, $conexao){
-
-    $emailusuario = $email;
-    $senhausuario = $senha;
-
-    $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
-
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("s", $emailusuario);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 1) {
-
-        $stmt->bind_result($emailBanco, $hash);
-        $stmt->fetch();
-
-        if (password_verify($senhausuario, $hash)) {
-
-            header("Location: Painel.php");
-            exit;
+            echo "O cpf já está sendo utilizado.";
+            $stmt->close();
 
         } else {
 
-            $_SESSION['mensagem'] = "Senha incorreta.";
-            
+            $stmt->close();
+
+            $sql = "SELECT email FROM usuarios WHERE email = ?";
+
+            $stmt = $conexao->prepare($sql);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+
+                echo "O email já está sendo utilizado.";
+                $stmt->close();
+
+            } else {
+
+                $stmt->close();
+
+                $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
+                        VALUES (?, ?, ?, ?, ?, ?)";
+
+                $stmt = $conexao->prepare($sql);
+
+                $Senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+                $stmt->bind_param(
+                    "ssssss",
+                    $nome,
+                    $email,
+                    $Senha_hash,
+                    $cpf,
+                    $telefone,
+                    $classe
+                );
+
+                $stmt->execute();
+                $stmt->close();
+
+                header("Location: Login.php");
+                exit();
+            }
+        }
+    }
+
+    public function User_Login($email, $senha, $conexao) {
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
 
-    } else {
+        $sql = "SELECT email, senha, tipo FROM usuarios WHERE email = ?";
 
-        echo $_SESSION['mensagem'] = "Email não encontrado.";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
 
+        if ($stmt->num_rows === 1) {
+
+            $stmt->bind_result($emailBanco, $hash, $tipoBanco);
+            $stmt->fetch();
+
+            if (password_verify($senha, $hash)) {
+
+                // Salva as informações do usuário na sessão
+                $_SESSION['email'] = $emailBanco;
+                $_SESSION['tipo'] = $tipoBanco;
+
+                $stmt->close();
+
+                header("Location: Painel.php");
+                exit;
+
+            } else {
+
+                $_SESSION['mensagem'] = "Senha incorreta.";
+
+            }
+
+        } else {
+
+            $_SESSION['mensagem'] = "Email não encontrado.";
+
+        }
+
+        $stmt->close();
+
+        header("Location: Login.php");
+        exit;
     }
-
-    $stmt->close();
-    $conexao->close();
-    header("Location: Login.php");
-            exit;
 }
-    }
 
 ?>
