@@ -1,6 +1,6 @@
 <?php
 
-require_once '../conexao_msql.php';
+require_once 'conexao_msql.php';
 session_start();
 if ($_SESSION['tipo'] === 'admin'){
 
