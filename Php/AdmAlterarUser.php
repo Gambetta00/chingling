@@ -1,5 +1,5 @@
 <?php
-require_once '../conexao_msql.php';
+require_once 'conexao_msql.php';
 
 function buscarUsuario(mixed $conexao, mixed $email) {
     $sql = "SELECT * FROM usuarios WHERE email = '$email'";
@@ -453,10 +453,23 @@ senha = '$senha',
  imagem = '$imagem'
 WHERE email = '$email';
 "; 
- 
+ try{
     $resultado2 = $conexao->query($sql); 
  
     return $resultado2;
+ }catch (mysqli_sql_exception $e) { // Mudado de $erro para $e
+
+        $salvou = false;
+        
+        // Verifica se é erro de chave duplicada (ex: e-mail já cadastrado no MySQL código 1062)
+        if ($e->getCode() === 1062) {
+            $erro = "Este e-mail já está em uso por outro usuário.";
+        } else {
+            $erro = "Ocorreu um problema ao atualizar os dados. Tente novamente mais tarde.";
+        }
+        
+
+    }
   }
  }
 
@@ -517,9 +530,12 @@ WHERE email = '$email';
 
  } 
  
-        
+         if (!empty($erro)): ?>
 
-?>
+        <p><?php echo htmlspecialchars($erro); ?></p>
+
+    <?php endif; ?>
+
  </form> 
 
  

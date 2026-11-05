@@ -1,5 +1,9 @@
 
 <?php
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+
 session_start();
 
 require_once 'conexao_msql.php';
@@ -35,7 +39,7 @@ $salvou = false;
 $erro = '';
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
 
 
     $nome = !empty($_POST['nome'])
@@ -100,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-
+ 
 
     $sql = "UPDATE usuarios
             SET nome = ?,
@@ -122,26 +126,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $emailOriginal
     );
 
-    if ($stmt->execute()) {
+    try {
+
+        $stmt->execute();
 
         $salvou = true;
 
-        
         $_SESSION['emailAlterar'] = $emailN;
 
         $emailOriginal = $emailN;
-
 
         $resultado = buscarUsuario($conexao, $emailOriginal);
 
         $usuario = $resultado->fetch_assoc();
 
-    } else {
+    } catch (mysqli_sql_exception $e) { // Mudado de $erro para $e
 
-        $erro = 'Erro ao atualizar usuário: ' . $stmt->error;
+        $salvou = false;
+        
+        // Verifica se é erro de chave duplicada (ex: e-mail já cadastrado no MySQL código 1062)
+        if ($e->getCode() === 1062) {
+            $erro = "Este e-mail já está em uso por outro usuário.";
+        } else {
+            $erro = "Ocorreu um problema ao atualizar os dados. Tente novamente mais tarde.";
+        }
+        
 
     }
 }
+
 
 ?>
 
