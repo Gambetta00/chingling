@@ -2127,3 +2127,878 @@ main.painel .mensagem-painel,
     border-radius: 50% !important;
     flex-shrink: 0;
 }
+
+/* =========================================
+   PÁGINA DE ALTERAÇÃO DE PERFIL
+========================================= */
+
+.perfil-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 35px auto 50px;
+    padding: 0 20px;
+}
+
+/* Introdução */
+
+.perfil-introducao {
+    margin-bottom: 25px;
+}
+
+.perfil-introducao h1 {
+    color: #0b2f6b;
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.perfil-introducao p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Caixa principal */
+
+.perfil-caixa {
+    width: 100%;
+    padding: 32px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .05);
+}
+
+/* Cabeçalho do formulário */
+
+.perfil-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 23px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+.perfil-icone-cabecalho {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf3ff;
+    border-radius: 9px;
+    font-size: 22px;
+}
+
+.perfil-cabecalho h2 {
+    color: #0b2f6b;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.perfil-cabecalho p {
+    color: #777;
+    font-size: 13px;
+}
+
+/* Foto de perfil */
+
+.perfil-foto-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 28px 0;
+}
+
+.perfil-foto-circulo {
+    width: 125px;
+    height: 125px;
+    min-width: 125px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 4px solid #0875d1;
+    background: #eaf3ff;
+}
+
+.perfil-foto-imagem {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.perfil-foto-padrao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #0875d1;
+    font-size: 55px;
+}
+
+.perfil-foto-area h3 {
+    margin-top: 13px;
+    color: #0b2f6b;
+    font-size: 17px;
+}
+
+.perfil-foto-area p {
+    margin-top: 4px;
+    color: #777;
+    font-size: 13px;
+}
+
+.perfil-botao-imagem {
+    display: inline-block;
+    margin-top: 13px;
+    padding: 10px 18px;
+    color: #fff;
+    background: #0056cc;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.perfil-botao-imagem:hover {
+    background: #0b2f6b;
+}
+
+.perfil-foto-area input[type="file"] {
+    display: none;
+}
+
+.perfil-foto-area small {
+    margin-top: 9px;
+    color: #888;
+    font-size: 11px;
+}
+
+/* Divisor */
+
+.perfil-divisor {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 25px;
+    background: #e8edf3;
+}
+
+/* Formulário */
+
+.perfil-formulario {
+    width: 100%;
+}
+
+.perfil-campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+}
+
+.perfil-campo {
+    min-width: 0;
+}
+
+.perfil-campo-completo {
+    grid-column: 1 / -1;
+}
+
+.perfil-campo label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.perfil-campo label small {
+    color: #888;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.perfil-campo input {
+    display: block;
+    width: 100%;
+    height: 45px;
+    margin: 0;
+    padding: 11px 13px;
+    color: #333;
+    background: #fff;
+    border: 1px solid #ccd5e0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.perfil-campo input:focus {
+    outline: none;
+    border-color: #0056cc;
+    box-shadow: 0 0 0 3px rgba(0, 86, 204, .10);
+}
+
+/* Botão salvar */
+
+.perfil-botao-salvar {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 28px;
+    padding: 12px;
+    color: #fff;
+    background: #0056cc;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.perfil-botao-salvar:hover {
+    background: #0b2f6b;
+}
+
+/* Mensagens */
+
+.perfil-mensagem {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+    padding: 13px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.perfil-mensagem.sucesso {
+    color: #176b36;
+    background: #eaf7ee;
+    border: 1px solid #c9e8d2;
+}
+
+.perfil-mensagem.erro {
+    color: #a12626;
+    background: #fff0f0;
+    border: 1px solid #f0cccc;
+}
+
+/* Rodapé */
+
+.perfil-rodape {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e8edf3;
+    text-align: center;
+}
+
+.perfil-rodape a {
+    color: #0056cc;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.perfil-rodape a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade */
+
+@media (max-width: 650px) {
+
+    .perfil-container {
+        margin: 25px auto 35px;
+        padding: 0 15px;
+    }
+
+    .perfil-caixa {
+        padding: 22px;
+    }
+
+    .perfil-campos {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .perfil-campo-completo {
+        grid-column: 1;
+    }
+
+    .perfil-introducao h1 {
+        font-size: 23px;
+    }
+
+    .perfil-cabecalho h2 {
+        font-size: 17px;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .perfil-caixa {
+        padding: 18px;
+    }
+
+    .perfil-foto-circulo {
+        width: 110px;
+        height: 110px;
+        min-width: 110px;
+    }
+
+}
+
+/* =========================================
+   CADASTRO DE MÓVEIS - ADMINISTRAÇÃO
+========================================= */
+
+.adm-cadastro-container {
+    width: 100%;
+    max-width: 1050px;
+    margin: 35px auto 55px;
+    padding: 0 22px;
+}
+
+.adm-cadastro-introducao {
+    margin-bottom: 25px;
+}
+
+.adm-cadastro-etiqueta {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 11px;
+    color: #0056cc;
+    background: #eaf3ff;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.adm-cadastro-introducao h1 {
+    margin-bottom: 9px;
+    color: #0b2f6b;
+    font-size: 27px;
+}
+
+.adm-cadastro-introducao p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Caixa principal */
+
+.adm-cadastro-caixa {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #e1e6ed;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .05);
+}
+
+.adm-cadastro-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 27px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+.adm-cadastro-icone {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf3ff;
+    border-radius: 9px;
+    font-size: 22px;
+}
+
+.adm-cadastro-cabecalho h2 {
+    margin-bottom: 5px;
+    color: #0b2f6b;
+    font-size: 20px;
+}
+
+.adm-cadastro-cabecalho p {
+    color: #777;
+    font-size: 13px;
+}
+
+/* Campos */
+
+.adm-cadastro-campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 21px 18px;
+}
+
+.adm-cadastro-campo {
+    min-width: 0;
+}
+
+.adm-cadastro-campo-completo {
+    grid-column: 1 / -1;
+}
+
+.adm-cadastro-campo label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.adm-cadastro-campo input,
+.adm-cadastro-campo select,
+.adm-cadastro-campo textarea {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    color: #333;
+    background: #fff;
+    border: 1px solid #ccd5e0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.adm-cadastro-campo input,
+.adm-cadastro-campo select {
+    height: 45px;
+}
+
+.adm-cadastro-campo textarea {
+    resize: vertical;
+}
+
+.adm-cadastro-campo input:focus,
+.adm-cadastro-campo select:focus,
+.adm-cadastro-campo textarea:focus {
+    outline: none;
+    border-color: #0875d1;
+    box-shadow: 0 0 0 3px rgba(8, 117, 209, .10);
+}
+
+/* Imagem */
+
+.adm-cadastro-imagem-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    padding: 25px 15px;
+    background: #f8fafc;
+    border: 1px solid #e3eaf2;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.adm-cadastro-imagem-cabecalho h3 {
+    margin-bottom: 7px;
+    color: #0b2f6b;
+    font-size: 17px;
+}
+
+.adm-cadastro-imagem-cabecalho p {
+    color: #777;
+    font-size: 13px;
+}
+
+.adm-cadastro-imagem-preview {
+    width: 190px;
+    height: 160px;
+    margin: 20px 0 15px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf3ff;
+    border: 2px dashed #b9cde3;
+    border-radius: 8px;
+}
+
+#imagem-padrao {
+    color: #0875d1;
+    font-size: 55px;
+}
+
+#imagem-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.adm-cadastro-botao-imagem {
+    display: inline-block;
+    padding: 11px 20px;
+    color: #fff;
+    background: #0056cc;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.adm-cadastro-botao-imagem:hover {
+    background: #0b2f6b;
+}
+
+#cad_movel_imagem {
+    display: none;
+}
+
+.adm-cadastro-ajuda {
+    margin-top: 12px;
+    color: #888;
+    font-size: 11px;
+}
+
+.adm-cadastro-nome-arquivo {
+    margin-top: 8px;
+    color: #555;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* Botão cadastrar */
+
+.adm-cadastro-botao-salvar {
+    width: 100%;
+    min-height: 47px;
+    margin-top: 28px;
+    padding: 13px;
+    color: #fff;
+    background: #0056cc;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.adm-cadastro-botao-salvar:hover {
+    background: #0b2f6b;
+}
+
+/* Mensagem */
+
+.adm-cadastro-mensagem {
+    margin-bottom: 20px;
+    padding: 14px 17px;
+    color: #176b36;
+    background: #eaf7ee;
+    border: 1px solid #c9e8d2;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* Rodapé */
+
+.adm-cadastro-rodape {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.adm-cadastro-rodape a {
+    color: #0056cc;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.adm-cadastro-rodape a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade */
+
+@media (max-width: 650px) {
+
+    .adm-cadastro-container {
+        margin: 25px auto 40px;
+        padding: 0 15px;
+    }
+
+    .adm-cadastro-caixa {
+        padding: 20px;
+    }
+
+    .adm-cadastro-campos {
+        grid-template-columns: 1fr;
+    }
+
+    .adm-cadastro-campo-completo {
+        grid-column: 1;
+    }
+
+    .adm-cadastro-introducao h1 {
+        font-size: 23px;
+    }
+
+}
+/* =========================================
+   CARRINHO DE COMPRAS FLUTUANTE
+========================================= */
+
+.carrinho-flutuante {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    width: 310px;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #dce3ed;
+    border-radius: 12px;
+    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.18);
+}
+
+.carrinho-cabecalho {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5eaf1;
+}
+
+.carrinho-cabecalho h2 {
+    margin: 0;
+    color: #12366b;
+    font-size: 19px;
+}
+
+.carrinho-cabecalho span {
+    display: block;
+    margin-top: 4px;
+    color: #687789;
+    font-size: 12px;
+}
+
+.carrinho-vazio {
+    padding: 25px 10px;
+    text-align: center;
+}
+
+.carrinho-vazio span {
+    font-size: 32px;
+}
+
+.carrinho-vazio p {
+    margin: 8px 0 4px;
+    color: #173b70;
+    font-weight: bold;
+}
+
+.carrinho-vazio small {
+    color: #778397;
+}
+
+.carrinho-lista {
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 5px 0;
+}
+
+.carrinho-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.carrinho-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.carrinho-item-info strong {
+    color: #173b70;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.carrinho-item-info span {
+    color: #697789;
+    font-size: 12px;
+}
+
+.carrinho-item-info b {
+    color: #0757bd;
+    font-size: 13px;
+}
+
+.carrinho-alerta {
+    color: #c0392b;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.carrinho-remover {
+    width: 27px;
+    height: 27px;
+    border: none;
+    border-radius: 6px;
+    background: #ffe9e9;
+    color: #c0392b;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.carrinho-remover:hover {
+    background: #ffd3d3;
+}
+
+.carrinho-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5eaf1;
+}
+
+.carrinho-total span {
+    color: #173b70;
+    font-weight: bold;
+}
+
+.carrinho-total strong {
+    color: #0757bd;
+    font-size: 20px;
+}
+
+.carrinho-saldo {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 10px 0;
+    color: #697789;
+    font-size: 12px;
+}
+
+.carrinho-saldo strong {
+    color: #173b70;
+}
+
+.carrinho-comprar {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    background: #0875d1;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.carrinho-comprar:hover {
+    background: #005bb5;
+}
+
+.carrinho-limpar {
+    width: 100%;
+    margin-top: 7px;
+    padding: 9px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    background: #f5f7fa;
+    color: #687789;
+    cursor: pointer;
+}
+
+.carrinho-limpar:hover {
+    background: #e9edf3;
+}
+
+.produto-no-carrinho {
+    display: block;
+    margin-top: 7px;
+    color: #0875d1;
+    font-size: 12px;
+}
+
+/* =========================================
+   MENSAGENS DE SUCESSO E ERRO
+========================================= */
+
+.mensagem-painel.mensagem-sucesso {
+    padding: 14px 18px;
+    border: 1px solid #a7dfb5;
+    border-left: 5px solid #269b50;
+    border-radius: 8px;
+    background: #e9f8ee;
+    color: #176b35;
+}
+
+.mensagem-painel.mensagem-erro {
+    padding: 14px 18px;
+    border: 1px solid #efb1b1;
+    border-left: 5px solid #d63838;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #a52121;
+}
+
+/* =========================================
+   RESPONSIVIDADE DO CARRINHO
+========================================= */
+
+@media (max-width: 600px) {
+    .carrinho-flutuante {
+        right: 10px;
+        bottom: 10px;
+        width: calc(100% - 20px);
+        max-height: 55vh;
+        box-sizing: border-box;
+    }
+}
+/* =========================================
+   AJUSTE DO CARRINHO - PAINEL CHINGLING
+   Remove a sobreposição dos anúncios e produtos
+   ========================================= */
+
+.carrinho-flutuante {
+    position: relative !important;
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 25px auto;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    z-index: 1 !important;
+    box-sizing: border-box;
+}
+
+/* Impede que o carrinho ultrapasse a tela */
+.carrinho-flutuante * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ajuste para celulares */
+@media (max-width: 600px) {
+    .carrinho-flutuante {
+        width: 100%;
+        margin: 20px auto;
+    }
+}

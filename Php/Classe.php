@@ -21,67 +21,73 @@ Class Usuario {
         $this->conexao = $conexao;
     }
 
-    public function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao) {
+    
+public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
 
-        require_once 'conexao_msql.php';
+    // Verificar se o móvel já existe.
+    $sql = "SELECT id FROM produtos
+            WHERE nome = ?
+            AND categoria_id = ?";
 
-        $sql = "SELECT cpf FROM usuarios WHERE cpf = ?";
+    $stmt = $conexao->prepare($sql);
 
-        $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("s", $cpf);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-
-            echo "O cpf já está sendo utilizado.";
-            $stmt->close();
-
-        } else {
-
-            $stmt->close();
-
-            $sql = "SELECT email FROM usuarios WHERE email = ?";
-
-            $stmt = $conexao->prepare($sql);
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows > 0) {
-
-                echo "O email já está sendo utilizado.";
-                $stmt->close();
-
-            } else {
-
-                $stmt->close();
-
-                $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
-                        VALUES (?, ?, ?, ?, ?, ?)";
-
-                $stmt = $conexao->prepare($sql);
-
-                $Senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-                $stmt->bind_param(
-                    "ssssss",
-                    $nome,
-                    $email,
-                    $Senha_hash,
-                    $cpf,
-                    $telefone,
-                    $classe
-                );
-
-                $stmt->execute();
-                $stmt->close();
-
-                header("Location: Login.php");
-                exit();
-            }
-        }
+    if (!$stmt) {
+        $_SESSION['mensagem'] = "Erro ao verificar o móvel.";
+        return false;
     }
+
+    $stmt->bind_param("si", $nome, $categoria);
+    $stmt->execute();
+    $stmt->store_result();
+
+    // Se encontrou um registro igual.
+    if ($stmt->num_rows > 0) {
+
+        $_SESSION['mensagem'] = "Este móvel já está cadastrado!";
+
+        $stmt->close();
+
+        return false;
+    }
+
+    $stmt->close();
+
+    // Cadastrar o móvel.
+    $sql = "INSERT INTO produtos
+            (nome, estoque, preco, categoria_id, imagem, descricao)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conexao->prepare($sql);
+
+    if (!$stmt) {
+        $_SESSION['mensagem'] = "Erro ao preparar o cadastro.";
+        return false;
+    }
+
+    $stmt->bind_param(
+        "sidi ss",
+        $nome,
+        $estoque,
+        $preco,
+        $categoria,
+        $imagem,
+        $descricao
+    );
+
+    // Executar o cadastro.
+    if (!$stmt->execute()) {
+        $_SESSION['mensagem'] = "Erro ao cadastrar o móvel.";
+        $stmt->close();
+        return false;
+    }
+
+    $stmt->close();
+
+    $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
+
+    return true;
+}
+
 
     public function User_Login($email, $senha, $conexao) {
 
