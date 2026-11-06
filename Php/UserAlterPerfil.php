@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $salvou = true;
 
-        $_SESSION['emailAlterar'] = $emailN;
+        $_SESSION['email'] = $emailN;
 
         $emailOriginal = $emailN;
 

@@ -331,7 +331,7 @@ if ($acao === 'recarga') {
 // =====================================
 
 $sqlUsuario = "
-    SELECT nome, saldo, tipo
+    SELECT nome, saldo, tipo, imagem
     FROM usuarios
     WHERE email = ?
 ";
@@ -450,7 +450,7 @@ function escapar($valor) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chingling - Móveis para todos os momentos</title>
-    <link rel="stylesheet" href="style2.css?v=4">
+<link rel="stylesheet" href="style2.css?v=5">
 </head>
 
 <body>
@@ -467,14 +467,33 @@ function escapar($valor) {
 
         <div class="topo-direita">
 
-            <a class="editar_user" href="UserAlterPerfil.php">Editar Usuário</a>
+    <div class="usuario-topo">
 
-            <span>👤 Olá, <?= escapar($usuarioAtual['nome']) ?>!</span>
+        <?php if (!empty($usuarioAtual['imagem'])): ?>
+
+            <img
+                src="<?= escapar($usuarioAtual['imagem']) ?>"
+                alt="Foto de perfil"
+                class="foto-perfil-topo"
+            >
+
+        <?php else: ?>
+
+            <span class="foto-perfil-padrao">👤</span>
+
+        <?php endif; ?>
+
+        <span>
+            Olá, <?= escapar($usuarioAtual['nome']) ?>!
+        </span>
+
+    </div>
             <form action="Login.php" method="POST">
                 <input type="hidden" name="sinal_clique" value="ativado">
                 <button type="submit" class="botao-sair">Sair da conta</button>
             </form>
-            
+                <input type="hidden" name="sinal_clique" value="ativado">
+                <button type="submit" class="botao-sair" onclick="window.location.href='UserAlterPerfil.php'">Editar perfil </button>
         </div>
     </div>
 
