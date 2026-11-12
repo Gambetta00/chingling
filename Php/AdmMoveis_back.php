@@ -108,14 +108,25 @@ $nomeImagem = bin2hex(random_bytes(16)) . "." . $extensao;
 
 $caminhoCompleto = $pastaImagens . $nomeImagem;
 
+<<<<<<< HEAD
 $imagem = "imagens/moveis/" . $nomeImagem;
 
+=======
+// Caminho que será salvo no banco de dados.
+$imagem = "imagens/moveis/" . $nomeImagem;
+
+// Mover a imagem enviada para a pasta.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 if (!move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto)) {
     $_SESSION['mensagem'] = "Não foi possível salvar a imagem.";
     header("Location: AdmCadastroMoveis.php");
     exit();
 }
 
+<<<<<<< HEAD
+=======
+// Cadastrar o móvel.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 $Movel = new Movel(
     $nome,
     $estoque,
@@ -137,7 +148,11 @@ if ($Movel->Set_Movel(
 )) {
     $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
 } else {
+<<<<<<< HEAD
 
+=======
+    // Apagar a imagem se o cadastro não for realizado.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if (file_exists($caminhoCompleto)) {
         unlink($caminhoCompleto);
     }

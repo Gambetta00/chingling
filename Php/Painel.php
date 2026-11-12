@@ -3,6 +3,13 @@
 session_start();
 require_once "conexao_msql.php";
 
+<<<<<<< HEAD
+=======
+// =====================================
+// VERIFICAR LOGIN
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 if (empty($_SESSION['email'])) {
     header("Location: Login.php");
     exit;
@@ -14,10 +21,21 @@ if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
 }
 
+<<<<<<< HEAD
 function escapar($valor) {
     return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
 }
 
+=======
+// =====================================
+// FUNÇÕES
+// =====================================
+
+function escapar($valor) {
+    return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
+}
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 function caminhoImagem($imagem) {
     return trim((string)$imagem);
 }
@@ -27,6 +45,13 @@ function definirMensagem($texto, $tipo = 'erro') {
     $_SESSION['mensagem_painel_tipo'] = $tipo;
 }
 
+<<<<<<< HEAD
+=======
+// =====================================
+// BUSCAR TIPO DO USUÁRIO
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 $sql = "SELECT tipo FROM usuarios WHERE email = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("s", $emailUsuario);
@@ -43,6 +68,10 @@ if (!$resultadoTipo) {
 $tipo = $resultadoTipo['tipo'];
 $_SESSION['tipo'] = $tipo;
 
+// =====================================
+// RECEBER FILTROS
+// =====================================
+
 $buscaNome = trim($_GET['busca_nome'] ?? '');
 $categoriaBusca = (int)($_GET['categoria_busca'] ?? 0);
 
@@ -55,15 +84,36 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
+<<<<<<< HEAD
+=======
+// =====================================
+// TOKEN CSRF
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 if (empty($_SESSION['csrf_painel'])) {
     $_SESSION['csrf_painel'] = bin2hex(random_bytes(32));
 }
 
+<<<<<<< HEAD
+=======
+// =====================================
+// MENSAGEM
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 $mensagemPainel = $_SESSION['mensagem_painel'] ?? '';
 $tipoMensagem = $_SESSION['mensagem_painel_tipo'] ?? 'erro';
 
 unset($_SESSION['mensagem_painel']);
 unset($_SESSION['mensagem_painel_tipo']);
+<<<<<<< HEAD
+=======
+
+// =====================================
+// PROCESSAR FORMULÁRIOS
+// =====================================
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -77,6 +127,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
+<<<<<<< HEAD
+=======
+    // =====================================
+    // ADICIONAR AO CARRINHO
+    // =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if ($acao === 'adicionar_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
@@ -123,6 +180,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+<<<<<<< HEAD
+=======
+    // =====================================
+    // REMOVER PRODUTO DO CARRINHO
+    // =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if ($acao === 'remover_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
@@ -136,6 +200,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+<<<<<<< HEAD
+=======
+    // =====================================
+    // ESVAZIAR CARRINHO
+    // =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if ($acao === 'limpar_carrinho') {
 
         $_SESSION['carrinho'] = [];
@@ -145,6 +216,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+<<<<<<< HEAD
+=======
+    // =====================================
+    // COMPRAR TODOS OS PRODUTOS
+    // =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if ($acao === 'comprar_carrinho') {
 
         $carrinho = $_SESSION['carrinho'];
@@ -162,6 +240,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conexao->begin_transaction();
             $transacaoIniciada = true;
 
+<<<<<<< HEAD
+=======
+            // Bloqueia o usuário durante a compra.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             $sqlUsuario = "
                 SELECT id, saldo
                 FROM usuarios
@@ -180,11 +262,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Usuário não encontrado.");
             }
 
+<<<<<<< HEAD
+=======
+            // Ordena os IDs para manter uma ordem consistente
+            // ao bloquear os produtos no banco.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             ksort($carrinho);
 
             $produtosCompra = [];
             $totalCentavos = 0;
 
+<<<<<<< HEAD
+=======
+            // Verifica todos os produtos antes de alterar o banco.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             foreach ($carrinho as $id => $quantidade) {
 
                 $id = (int)$id;
@@ -219,6 +310,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                 }
 
+<<<<<<< HEAD
+=======
+                // Calcula o preço final, considerando promoção.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
                 $preco = (float)$produto['preco'];
 
                 if (
@@ -239,6 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $produtosCompra[] = $produto;
             }
 
+<<<<<<< HEAD
+=======
+            // Compara o saldo com o valor total do carrinho.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
 
             if ($saldoCentavos < $totalCentavos) {
@@ -250,6 +349,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
+<<<<<<< HEAD
+=======
+            // Desconta o valor total apenas uma vez.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
 
             $sqlSaldo = "
@@ -263,6 +366,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSaldo->execute();
             $stmtSaldo->close();
 
+<<<<<<< HEAD
+=======
+            // Atualiza o estoque e registra cada produto comprado.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             foreach ($produtosCompra as $produto) {
 
                 $id = (int)$produto['id'];
@@ -313,6 +420,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtCompra->close();
             }
 
+<<<<<<< HEAD
+=======
+            // Confirma todas as compras juntas.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
             $conexao->commit();
             $transacaoIniciada = false;
 
@@ -341,8 +452,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+<<<<<<< HEAD
     if ($acao === 'recarga') {
 
+=======
+    // =====================================
+    // RECARGA DE SALDO
+    // =====================================
+
+    if ($acao === 'recarga') {
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         $valorRecarga = filter_input(
             INPUT_POST,
             'valor_recarga',
@@ -386,6 +506,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+<<<<<<< HEAD
+=======
+// =====================================
+// BUSCAR USUÁRIO
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 $sqlUsuario = "
     SELECT nome, saldo, tipo, imagem
     FROM usuarios
@@ -405,9 +532,23 @@ if (!$usuarioAtual) {
     exit;
 }
 
+<<<<<<< HEAD
 $categorias = $conexao->query(
     "SELECT id, nome FROM categorias ORDER BY nome ASC"
 );
+=======
+// =====================================
+// BUSCAR CATEGORIAS
+// =====================================
+
+$categorias = $conexao->query(
+    "SELECT id, nome FROM categorias ORDER BY nome ASC"
+);
+
+// =====================================
+// BUSCAR PRODUTOS
+// =====================================
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 
 $filtros = ["p.ativo = 1"];
 $tipos = "s";
@@ -491,6 +632,13 @@ while ($produto = $resultadoProdutos->fetch_assoc()) {
 
 $stmtProdutos->close();
 
+<<<<<<< HEAD
+=======
+// =====================================
+// BUSCAR ITENS DO CARRINHO
+// =====================================
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 $itensCarrinho = [];
 $totalCarrinhoCentavos = 0;
 $quantidadeTotalCarrinho = 0;
@@ -558,11 +706,19 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
     <link rel="stylesheet" href="style2.css?v=6">
 </head>
 <script>
+<<<<<<< HEAD
 
+=======
+    // Evita que o navegador altere a posição automaticamente.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
 
+<<<<<<< HEAD
+=======
+    // Salva a posição ao adicionar um produto ao carrinho.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     document.querySelectorAll('.form-comprar').forEach(form => {
         form.addEventListener('submit', function () {
             sessionStorage.setItem(
@@ -572,6 +728,10 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         });
     });
 
+<<<<<<< HEAD
+=======
+    // Restaura a posição depois que a página recarregar.
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     window.addEventListener('load', function () {
         const posicao = sessionStorage.getItem('posicaoPainel');
 
@@ -583,6 +743,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 </script>
 <body>
 
+<<<<<<< HEAD
+=======
+    <!-- BARRA SUPERIOR -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     <div id="topo-beneficios">
 
         <div class="topo-esquerda">
@@ -627,6 +792,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- BARRA PRINCIPAL -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
@@ -662,6 +832,10 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- MENU -->
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 
     <nav id="menu-categorias">
 
@@ -673,6 +847,42 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         <?php endif; ?>
 
     </nav>
+
+<<<<<<< HEAD
+    <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
+
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
+
+            <img
+                src="Imagem/sala_de_jantar.jpg"
+                alt="Sala de estar com móveis Chingling"
+            >
+
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Encontre seu móvel ideal</p>
+                <span>Ver ofertas →</span>
+            </div>
+
+        </a>
+
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
+
+            <img
+                src="Imagem/quarto.jpg"
+                alt="Quarto com móveis Chingling"
+            >
+
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Renove seu ambiente</p>
+                <span>Confira agora →</span>
+            </div>
+
+        </a>
+
+=======
+    <!-- BANNERS LATERAIS -->
 
     <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
 
@@ -706,10 +916,16 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </a>
 
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     </aside>
 
     <div class="container painel-container">
 
+<<<<<<< HEAD
+=======
+        <!-- BANNER PRINCIPAL -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         <section class="banner-hero">
 
             <div class="banner-conteudo">
@@ -738,6 +954,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
+<<<<<<< HEAD
+=======
+        <!-- BENEFÍCIOS -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         <section class="regua-beneficios">
             <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
             <div class="item-beneficio">🔒 Compra segura</div>
@@ -745,6 +966,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
             <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
         </section>
 
+<<<<<<< HEAD
+=======
+        <!-- MENSAGEM -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         <?php if ($mensagemPainel !== ''): ?>
 
             <div class="mensagem-painel <?= $tipoMensagem === 'sucesso' ? 'mensagem-sucesso' : 'mensagem-erro' ?>" role="status">
@@ -753,6 +979,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         <?php endif; ?>
 
+<<<<<<< HEAD
+=======
+        <!-- SALDO E RECARGA -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         <section class="saldo-area">
 
             <div class="saldo-texto">
@@ -799,6 +1030,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
+<<<<<<< HEAD
+=======
+        <!-- PRODUTOS -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
         <section class="secao-produtos" id="secao-produtos">
 
             <div class="titulo-secao-produtos">
@@ -808,6 +1044,8 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
                     <p>Confira nossos móveis e encontre o ideal para sua casa.</p>
                 </div>
             </div>
+
+            <!-- FILTROS -->
 
             <form method="GET" action="Painel.php" class="pesquisa-painel">
 
@@ -875,6 +1113,8 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
                 </a>
 
             </form>
+
+            <!-- LISTA DE PRODUTOS -->
 
             <?php if (count($produtos) === 0): ?>
 
@@ -1027,6 +1267,13 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- =====================================
+         CARRINHO FIXO NA TELA
+    ====================================== -->
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
     <aside class="carrinho-flutuante">
 
         <div class="carrinho-cabecalho">
