@@ -20,7 +20,7 @@ public function __construct($nome, $estoque, $preco, $categoria, $imagem, $descr
 
 public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
     session_start();
-    // Verificar se o móvel já existe
+
     $sql = "SELECT nome FROM produtos
             WHERE nome = ?
             AND categoria_id = ?";
@@ -36,7 +36,6 @@ public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descric
     $stmt->execute();
     $stmt->store_result();
 
-    // Se encontrou um registro igual
     if ($stmt->num_rows > 0) {
 
         $_SESSION['mensagem'] = "Este móvel já está cadastrado!";
@@ -50,7 +49,6 @@ public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descric
 
     $stmt->close();
 
-    // Se não existe, cadastrar
     $sql = "INSERT INTO produtos
             (nome, estoque, preco, categoria_id, imagem, descricao)
             VALUES (?, ?, ?, ?, ?, ?)";
@@ -114,8 +112,6 @@ public function Edit_Movel($nome, $estoque, $preco, $categoria, $imagem, $descri
 
 public static function UnSet_Movel($id, $conexao){
 
-
-    // Verificar se o móvel existe
     $sql = "SELECT id FROM produtos
             WHERE id = ?
             ";
@@ -130,7 +126,6 @@ public static function UnSet_Movel($id, $conexao){
     $stmt->execute();
     $stmt->store_result();
 
-    // Se encontrou um registro, deleta
     if ($stmt->num_rows > 0) {
 
         $sql = "DELETE FROM produtos 

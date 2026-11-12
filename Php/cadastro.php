@@ -34,7 +34,6 @@ $stmt->fetch();
 
 <body>
 
-    <!-- BARRA SUPERIOR -->
     <div id="topo-beneficios">
 
         <div class="topo-esquerda">
@@ -51,8 +50,6 @@ $stmt->fetch();
 
     </div>
 
-
-    <!-- CABEÇALHO PRINCIPAL -->
     <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
@@ -67,8 +64,6 @@ $stmt->fetch();
 
     </div>
 
-
-    <!-- MENU -->
     <nav id="menu-categorias">
         <?php if ($tipo === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
@@ -77,8 +72,6 @@ $stmt->fetch();
         <?php endif; ?>
     </nav>
 
-
-    <!-- CONTEÚDO DO CADASTRO -->
     <main class="cadastro-container">
 
         <section class="cadastro-introducao">
@@ -190,8 +183,6 @@ $stmt->fetch();
 
         </section>
 
-
-        <!-- BENEFÍCIOS -->
         <section class="cadastro-beneficios">
 
             <div>
