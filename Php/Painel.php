@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require_once "conexao_msql.php";
@@ -26,7 +25,6 @@ function definirMensagem($texto, $tipo = 'erro') {
     $_SESSION['mensagem_painel'] = $texto;
     $_SESSION['mensagem_painel_tipo'] = $tipo;
 }
-
 
 $sql = "SELECT tipo FROM usuarios WHERE email = ?";
 $stmt = $conexao->prepare($sql);
@@ -56,11 +54,9 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
-
 if (empty($_SESSION['csrf_painel'])) {
     $_SESSION['csrf_painel'] = bin2hex(random_bytes(32));
 }
-
 
 $mensagemPainel = $_SESSION['mensagem_painel'] ?? '';
 $tipoMensagem = $_SESSION['mensagem_painel_tipo'] ?? 'erro';
@@ -80,7 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
-   if ($acao === 'adicionar_carrinho') {
+    // ADICIONAR AO CARRINHO
+    if ($acao === 'adicionar_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
 
@@ -126,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // REMOVER DO CARRINHO
     if ($acao === 'remover_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
@@ -139,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // ESVAZIAR CARRINHO
     if ($acao === 'limpar_carrinho') {
 
         $_SESSION['carrinho'] = [];
@@ -148,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // COMPRAR TUDO
     if ($acao === 'comprar_carrinho') {
 
         $carrinho = $_SESSION['carrinho'];
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conexao->begin_transaction();
             $transacaoIniciada = true;
 
-          $sqlUsuario = "
+            $sqlUsuario = "
                 SELECT id, saldo
                 FROM usuarios
                 WHERE email = ?
@@ -183,12 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Usuário não encontrado.");
             }
 
-          ksort($carrinho);
+            ksort($carrinho);
 
             $produtosCompra = [];
             $totalCentavos = 0;
 
-         foreach ($carrinho as $id => $quantidade) {
+            foreach ($carrinho as $id => $quantidade) {
 
                 $id = (int)$id;
                 $quantidade = (int)$quantidade;
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $produtosCompra[] = $produto;
             }
 
-           $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
+            $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
 
             if ($saldoCentavos < $totalCentavos) {
                 throw new Exception(
@@ -253,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
-          $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
+            $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
 
             $sqlSaldo = "
                 UPDATE usuarios
@@ -316,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtCompra->close();
             }
 
-         $conexao->commit();
+            $conexao->commit();
             $transacaoIniciada = false;
 
             $_SESSION['carrinho'] = [];
@@ -340,7 +340,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if ($acao === 'recarga') {
+        header("Location: Painel.php");
+        exit;
+    }
+
+    // RECARGA DE SALDO
+    if ($acao === 'recarga') {
 
         $valorRecarga = filter_input(
             INPUT_POST,
@@ -385,43 +390,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 }
-
-        $valoresPermitidos = [50.0, 100.0, 200.0, 500.0];
-
-        if (
-            $valorRecarga === false ||
-            $valorRecarga === null ||
-            !in_array((float)$valorRecarga, $valoresPermitidos, true)
-        ) {
-            definirMensagem("Selecione um valor válido.");
-            header("Location: Painel.php");
-            exit;
-        }
-
-        $valorRecarga = (float)$valorRecarga;
-
-        $sqlRecarga = "
-            UPDATE usuarios
-            SET saldo = saldo + ?
-            WHERE email = ?
-            LIMIT 1
-        ";
-
-        $stmtRecarga = $conexao->prepare($sqlRecarga);
-        $stmtRecarga->bind_param("ds", $valorRecarga, $emailUsuario);
-
-        if ($stmtRecarga->execute() && $stmtRecarga->affected_rows === 1) {
-            definirMensagem("Recarga realizada com sucesso!", 'sucesso');
-        } else {
-            definirMensagem("Não foi possível realizar a recarga.");
-        }
-
-        $stmtRecarga->close();
-
-        header("Location: Painel.php");
-        exit;
-    }
-
 
 $sqlUsuario = "
     SELECT nome, saldo, tipo, imagem
@@ -592,12 +560,12 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     <title>Chingling - Móveis para todos os momentos</title>
 
-    <link rel="stylesheet" href="style2.css?v=6">
+    <link rel="stylesheet" href="style2.css?v=7">
 </head>
 
 <body>
 
-  <div id="topo-beneficios">
+    <div id="topo-beneficios">
 
         <div class="topo-esquerda">
             <span>🚚 Entrega para todo o Brasil</span>
@@ -641,7 +609,9 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         </div>
     </div>
 
- <div id="barra-principal">
+    <!-- BARRA PRINCIPAL -->
+
+    <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
             <span>🏠 Chingling</span>
@@ -676,6 +646,8 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
+    <!-- MENU -->
+
     <nav id="menu-categorias">
 
         <a href="Painel.php">Início</a>
@@ -687,43 +659,47 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </nav>
 
+    <!-- BANNERS LATERAIS -->
+
     <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
 
-    <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
 
-        <img
-            src="Imagem/sala_de_jantar.jpg"
-            alt="Sala de estar com móveis Chingling"
-        >
+            <img
+                src="Imagem/sala_de_jantar.jpg"
+                alt="Sala de estar com móveis Chingling"
+            >
 
-        <div class="promocao-conteudo">
-            <h2>Chingling</h2>
-            <p>Encontre seu móvel ideal</p>
-            <span>Ver ofertas →</span>
-        </div>
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Encontre seu móvel ideal</p>
+                <span>Ver ofertas →</span>
+            </div>
 
-    </a>
+        </a>
 
-    <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
 
-        <img
-            src="Imagem/quarto.jpg"
-            alt="Quarto com móveis Chingling"
-        >
+            <img
+                src="Imagem/quarto.jpg"
+                alt="Quarto com móveis Chingling"
+            >
 
-        <div class="promocao-conteudo">
-            <h2>Chingling</h2>
-            <p>Renove seu ambiente</p>
-            <span>Confira agora →</span>
-        </div>
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Renove seu ambiente</p>
+                <span>Confira agora →</span>
+            </div>
 
-    </a>
+        </a>
 
     </aside>
 
     <div class="container painel-container">
 
-       <section class="banner-hero">
+        <!-- BANNER PRINCIPAL -->
+
+        <section class="banner-hero">
 
             <div class="banner-conteudo">
 
@@ -751,20 +727,26 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-       <section class="regua-beneficios">
+        <!-- BENEFÍCIOS -->
+
+        <section class="regua-beneficios">
             <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
             <div class="item-beneficio">🔒 Compra segura</div>
             <div class="item-beneficio">💳 Saldo integrado à sua conta</div>
             <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
         </section>
 
-     <?php if ($mensagemPainel !== ''): ?>
+        <!-- MENSAGEM -->
+
+        <?php if ($mensagemPainel !== ''): ?>
 
             <div class="mensagem-painel <?= $tipoMensagem === 'sucesso' ? 'mensagem-sucesso' : 'mensagem-erro' ?>" role="status">
                 <?= escapar($mensagemPainel) ?>
             </div>
 
         <?php endif; ?>
+
+        <!-- SALDO E RECARGA -->
 
         <section class="saldo-area">
 
@@ -812,7 +794,9 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-       <section class="secao-produtos" id="secao-produtos">
+        <!-- PRODUTOS -->
+
+        <section class="secao-produtos" id="secao-produtos">
 
             <div class="titulo-secao-produtos">
                 <div>
@@ -1044,7 +1028,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
-   <aside class="carrinho-flutuante">
+    <!-- =====================================
+         CARRINHO FIXO NA TELA
+    ====================================== -->
+
+    <aside class="carrinho-flutuante">
 
         <div class="carrinho-cabecalho">
             <div>
@@ -1174,7 +1162,6 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         <?php endif; ?>
 
     </aside>
-
 
     <script>
         if ('scrollRestoration' in history) {

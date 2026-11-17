@@ -19,6 +19,7 @@ Class Usuario{
     }
 
     function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+
 session_start();
 require_once 'conexao_msql.php';
 
@@ -39,6 +40,23 @@ if ($stmt->num_rows > 0) {
     $stmt->close();
     header("Location: cadastro.php");
     exit();
+
+require_once 'conexao_msql.php';
+
+$sql = "SELECT cpf FROM usuarios
+        WHERE cpf = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $cpf);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+
+    echo "O cpf já está sendo utilizado.";
 
     $stmt->close();
 
@@ -63,7 +81,6 @@ if ($stmt->num_rows > 0) {
     exit();
 
 } else {
-
 
     $stmt->close();
 
@@ -96,8 +113,41 @@ if ($stmt->num_rows > 0) {
 }
     }
 }
+    }
+    function User_Login($email, $senha, $conexao){
 
+    $emailusuario = $email;
+    $senhausuario = $senha;
 
+    $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
+
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $emailusuario);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows === 1) {
+
+        $stmt->bind_result($emailBanco, $hash);
+        $stmt->fetch();
+
+        if (password_verify($senhausuario, $hash)) {
+
+            header("Location: Painel.php");
+            exit;
+
+        } else {
+
+            echo "Senha incorreta.";
+
+        }
+
+    } else {
+
+        echo "Email não encontrado.";
+
+    }
+    }
     function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
@@ -135,8 +185,6 @@ if ($stmt->num_rows > 0) {
     }
     $stmt->close();
     $conexao->close();
-
-}
-}
-
+    }
+    }
 ?>

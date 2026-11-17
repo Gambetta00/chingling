@@ -112,7 +112,10 @@ $imagem = "imagens/moveis/" . $nomeImagem;
 
 $imagem = "imagens/moveis/" . $nomeImagem;
 
->>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
+$imagem = "imagens/moveis/" . $nomeImagem;
+
+$imagem = "imagens/moveis/" . $nomeImagem;
+
 if (!move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto)) {
     $_SESSION['mensagem'] = "Não foi possível salvar a imagem.";
     header("Location: AdmCadastroMoveis.php");
