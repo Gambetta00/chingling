@@ -114,40 +114,7 @@ if ($stmt->num_rows > 0) {
     }
 }
     }
-    function User_Login($email, $senha, $conexao){
-
-    $emailusuario = $email;
-    $senhausuario = $senha;
-
-    $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
-
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("s", $emailusuario);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 1) {
-
-        $stmt->bind_result($emailBanco, $hash);
-        $stmt->fetch();
-
-        if (password_verify($senhausuario, $hash)) {
-
-            header("Location: Painel.php");
-            exit;
-
-        } else {
-
-            echo "Senha incorreta.";
-
-        }
-
-    } else {
-
-        echo "Email não encontrado.";
-
-    }
-    }
+    
     function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
@@ -177,12 +144,14 @@ if ($stmt->num_rows > 0) {
             exit();
 
         } 
-        
-    }else{
+    }
+    
+        if($emailBanco = $emailusuario){
             $_SESSION['mensagem'] = "Este email não existe!";
             header("Location: Login.php");
             exit();
     }
+            
     $stmt->close();
     $conexao->close();
     }
