@@ -1,8 +1,5 @@
-
 <?php
-
-Class Usuario {
-
+Class Usuario{
     private $nome;
     private $email;
     private $senha;
@@ -11,7 +8,7 @@ Class Usuario {
     private $classe;
     private $conexao;
 
-    public function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao) {
+    function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
         $this->nome = $nome;
         $this->email = $email;
         $this->senha = $senha;
@@ -21,120 +18,125 @@ Class Usuario {
         $this->conexao = $conexao;
     }
 
-    
-public function Set_Movel($nome, $estoque, $preco, $categoria, $imagem, $descricao, $conexao){
+    function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+session_start();
+require_once 'conexao_msql.php';
 
-    // Verificar se o móvel já existe.
-    $sql = "SELECT id FROM produtos
-            WHERE nome = ?
-            AND categoria_id = ?";
+$sql = "SELECT cpf FROM usuarios
+        WHERE cpf = ?";
 
-    $stmt = $conexao->prepare($sql);
+$stmt = $conexao->prepare($sql);
 
-    if (!$stmt) {
-        $_SESSION['mensagem'] = "Erro ao verificar o móvel.";
-        return false;
-    }
+$stmt->bind_param("s", $cpf);
 
-    $stmt->bind_param("si", $nome, $categoria);
-    $stmt->execute();
-    $stmt->store_result();
+$stmt->execute();
 
-    // Se encontrou um registro igual.
-    if ($stmt->num_rows > 0) {
+$stmt->store_result();
 
-        $_SESSION['mensagem'] = "Este móvel já está cadastrado!";
+if ($stmt->num_rows > 0) {
 
-        $stmt->close();
-
-        return false;
-    }
+    $_SESSION['mensagem'] = "Esta conta já existe.";
+    $stmt->close();
+    header("Location: cadastro.php");
+    exit();
 
     $stmt->close();
 
-    // Cadastrar o móvel.
-    $sql = "INSERT INTO produtos
-            (nome, estoque, preco, categoria_id, imagem, descricao)
+} else {
+    $sql = "SELECT email FROM usuarios
+        WHERE email = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $email);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+
+if ($stmt->num_rows > 0) {
+
+    $_SESSION['mensagem'] = "O email já está sendo utilizado.";
+    $stmt->close();
+    header("Location: cadastro.php");
+    exit();
+
+} else {
+
+
+    $stmt->close();
+
+    $sql = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, tipo)
             VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexao->prepare($sql);
 
-    if (!$stmt) {
-        $_SESSION['mensagem'] = "Erro ao preparar o cadastro.";
-        return false;
-    }
-
-    $stmt->bind_param(
-        "sidi ss",
-        $nome,
-        $estoque,
-        $preco,
-        $categoria,
-        $imagem,
-        $descricao
+    $Senha_hash = password_hash(
+        $senha,
+        PASSWORD_DEFAULT
     );
 
-    // Executar o cadastro.
-    if (!$stmt->execute()) {
-        $_SESSION['mensagem'] = "Erro ao cadastrar o móvel.";
-        $stmt->close();
-        return false;
-    }
+    $stmt->bind_param(
+        "ssssss",
+        $nome,
+        $email,
+        $Senha_hash,
+        $cpf,
+        $telefone,
+        $classe
+    );
+
+    $stmt->execute();
 
     $stmt->close();
 
-    $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
-
-    return true;
+    header("Location: Login.php");
+    exit();
+}
+    }
 }
 
 
-    public function User_Login($email, $senha, $conexao) {
+    function User_Login($email, $senha, $conexao){
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+    $emailusuario = $email;
+    $senhausuario = $senha;
 
-        $sql = "SELECT email, senha, tipo FROM usuarios WHERE email = ?";
+    $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
 
-        $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result();
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $emailusuario);
+    $stmt->execute();
+    $stmt->store_result();
 
-        if ($stmt->num_rows === 1) {
+    if ($stmt->num_rows === 1) {
 
-            $stmt->bind_result($emailBanco, $hash, $tipoBanco);
-            $stmt->fetch();
+        $stmt->bind_result($emailBanco, $hash);
+        $stmt->fetch();
 
-            if (password_verify($senha, $hash)) {
+        if (password_verify($senhausuario, $hash)) {
 
-                // Salva as informações do usuário na sessão
-                $_SESSION['email'] = $emailBanco;
-                $_SESSION['tipo'] = $tipoBanco;
+            header("Location: Painel.php");
+            exit;
 
-                $stmt->close();
+        } else{
 
-                header("Location: Painel.php");
-                exit;
+            $_SESSION['mensagem'] = "Seu email ou senha está incorreto!";
+            header("Location: Login.php");
+            exit();
 
-            } else {
-
-                $_SESSION['mensagem'] = "Senha incorreta.";
-
-            }
-
-        } else {
-
-            $_SESSION['mensagem'] = "Email não encontrado.";
-
-        }
-
-        $stmt->close();
-
-        header("Location: Login.php");
-        exit;
+        } 
+        
+    }else{
+            $_SESSION['mensagem'] = "Este email não existe!";
+            header("Location: Login.php");
+            exit();
     }
+    $stmt->close();
+    $conexao->close();
+
+}
 }
 
 ?>

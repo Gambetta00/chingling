@@ -3,10 +3,6 @@
 session_start();
 require_once "conexao_msql.php";
 
-// =====================================
-// VERIFICAR LOGIN
-// =====================================
-
 if (empty($_SESSION['email'])) {
     header("Location: Login.php");
     exit;
@@ -17,10 +13,6 @@ $emailUsuario = $_SESSION['email'];
 if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
 }
-
-// =====================================
-// FUNÇÕES
-// =====================================
 
 function escapar($valor) {
     return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
@@ -35,9 +27,6 @@ function definirMensagem($texto, $tipo = 'erro') {
     $_SESSION['mensagem_painel_tipo'] = $tipo;
 }
 
-// =====================================
-// BUSCAR TIPO DO USUÁRIO
-// =====================================
 
 $sql = "SELECT tipo FROM usuarios WHERE email = ?";
 $stmt = $conexao->prepare($sql);
@@ -55,10 +44,6 @@ if (!$resultadoTipo) {
 $tipo = $resultadoTipo['tipo'];
 $_SESSION['tipo'] = $tipo;
 
-// =====================================
-// RECEBER FILTROS
-// =====================================
-
 $buscaNome = trim($_GET['busca_nome'] ?? '');
 $categoriaBusca = (int)($_GET['categoria_busca'] ?? 0);
 
@@ -71,27 +56,17 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
-// =====================================
-// TOKEN CSRF
-// =====================================
 
 if (empty($_SESSION['csrf_painel'])) {
     $_SESSION['csrf_painel'] = bin2hex(random_bytes(32));
 }
 
-// =====================================
-// MENSAGEM
-// =====================================
 
 $mensagemPainel = $_SESSION['mensagem_painel'] ?? '';
 $tipoMensagem = $_SESSION['mensagem_painel_tipo'] ?? 'erro';
 
 unset($_SESSION['mensagem_painel']);
 unset($_SESSION['mensagem_painel_tipo']);
-
-// =====================================
-// PROCESSAR FORMULÁRIOS
-// =====================================
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -105,11 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
-    // =====================================
-    // ADICIONAR AO CARRINHO
-    // =====================================
-
-    if ($acao === 'adicionar_carrinho') {
+   if ($acao === 'adicionar_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
 
@@ -155,10 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // =====================================
-    // REMOVER PRODUTO DO CARRINHO
-    // =====================================
-
     if ($acao === 'remover_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
@@ -172,10 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // =====================================
-    // ESVAZIAR CARRINHO
-    // =====================================
-
     if ($acao === 'limpar_carrinho') {
 
         $_SESSION['carrinho'] = [];
@@ -184,10 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: Painel.php");
         exit;
     }
-
-    // =====================================
-    // COMPRAR TODOS OS PRODUTOS
-    // =====================================
 
     if ($acao === 'comprar_carrinho') {
 
@@ -206,8 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conexao->begin_transaction();
             $transacaoIniciada = true;
 
-            // Bloqueia o usuário durante a compra.
-            $sqlUsuario = "
+          $sqlUsuario = "
                 SELECT id, saldo
                 FROM usuarios
                 WHERE email = ?
@@ -225,15 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Usuário não encontrado.");
             }
 
-            // Ordena os IDs para manter uma ordem consistente
-            // ao bloquear os produtos no banco.
-            ksort($carrinho);
+          ksort($carrinho);
 
             $produtosCompra = [];
             $totalCentavos = 0;
 
-            // Verifica todos os produtos antes de alterar o banco.
-            foreach ($carrinho as $id => $quantidade) {
+         foreach ($carrinho as $id => $quantidade) {
 
                 $id = (int)$id;
                 $quantidade = (int)$quantidade;
@@ -267,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                 }
 
-                // Calcula o preço final, considerando promoção.
                 $preco = (float)$produto['preco'];
 
                 if (
@@ -288,8 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $produtosCompra[] = $produto;
             }
 
-            // Compara o saldo com o valor total do carrinho.
-            $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
+           $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
 
             if ($saldoCentavos < $totalCentavos) {
                 throw new Exception(
@@ -300,8 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
-            // Desconta o valor total apenas uma vez.
-            $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
+          $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
 
             $sqlSaldo = "
                 UPDATE usuarios
@@ -314,7 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSaldo->execute();
             $stmtSaldo->close();
 
-            // Atualiza o estoque e registra cada produto comprado.
             foreach ($produtosCompra as $produto) {
 
                 $id = (int)$produto['id'];
@@ -365,8 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtCompra->close();
             }
 
-            // Confirma todas as compras juntas.
-            $conexao->commit();
+         $conexao->commit();
             $transacaoIniciada = false;
 
             $_SESSION['carrinho'] = [];
@@ -390,15 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header("Location: Painel.php");
-        exit;
-    }
-
-    // =====================================
-    // RECARGA DE SALDO
-    // =====================================
-
-    if ($acao === 'recarga') {
+        if ($acao === 'recarga') {
 
         $valorRecarga = filter_input(
             INPUT_POST,
@@ -441,11 +383,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: Painel.php");
         exit;
     }
+
 }
 
-// =====================================
-// BUSCAR USUÁRIO
-// =====================================
+        $valoresPermitidos = [50.0, 100.0, 200.0, 500.0];
+
+        if (
+            $valorRecarga === false ||
+            $valorRecarga === null ||
+            !in_array((float)$valorRecarga, $valoresPermitidos, true)
+        ) {
+            definirMensagem("Selecione um valor válido.");
+            header("Location: Painel.php");
+            exit;
+        }
+
+        $valorRecarga = (float)$valorRecarga;
+
+        $sqlRecarga = "
+            UPDATE usuarios
+            SET saldo = saldo + ?
+            WHERE email = ?
+            LIMIT 1
+        ";
+
+        $stmtRecarga = $conexao->prepare($sqlRecarga);
+        $stmtRecarga->bind_param("ds", $valorRecarga, $emailUsuario);
+
+        if ($stmtRecarga->execute() && $stmtRecarga->affected_rows === 1) {
+            definirMensagem("Recarga realizada com sucesso!", 'sucesso');
+        } else {
+            definirMensagem("Não foi possível realizar a recarga.");
+        }
+
+        $stmtRecarga->close();
+
+        header("Location: Painel.php");
+        exit;
+    }
+
 
 $sqlUsuario = "
     SELECT nome, saldo, tipo, imagem
@@ -466,17 +442,9 @@ if (!$usuarioAtual) {
     exit;
 }
 
-// =====================================
-// BUSCAR CATEGORIAS
-// =====================================
-
 $categorias = $conexao->query(
     "SELECT id, nome FROM categorias ORDER BY nome ASC"
 );
-
-// =====================================
-// BUSCAR PRODUTOS
-// =====================================
 
 $filtros = ["p.ativo = 1"];
 $tipos = "s";
@@ -560,10 +528,6 @@ while ($produto = $resultadoProdutos->fetch_assoc()) {
 
 $stmtProdutos->close();
 
-// =====================================
-// BUSCAR ITENS DO CARRINHO
-// =====================================
-
 $itensCarrinho = [];
 $totalCarrinhoCentavos = 0;
 $quantidadeTotalCarrinho = 0;
@@ -630,37 +594,10 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     <link rel="stylesheet" href="style2.css?v=6">
 </head>
-<script>
-    // Evita que o navegador altere a posição automaticamente.
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
 
-    // Salva a posição ao adicionar um produto ao carrinho.
-    document.querySelectorAll('.form-comprar').forEach(form => {
-        form.addEventListener('submit', function () {
-            sessionStorage.setItem(
-                'posicaoPainel',
-                window.scrollY
-            );
-        });
-    });
-
-    // Restaura a posição depois que a página recarregar.
-    window.addEventListener('load', function () {
-        const posicao = sessionStorage.getItem('posicaoPainel');
-
-        if (posicao !== null) {
-            window.scrollTo(0, parseInt(posicao, 10));
-            sessionStorage.removeItem('posicaoPainel');
-        }
-    });
-</script>
 <body>
 
-    <!-- BARRA SUPERIOR -->
-
-    <div id="topo-beneficios">
+  <div id="topo-beneficios">
 
         <div class="topo-esquerda">
             <span>🚚 Entrega para todo o Brasil</span>
@@ -704,9 +641,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
         </div>
     </div>
 
-    <!-- BARRA PRINCIPAL -->
-
-    <div id="barra-principal">
+ <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
             <span>🏠 Chingling</span>
@@ -741,8 +676,6 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
-    <!-- MENU -->
-
     <nav id="menu-categorias">
 
         <a href="Painel.php">Início</a>
@@ -754,47 +687,43 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </nav>
 
-    <!-- BANNERS LATERAIS -->
-
     <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
 
-        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
+    <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
 
-            <img
-                src="Imagem/sala_de_jantar.jpg"
-                alt="Sala de estar com móveis Chingling"
-            >
+        <img
+            src="Imagem/sala_de_jantar.jpg"
+            alt="Sala de estar com móveis Chingling"
+        >
 
-            <div class="promocao-conteudo">
-                <h2>Chingling</h2>
-                <p>Encontre seu móvel ideal</p>
-                <span>Ver ofertas →</span>
-            </div>
+        <div class="promocao-conteudo">
+            <h2>Chingling</h2>
+            <p>Encontre seu móvel ideal</p>
+            <span>Ver ofertas →</span>
+        </div>
 
-        </a>
+    </a>
 
-        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
+    <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
 
-            <img
-                src="Imagem/quarto.jpg"
-                alt="Quarto com móveis Chingling"
-            >
+        <img
+            src="Imagem/quarto.jpg"
+            alt="Quarto com móveis Chingling"
+        >
 
-            <div class="promocao-conteudo">
-                <h2>Chingling</h2>
-                <p>Renove seu ambiente</p>
-                <span>Confira agora →</span>
-            </div>
+        <div class="promocao-conteudo">
+            <h2>Chingling</h2>
+            <p>Renove seu ambiente</p>
+            <span>Confira agora →</span>
+        </div>
 
-        </a>
+    </a>
 
     </aside>
 
     <div class="container painel-container">
 
-        <!-- BANNER PRINCIPAL -->
-
-        <section class="banner-hero">
+       <section class="banner-hero">
 
             <div class="banner-conteudo">
 
@@ -822,26 +751,20 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-        <!-- BENEFÍCIOS -->
-
-        <section class="regua-beneficios">
+       <section class="regua-beneficios">
             <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
             <div class="item-beneficio">🔒 Compra segura</div>
             <div class="item-beneficio">💳 Saldo integrado à sua conta</div>
             <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
         </section>
 
-        <!-- MENSAGEM -->
-
-        <?php if ($mensagemPainel !== ''): ?>
+     <?php if ($mensagemPainel !== ''): ?>
 
             <div class="mensagem-painel <?= $tipoMensagem === 'sucesso' ? 'mensagem-sucesso' : 'mensagem-erro' ?>" role="status">
                 <?= escapar($mensagemPainel) ?>
             </div>
 
         <?php endif; ?>
-
-        <!-- SALDO E RECARGA -->
 
         <section class="saldo-area">
 
@@ -889,9 +812,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-        <!-- PRODUTOS -->
-
-        <section class="secao-produtos" id="secao-produtos">
+       <section class="secao-produtos" id="secao-produtos">
 
             <div class="titulo-secao-produtos">
                 <div>
@@ -1123,11 +1044,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
-    <!-- =====================================
-         CARRINHO FIXO NA TELA
-    ====================================== -->
-
-    <aside class="carrinho-flutuante">
+   <aside class="carrinho-flutuante">
 
         <div class="carrinho-cabecalho">
             <div>

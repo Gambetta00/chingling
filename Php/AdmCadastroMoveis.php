@@ -4,13 +4,11 @@ session_start();
 
 require_once 'conexao_msql.php';
 
-// Verifica se o usuário está logado.
 if (empty($_SESSION['email'])) {
     header("Location: Login.php");
     exit;
 }
 
-// Verifica se o usuário é administrador.
 $sqlUsuario = "SELECT nome, tipo FROM usuarios WHERE email = ?";
 $stmtUsuario = $conexao->prepare($sqlUsuario);
 $stmtUsuario->bind_param("s", $_SESSION['email']);
@@ -50,8 +48,6 @@ unset($_SESSION['mensagem']);
 
 <body>
 
-    <!-- BARRA SUPERIOR -->
-
     <div id="topo-beneficios">
 
         <div class="topo-esquerda">
@@ -85,8 +81,6 @@ unset($_SESSION['mensagem']);
         </div>
 
     </div>
-
-    <!-- BARRA PRINCIPAL -->
 
     <div id="barra-principal">
 
@@ -126,8 +120,6 @@ unset($_SESSION['mensagem']);
 
     </div>
 
-    <!-- MENU -->
-
     <nav id="menu-categorias">
 
         <a href="Painel.php">Início</a>
@@ -141,8 +133,6 @@ unset($_SESSION['mensagem']);
         <a href="AdmCadastroMoveis.php">Cadastro de Móveis</a>
 
     </nav>
-
-    <!-- CONTEÚDO PRINCIPAL -->
 
     <main class="adm-cadastro-container">
 
@@ -197,8 +187,6 @@ unset($_SESSION['mensagem']);
 
                 <div class="adm-cadastro-campos">
 
-                    <!-- NOME -->
-
                     <div class="adm-cadastro-campo">
 
                         <label for="cad_movel_nome">
@@ -214,8 +202,6 @@ unset($_SESSION['mensagem']);
                         >
 
                     </div>
-
-                    <!-- ESTOQUE -->
 
                     <div class="adm-cadastro-campo">
 
@@ -234,8 +220,6 @@ unset($_SESSION['mensagem']);
 
                     </div>
 
-                    <!-- PREÇO -->
-
                     <div class="adm-cadastro-campo">
 
                         <label for="cad_movel_preco">
@@ -253,8 +237,6 @@ unset($_SESSION['mensagem']);
                         >
 
                     </div>
-
-                    <!-- CATEGORIA -->
 
                     <div class="adm-cadastro-campo">
 
@@ -277,8 +259,6 @@ unset($_SESSION['mensagem']);
 
                     </div>
 
-                    <!-- DESCRIÇÃO -->
-
                     <div class="adm-cadastro-campo adm-cadastro-campo-completo">
 
                         <label for="cad_movel_descricao">
@@ -296,8 +276,6 @@ unset($_SESSION['mensagem']);
                     </div>
 
                 </div>
-
-                <!-- IMAGEM -->
 
                 <div class="adm-cadastro-imagem-area">
 
@@ -356,8 +334,6 @@ unset($_SESSION['mensagem']);
 
                 </div>
 
-                <!-- BOTÃO -->
-
                 <button
                     type="submit"
                     class="adm-cadastro-botao-salvar"
@@ -378,8 +354,6 @@ unset($_SESSION['mensagem']);
         </div>
 
     </main>
-
-    <!-- PRÉ-VISUALIZAÇÃO DA IMAGEM -->
 
     <script>
 

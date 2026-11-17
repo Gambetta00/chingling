@@ -5,7 +5,6 @@ session_start();
 
 require_once "conexao_msql.php";
 
-// Verifica se existe um usuário logado.
 $tipo = null;
 
 if (isset($_SESSION['email'])) {
@@ -23,7 +22,6 @@ if (isset($_SESSION['email'])) {
     $stmt->close();
 }
 
-// Recupera a mensagem de retorno do login.
 $mensagem = "";
 
 if (isset($_SESSION['mensagem'])) {
@@ -47,7 +45,6 @@ if (isset($_SESSION['mensagem'])) {
 
 <body>
 
-    <!-- BARRA SUPERIOR -->
     <div id="topo-beneficios">
 
         <div class="topo-esquerda">
@@ -64,8 +61,6 @@ if (isset($_SESSION['mensagem'])) {
 
     </div>
 
-
-    <!-- CABEÇALHO PRINCIPAL -->
     <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
@@ -80,8 +75,6 @@ if (isset($_SESSION['mensagem'])) {
 
     </div>
 
-
-    <!-- MENU -->
     <nav id="menu-categorias">
 
         <?php if ($tipo === 'admin'): ?>
@@ -93,14 +86,11 @@ if (isset($_SESSION['mensagem'])) {
         <?php elseif (isset($_SESSION['email'])): ?>
 
             <a href="Painel.php">Início</a>
-            <a href="Moveis.php">Móveis</a>
 
         <?php endif; ?>
 
     </nav>
 
-
-    <!-- CONTEÚDO DO LOGIN -->
     <main class="cadastro-container">
 
         <section class="cadastro-introducao">
@@ -130,8 +120,6 @@ if (isset($_SESSION['mensagem'])) {
 
             </div>
 
-
-            <!-- MENSAGEM DE ERRO -->
             <?php if ($mensagem !== ''): ?>
 
                 <div class="mensagem-painel" role="alert">
@@ -140,8 +128,6 @@ if (isset($_SESSION['mensagem'])) {
 
             <?php endif; ?>
 
-
-            <!-- FORMULÁRIO DE LOGIN -->
             <form method="POST" action="login_back.php" class="form-cadastro">
 
                 <div class="campo-cadastro campo-cadastro-completo">
@@ -190,8 +176,6 @@ if (isset($_SESSION['mensagem'])) {
 
         </section>
 
-
-        <!-- BENEFÍCIOS -->
         <section class="cadastro-beneficios">
 
             <div>

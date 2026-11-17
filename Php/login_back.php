@@ -27,7 +27,7 @@ if (isset($_POST['sinal_clique'])) {
     }
 }
 
-header("Location: UserAlterPerfil.php");
+header("Location: Painel.php");
 exit;
 
 ?>

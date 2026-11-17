@@ -400,12 +400,10 @@ $senha = !empty($_POST['senha']) ? $_POST['senha'] : $usuario['senha'];
 
     $pasta = 'imagens/';
 
-    // Cria a pasta caso ela não exista
     if (!is_dir($pasta)) {
         mkdir($pasta, 0777, true);
     }
 
-    // Obtém a extensão da imagem
     $extensao = strtolower(
         pathinfo(
             $_FILES['imagem']['name'],
@@ -413,20 +411,16 @@ $senha = !empty($_POST['senha']) ? $_POST['senha'] : $usuario['senha'];
         )
     );
 
-    // Extensões permitidas
     $extensoesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
     if (!in_array($extensao, $extensoesPermitidas)) {
         exit('Formato de imagem não permitido.');
     }
 
-    // Cria um nome único
     $nomeImagem = uniqid('img_', true) . '.' . $extensao;
 
-    // Define o caminho da imagem
     $caminho = $pasta . $nomeImagem;
 
-    // Move a imagem para a pasta imagens
     if (
         move_uploaded_file(
             $_FILES['imagem']['tmp_name'],
@@ -457,11 +451,10 @@ WHERE email = '$email';
     $resultado2 = $conexao->query($sql); 
  
     return $resultado2;
- }catch (mysqli_sql_exception $e) { // Mudado de $erro para $e
+ }catch (mysqli_sql_exception $e) { 
 
         $salvou = false;
         
-        // Verifica se é erro de chave duplicada (ex: e-mail já cadastrado no MySQL código 1062)
         if ($e->getCode() === 1062) {
             $erro = "Este e-mail já está em uso por outro usuário.";
         } else {

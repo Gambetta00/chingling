@@ -1,6 +1,4 @@
- /* AJUSTES PARA A PÁGINA DE CADASTRO DE USUÁRIOS */
 
-    /* Caixa do formulário de cadastro */
     main > .caixa {
         width: 100%;
         max-width: 900px;
@@ -12,14 +10,12 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
-    /* Título dentro da caixa */
     main > .caixa h2 {
         margin-bottom: 25px;
         font-size: 20px;
         color: #0875d1;
     }
 
-    /* Campos do formulário */
     main > .caixa input,
     main > .caixa select {
         display: block;
@@ -32,7 +28,6 @@
         background-color: white;
     }
 
-    /* Texto dos campos */
     main > .caixa label {
         display: block;
         margin-bottom: 8px;
@@ -40,7 +35,6 @@
         color: #333;
     }
 
-    /* Espaçamento do botão */
     main > .caixa .botao-alterar {
         display: block;
         width: 100%;
@@ -48,13 +42,11 @@
         padding: 13px;
     }
 
-    /* Ajuste para telas pequenas */
     @media (max-width: 500px) {
         main > .caixa {
             padding: 20px;
         }
     }
-    /* PAINEL ADMINISTRATIVO */
 
     .painel > h1 {
         color: #0875d1;
@@ -106,8 +98,6 @@
     .botao-painel:hover {
         background-color: #0055a4;
     }
-
-    /* PESQUISA DE MÓVEIS */
 
     .pesquisa-caixa {
         width: 100%;
@@ -179,9 +169,6 @@
         color: #333;
     }
 
-
-    /* CABEÇALHO */
-
     header {
         height: 75px;
         background-color: white;
@@ -215,9 +202,6 @@
         margin-left: 5px;
     }
 
-
-    /* MENU */
-
     nav {
         background-color: #006dcc;
         padding: 12px 30px;
@@ -230,9 +214,6 @@
         text-decoration: none;
         font-size: 14px;
     }
-
-
-    /* CONTEÚDO */
 
     main {
         width: 90%;
@@ -250,9 +231,6 @@
         color: #666;
     }
 
-
-    /* CAIXA DO CADASTRO */
-
     .caixa {
         background-color: white;
         margin-top: 25px;
@@ -265,9 +243,6 @@
         margin-bottom: 20px;
         font-size: 19px;
     }
-
-
-    /* CAMPOS */
 
     label {
         display: block;
@@ -305,10 +280,6 @@
         }
     }
 
-    /* BOT */
-
-    
-/* GRADE DOS RESULTADOS DA PESQUISA */
 .resultados-pesquisa {
     margin-top: 25px;
 }
@@ -318,20 +289,17 @@
     margin-bottom: 15px;
 }
 
-/* Até 5 móveis por linha */
 .resultados-pesquisa {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 15px;
 }
 
-/* Título e mensagem ocupam a linha inteira */
 .resultados-pesquisa > h2,
 .resultados-pesquisa > p {
     grid-column: 1 / -1;
 }
 
-/* Cartão individual de cada móvel */
 .produto-resultado {
     min-width: 0;
     margin: 0;
@@ -342,26 +310,22 @@
     overflow-wrap: anywhere;
 }
 
-/* Nome do móvel */
 .produto-resultado h3 {
     font-size: 15px;
     margin-bottom: 10px;
     color: #0875d1;
 }
 
-/* Informações do móvel */
 .produto-resultado p {
     font-size: 13px;
     margin-top: 6px;
     line-height: 1.4;
 }
 
-/* Formulário de exclusão */
 .produto-resultado form {
     margin-top: 10px;
 }
 
-/* Botões compactos */
 .produto-resultado button {
     width: 100%;
     padding: 8px 5px;
@@ -371,42 +335,34 @@
     cursor: pointer;
 }
 
-/* Botão de deletar */
 .produto-resultado form button {
     background-color: #dc3545;
     color: white;
 }
 
-/* Botão de editar */
 .produto-resultado > button {
     margin-top: 6px;
     background-color: #0875d1;
     color: white;
 }
 
-/* Telas médias: 3 móveis por linha */
 @media (max-width: 1000px) {
     .resultados-pesquisa {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-/* Tablets: 2 móveis por linha */
 @media (max-width: 650px) {
     .resultados-pesquisa {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-/* Celulares pequenos: 1 móvel por linha */
 @media (max-width: 400px) {
     .resultados-pesquisa {
         grid-template-columns: 1fr;
     }
 }
-
-
-/* MELHORAR A LEITURA DOS RESULTADOS */
 
 .resultados-pesquisa {
     display: grid;
@@ -415,13 +371,11 @@
     margin-top: 25px;
 }
 
-/* Título e mensagem ocupam a largura inteira */
 .resultados-pesquisa > h2,
 .resultados-pesquisa > p {
     grid-column: 1 / -1;
 }
 
-/* Cartão de cada móvel */
 .produto-resultado {
     min-width: 0;
     margin: 0;
@@ -432,21 +386,18 @@
     overflow-wrap: anywhere;
 }
 
-/* Nome do móvel */
 .produto-resultado h3 {
     font-size: 16px;
     line-height: 1.5;
     margin-bottom: 15px;
 }
 
-/* Informações */
 .produto-resultado p {
     font-size: 14px;
     line-height: 1.7;
     margin-top: 10px;
 }
 
-/* Espaço entre os botões */
 .produto-resultado form {
     margin-top: 16px;
 }
@@ -455,7 +406,6 @@
     margin-top: 10px;
 }
 
-/* Botões mais confortáveis */
 .produto-resultado form button,
 .produto-resultado > button {
     width: 100%;
@@ -468,14 +418,12 @@
     cursor: pointer;
 }
 
-/* Até 3 móveis por linha */
 @media (max-width: 1100px) {
     .resultados-pesquisa {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-/* Até 2 móveis por linha */
 @media (max-width: 750px) {
     .resultados-pesquisa {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -487,15 +435,11 @@
     }
 }
 
-/* 1 móvel por linha em telas muito estreitas */
 @media (max-width: 450px) {
     .resultados-pesquisa {
         grid-template-columns: 1fr;
     }
 }
-
-
-/* PRODUTOS EXIBIDOS NO PAINEL */
 
 main.painel .boas-vindas {
     margin-top: 18px;
@@ -559,8 +503,6 @@ main.painel .sem-imagem {
     }
 }
 
-/* PAINEL PRINCIPAL */
-
 main.painel .topo-painel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 250px;
@@ -578,8 +520,6 @@ main.painel .boas-vindas p {
     line-height: 1.6;
     color: #666;
 }
-
-/* SALDO LATERAL */
 
 main.painel .saldo-caixa {
     padding: 18px;
@@ -637,8 +577,6 @@ main.painel .aviso-recarga {
     font-size: 12px;
     line-height: 1.5;
 }
-
-/* PRODUTOS */
 
 main.painel .secao-produtos > h2 {
     margin-bottom: 18px;
@@ -742,8 +680,6 @@ main.painel .sem-produtos {
     border-radius: 6px;
 }
 
-/* BOTÃO SAIR */
-
 header .botao-sair {
     margin-left: 8px;
     padding: 7px 12px;
@@ -753,8 +689,6 @@ header .botao-sair {
     border-radius: 5px;
     cursor: pointer;
 }
-
-/* RESPONSIVIDADE */
 
 @media (max-width: 900px) {
     main.painel .lista-produtos-painel {
@@ -802,11 +736,6 @@ header .botao-sair {
         grid-template-columns: 1fr;
     }
 }
-
-/* =====================================================
-   BARRA DE PESQUISA DO PAINEL
-   Regras isoladas para não alterar as outras páginas.
-   ===================================================== */
 
 main.painel .pesquisa-painel {
     display: grid;
@@ -913,17 +842,10 @@ main.painel .botao-limpar-pesquisa:hover {
     }
 }
 
-/* =========================================================
-   NOVO VISUAL DO PAINEL CHINGLING
-   Regras adicionadas para aproximar o Painel.php do layout
-   de referência, sem remover as regras anteriores.
-   ========================================================= */
-
 body {
     background-color: #f4f6f9;
 }
 
-/* Barra superior de benefícios */
 #topo-beneficios {
     min-height: 34px;
     padding: 6px 25px;
@@ -965,7 +887,6 @@ body {
     cursor: pointer;
 }
 
-/* Barra principal */
 #barra-principal {
     width: 100%;
     min-height: 82px;
@@ -1053,7 +974,6 @@ body {
     font-size: 12px;
 }
 
-/* Menu */
 #menu-categorias {
     min-height: 38px;
     padding: 8px 15px;
@@ -1077,7 +997,6 @@ body {
     text-decoration: underline;
 }
 
-/* Conteúdo */
 main.painel,
 .painel-container {
     width: 100%;
@@ -1086,7 +1005,6 @@ main.painel,
     padding: 0 15px;
 }
 
-/* Banner principal */
 .painel-container .banner-hero {
     min-height: 230px;
     padding: 28px 35px;
@@ -1167,7 +1085,6 @@ main.painel,
     font-weight: bold;
 }
 
-/* Régua de benefícios */
 .painel-container .regua-beneficios {
     margin: 15px 0 25px;
     padding: 15px 20px;
@@ -1190,7 +1107,6 @@ main.painel,
     font-weight: bold;
 }
 
-/* Mensagem do sistema */
 main.painel .mensagem-painel,
 .painel-container .mensagem-painel {
     margin: 0 0 20px;
@@ -1202,7 +1118,6 @@ main.painel .mensagem-painel,
     color: #234;
 }
 
-/* Área do saldo */
 .painel-container .saldo-area {
     margin: 0 0 30px;
     padding: 20px 22px;
@@ -1297,7 +1212,6 @@ main.painel .mensagem-painel,
     font-size: 11px;
 }
 
-/* Título e filtros dos produtos */
 .painel-container .titulo-secao-produtos {
     margin-bottom: 15px;
     display: flex;
@@ -1391,7 +1305,6 @@ main.painel .mensagem-painel,
     color: #334;
 }
 
-/* Cartões dos móveis */
 .painel-container .lista-produtos-painel {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1552,7 +1465,6 @@ main.painel .mensagem-painel,
     color: #666;
 }
 
-/* Responsividade */
 @media (max-width: 900px) {
     #topo-beneficios {
         align-items: flex-start;
@@ -1651,23 +1563,10 @@ main.painel .mensagem-painel,
     }
 }
 
-/* =========================================================
-   BANNERS PROMOCIONAIS LATERAIS - PAINEL
-   Usa banner.jpg e banner.png já existentes na pasta Php.
-   Fica nas áreas vazias sem cobrir o conteúdo principal.
-   ========================================================= */
-/* BANNERS PROMOCIONAIS LATERAIS */
-
-/* =====================================================
-   BANNERS LATERAIS GRANDES - CHINGLING
-   ===================================================== */
-
-/* Estrutura dos banners */
 .promocoes-laterais {
     pointer-events: none;
 }
 
-/* Cada banner */
 .promocao-lateral {
     position: fixed;
     top: 159px;
@@ -1691,7 +1590,6 @@ main.painel .mensagem-painel,
     transition: transform .25s, box-shadow .25s;
 }
 
-/* Posicionamento */
 .promocao-lateral-esquerda {
     left: 10px;
 }
@@ -1700,7 +1598,6 @@ main.painel .mensagem-painel,
     right: 10px;
 }
 
-/* Imagem de fundo */
 .promocao-lateral img {
     position: absolute;
     inset: 0;
@@ -1714,7 +1611,6 @@ main.painel .mensagem-painel,
     transition: transform .4s;
 }
 
-/* Efeito ao passar o mouse */
 .promocao-lateral:hover {
     transform: translateY(-3px);
 
@@ -1725,7 +1621,6 @@ main.painel .mensagem-painel,
     transform: scale(1.04);
 }
 
-/* Conteúdo sobre a imagem */
 .promocao-conteudo {
     position: relative;
     z-index: 1;
@@ -1742,7 +1637,6 @@ main.painel .mensagem-painel,
     text-align: center;
 }
 
-/* Nome da loja */
 .promocao-conteudo h2 {
     margin-bottom: 12px;
 
@@ -1750,7 +1644,6 @@ main.painel .mensagem-painel,
     font-size: clamp(18px, 1.5vw, 25px);
 }
 
-/* Texto promocional */
 .promocao-conteudo p {
     margin-bottom: 20px;
 
@@ -1760,7 +1653,6 @@ main.painel .mensagem-painel,
     line-height: 1.4;
 }
 
-/* Botão visual */
 .promocao-conteudo span {
     display: block;
 
@@ -1776,10 +1668,6 @@ main.painel .mensagem-painel,
     font-weight: bold;
 }
 
-/* =====================================================
-   AJUSTE DO CONTEÚDO CENTRAL
-   ===================================================== */
-
 @media (min-width: 1051px) {
 
     .painel-container {
@@ -1792,7 +1680,6 @@ main.painel .mensagem-painel,
 
 }
 
-/* Em telas menores, esconder os banners */
 @media (max-width: 1050px) {
 
     .promocoes-laterais {
@@ -1806,19 +1693,13 @@ main.painel .mensagem-painel,
     }
 
 }
-/* =========================================================
-   PÁGINA DE CADASTRO - VISUAL CHINGLING
-   Regras isoladas para não prejudicar outras páginas.
-   ========================================================= */
 
 .cadastro-container {
     width: 100%;
     max-width: 850px;
-    margin: 45px auto;
+    margin: 20px auto;
     padding: 0 20px;
 }
-
-/* Introdução */
 
 .cadastro-introducao {
     margin-bottom: 25px;
@@ -1843,8 +1724,6 @@ main.painel .mensagem-painel,
     line-height: 1.6;
 }
 
-/* Caixa principal */
-
 .cadastro-container .cadastro-caixa {
     width: 100%;
     max-width: none;
@@ -1856,7 +1735,6 @@ main.painel .mensagem-painel,
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.045);
 }
 
-/* Cabeçalho do formulário */
 
 .cadastro-cabecalho {
     display: flex;
@@ -1888,8 +1766,6 @@ main.painel .mensagem-painel,
     color: #777;
     font-size: 13px;
 }
-
-/* Formulário */
 
 .form-cadastro {
     display: grid;
@@ -1934,8 +1810,6 @@ main.painel .mensagem-painel,
     box-shadow: 0 0 0 3px rgba(0, 86, 204, .10);
 }
 
-/* Botão */
-
 .botao-cadastrar {
     grid-column: 1 / -1;
     width: 100%;
@@ -1956,8 +1830,6 @@ main.painel .mensagem-painel,
     background: #0b2f6b;
 }
 
-/* Rodapé do formulário */
-
 .cadastro-rodape {
     margin-top: 25px;
     padding-top: 20px;
@@ -1976,8 +1848,6 @@ main.painel .mensagem-painel,
 .cadastro-rodape a:hover {
     text-decoration: underline;
 }
-
-/* Benefícios */
 
 .cadastro-beneficios {
     display: flex;
@@ -2004,8 +1874,6 @@ main.painel .mensagem-painel,
     font-size: 11px;
 }
 
-/* Cabeçalho de acesso */
-
 .cadastro-acesso {
     display: flex;
     align-items: center;
@@ -2027,8 +1895,6 @@ main.painel .mensagem-painel,
 .cadastro-acesso a:hover {
     background: #0b2f6b;
 }
-
-/* Responsividade */
 
 @media (max-width: 650px) {
 
@@ -2082,7 +1948,6 @@ main.painel .mensagem-painel,
     text-decoration: none;
     color: inherit;
 }
-/* FOTO DE PERFIL NA BARRA SUPERIOR */
 
 #topo-beneficios .usuario-topo {
     display: flex;
@@ -2111,7 +1976,6 @@ main.painel .mensagem-painel,
     background-color: #e8f2fc;
     font-size: 19px;
 }
-/* CORREÇÃO DO TAMANHO DA FOTO DE PERFIL */
 
 #topo-beneficios .topo-direita .foto-perfil-topo {
     width: 35px !important;
@@ -2128,10 +1992,6 @@ main.painel .mensagem-painel,
     flex-shrink: 0;
 }
 
-/* =========================================
-   PÁGINA DE ALTERAÇÃO DE PERFIL
-========================================= */
-
 .perfil-container {
     width: 100%;
     max-width: 1000px;
@@ -2139,7 +1999,6 @@ main.painel .mensagem-painel,
     padding: 0 20px;
 }
 
-/* Introdução */
 
 .perfil-introducao {
     margin-bottom: 25px;
@@ -2157,8 +2016,6 @@ main.painel .mensagem-painel,
     line-height: 1.6;
 }
 
-/* Caixa principal */
-
 .perfil-caixa {
     width: 100%;
     padding: 32px;
@@ -2167,8 +2024,6 @@ main.painel .mensagem-painel,
     border-radius: 10px;
     box-shadow: 0 3px 12px rgba(0, 0, 0, .05);
 }
-
-/* Cabeçalho do formulário */
 
 .perfil-cabecalho {
     display: flex;
@@ -2199,8 +2054,6 @@ main.painel .mensagem-painel,
     color: #777;
     font-size: 13px;
 }
-
-/* Foto de perfil */
 
 .perfil-foto-area {
     display: flex;
@@ -2280,16 +2133,12 @@ main.painel .mensagem-painel,
     font-size: 11px;
 }
 
-/* Divisor */
-
 .perfil-divisor {
     width: 100%;
     height: 1px;
     margin-bottom: 25px;
     background: #e8edf3;
 }
-
-/* Formulário */
 
 .perfil-formulario {
     width: 100%;
@@ -2344,8 +2193,6 @@ main.painel .mensagem-painel,
     box-shadow: 0 0 0 3px rgba(0, 86, 204, .10);
 }
 
-/* Botão salvar */
-
 .perfil-botao-salvar {
     width: 100%;
     min-height: 46px;
@@ -2364,8 +2211,6 @@ main.painel .mensagem-painel,
 .perfil-botao-salvar:hover {
     background: #0b2f6b;
 }
-
-/* Mensagens */
 
 .perfil-mensagem {
     display: flex;
@@ -2389,8 +2234,6 @@ main.painel .mensagem-painel,
     border: 1px solid #f0cccc;
 }
 
-/* Rodapé */
-
 .perfil-rodape {
     margin-top: 25px;
     padding-top: 20px;
@@ -2408,8 +2251,6 @@ main.painel .mensagem-painel,
 .perfil-rodape a:hover {
     text-decoration: underline;
 }
-
-/* Responsividade */
 
 @media (max-width: 650px) {
 
@@ -2455,10 +2296,6 @@ main.painel .mensagem-painel,
 
 }
 
-/* =========================================
-   CADASTRO DE MÓVEIS - ADMINISTRAÇÃO
-========================================= */
-
 .adm-cadastro-container {
     width: 100%;
     max-width: 1050px;
@@ -2493,8 +2330,6 @@ main.painel .mensagem-painel,
     font-size: 14px;
     line-height: 1.6;
 }
-
-/* Caixa principal */
 
 .adm-cadastro-caixa {
     padding: 30px;
@@ -2534,8 +2369,6 @@ main.painel .mensagem-painel,
     color: #777;
     font-size: 13px;
 }
-
-/* Campos */
 
 .adm-cadastro-campos {
     display: grid;
@@ -2589,8 +2422,6 @@ main.painel .mensagem-painel,
     border-color: #0875d1;
     box-shadow: 0 0 0 3px rgba(8, 117, 209, .10);
 }
-
-/* Imagem */
 
 .adm-cadastro-imagem-area {
     display: flex;
@@ -2672,8 +2503,6 @@ main.painel .mensagem-painel,
     overflow-wrap: anywhere;
 }
 
-/* Botão cadastrar */
-
 .adm-cadastro-botao-salvar {
     width: 100%;
     min-height: 47px;
@@ -2693,8 +2522,6 @@ main.painel .mensagem-painel,
     background: #0b2f6b;
 }
 
-/* Mensagem */
-
 .adm-cadastro-mensagem {
     margin-bottom: 20px;
     padding: 14px 17px;
@@ -2704,8 +2531,6 @@ main.painel .mensagem-painel,
     border-radius: 6px;
     font-size: 13px;
 }
-
-/* Rodapé */
 
 .adm-cadastro-rodape {
     margin-top: 22px;
@@ -2722,8 +2547,6 @@ main.painel .mensagem-painel,
 .adm-cadastro-rodape a:hover {
     text-decoration: underline;
 }
-
-/* Responsividade */
 
 @media (max-width: 650px) {
 
@@ -2749,9 +2572,6 @@ main.painel .mensagem-painel,
     }
 
 }
-/* =========================================
-   CARRINHO DE COMPRAS FLUTUANTE
-========================================= */
 
 .carrinho-flutuante {
     position: fixed;
@@ -2935,10 +2755,6 @@ main.painel .mensagem-painel,
     font-size: 12px;
 }
 
-/* =========================================
-   MENSAGENS DE SUCESSO E ERRO
-========================================= */
-
 .mensagem-painel.mensagem-sucesso {
     padding: 14px 18px;
     border: 1px solid #a7dfb5;
@@ -2957,10 +2773,6 @@ main.painel .mensagem-painel,
     color: #a52121;
 }
 
-/* =========================================
-   RESPONSIVIDADE DO CARRINHO
-========================================= */
-
 @media (max-width: 600px) {
     .carrinho-flutuante {
         right: 10px;
@@ -2970,10 +2782,6 @@ main.painel .mensagem-painel,
         box-sizing: border-box;
     }
 }
-/* =========================================
-   AJUSTE DO CARRINHO - PAINEL CHINGLING
-   Remove a sobreposição dos anúncios e produtos
-   ========================================= */
 
 .carrinho-flutuante {
     position: relative !important;
@@ -2989,13 +2797,11 @@ main.painel .mensagem-painel,
     box-sizing: border-box;
 }
 
-/* Impede que o carrinho ultrapasse a tela */
 .carrinho-flutuante * {
     max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Ajuste para celulares */
 @media (max-width: 600px) {
     .carrinho-flutuante {
         width: 100%;

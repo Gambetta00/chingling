@@ -2,8 +2,9 @@
 
 session_start();
 
+if(isset($_SESSION["email"])){
 $email = $_SESSION["email"];
-
+}
 require_once "conexao_msql.php";
 
 $sql = "SELECT tipo FROM usuarios
@@ -16,6 +17,12 @@ $stmt->store_result();
 $stmt->bind_result($tipo);
 $stmt->fetch();
 
+$mensagem = "";
+
+if (isset($_SESSION['mensagem'])) {
+    $mensagem = $_SESSION['mensagem'];
+    unset($_SESSION['mensagem']);
+}
 
 ?>
 
@@ -34,7 +41,6 @@ $stmt->fetch();
 
 <body>
 
-    <!-- BARRA SUPERIOR -->
     <div id="topo-beneficios">
 
         <div class="topo-esquerda">
@@ -51,8 +57,6 @@ $stmt->fetch();
 
     </div>
 
-
-    <!-- CABEÇALHO PRINCIPAL -->
     <div id="barra-principal">
 
         <a href="Painel.php" class="logo">
@@ -67,8 +71,6 @@ $stmt->fetch();
 
     </div>
 
-
-    <!-- MENU -->
     <nav id="menu-categorias">
         <?php if ($tipo === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
@@ -77,8 +79,6 @@ $stmt->fetch();
         <?php endif; ?>
     </nav>
 
-
-    <!-- CONTEÚDO DO CADASTRO -->
     <main class="cadastro-container">
 
         <section class="cadastro-introducao">
@@ -101,13 +101,22 @@ $stmt->fetch();
 
                 <div class="cadastro-icone">👤</div>
 
+                
+
                 <div>
                     <h2>Dados do usuário</h2>
                     <p>Preencha todos os campos para criar sua conta.</p>
                 </div>
 
-            </div>
+        </div>
 
+                <?php if ($mensagem !== ''): ?>
+
+                <div class="mensagem-painel" role="alert">
+                    <?= htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+
+                <?php endif; ?>
 
             <form method="POST" action="cadastro_back.php" class="form-cadastro">
 
@@ -190,8 +199,6 @@ $stmt->fetch();
 
         </section>
 
-
-        <!-- BENEFÍCIOS -->
         <section class="cadastro-beneficios">
 
             <div>

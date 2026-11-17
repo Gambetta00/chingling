@@ -5,13 +5,11 @@ session_start();
 require_once "conexao_msql.php";
 require_once "Classe_Moveis.php";
 
-// Verificar se o usuário está logado.
 if (empty($_SESSION['email'])) {
     header("Location: Login.php");
     exit();
 }
 
-// Verificar se o usuário é administrador.
 $emailUsuario = $_SESSION['email'];
 
 $sqlAdmin = "SELECT tipo FROM usuarios WHERE email = ?";
@@ -27,7 +25,6 @@ if (!$usuarioAdmin || $usuarioAdmin['tipo'] !== 'admin') {
     exit();
 }
 
-// Verificar se os dados foram enviados.
 if (
     !isset($_POST['movel_nome']) ||
     !isset($_POST['movel_estoque']) ||
@@ -40,14 +37,12 @@ if (
     exit();
 }
 
-// Receber os dados do formulário.
 $nome = trim($_POST['movel_nome']);
 $estoque = filter_input(INPUT_POST, 'movel_estoque', FILTER_VALIDATE_INT);
 $preco = str_replace(',', '.', $_POST['movel_preco']);
 $categoria = filter_input(INPUT_POST, 'categoria', FILTER_VALIDATE_INT);
 $descricao = trim($_POST['movel_descricao']);
 
-// Validar os dados.
 if (
     $nome === '' ||
     $estoque === false ||
@@ -65,7 +60,6 @@ if (
 
 $preco = (float)$preco;
 
-// Verificar o envio da imagem.
 if (
     !isset($_FILES['movel_imagem']) ||
     $_FILES['movel_imagem']['error'] !== UPLOAD_ERR_OK
@@ -77,14 +71,12 @@ if (
 
 $arquivo = $_FILES['movel_imagem'];
 
-// Limite de 5 MB.
 if ($arquivo['size'] > 5 * 1024 * 1024) {
     $_SESSION['mensagem'] = "A imagem deve ter no máximo 5 MB.";
     header("Location: AdmCadastroMoveis.php");
     exit();
 }
 
-// Verificar o tipo real do arquivo.
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $tipoImagem = $finfo->file($arquivo['tmp_name']);
 
@@ -101,7 +93,6 @@ if (!isset($tiposPermitidos[$tipoImagem])) {
     exit();
 }
 
-// Criar a pasta de imagens, caso não exista.
 $pastaImagens = __DIR__ . "/imagens/moveis/";
 
 if (!is_dir($pastaImagens)) {
@@ -112,23 +103,22 @@ if (!is_dir($pastaImagens)) {
     }
 }
 
-// Gerar um nome exclusivo para cada imagem.
 $extensao = $tiposPermitidos[$tipoImagem];
 $nomeImagem = bin2hex(random_bytes(16)) . "." . $extensao;
 
 $caminhoCompleto = $pastaImagens . $nomeImagem;
 
-// Caminho que será salvo no banco de dados.
 $imagem = "imagens/moveis/" . $nomeImagem;
 
-// Mover a imagem enviada para a pasta.
+$imagem = "imagens/moveis/" . $nomeImagem;
+
+>>>>>>> d30585d8396c3d0154b03bd9db5aa704cfffccb5
 if (!move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto)) {
     $_SESSION['mensagem'] = "Não foi possível salvar a imagem.";
     header("Location: AdmCadastroMoveis.php");
     exit();
 }
 
-// Cadastrar o móvel.
 $Movel = new Movel(
     $nome,
     $estoque,
@@ -150,7 +140,7 @@ if ($Movel->Set_Movel(
 )) {
     $_SESSION['mensagem'] = "Móvel cadastrado com sucesso!";
 } else {
-    // Apagar a imagem se o cadastro não for realizado.
+
     if (file_exists($caminhoCompleto)) {
         unlink($caminhoCompleto);
     }
