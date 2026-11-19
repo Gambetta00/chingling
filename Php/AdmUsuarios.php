@@ -296,11 +296,6 @@ label {
             <strong>Chingling</strong>
         </div>
 
-        <div class="pesquisa">
-            <input type="text" placeholder="O que você procura hoje?">
-            <button>🔍</button>
-        </div>
-
         <div class="usuario">
             👤 Minha conta
         </div>

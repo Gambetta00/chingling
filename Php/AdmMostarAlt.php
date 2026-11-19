@@ -1,233 +1,245 @@
+
 <?php
 require_once 'conexao_msql.php';
 
-    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+$usuario = null;
+$email = '';
+$pesquisou = false;
 
-    $resultado = $conexao->query($sql);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $email = trim($_POST['email'] ?? '');
+    $pesquisou = true;
 
-            if (isset($resultado)) {
-                if ($resultado->num_rows > 0) {
-                    echo "Usuário encontrado!";
-                    $usuario = $resultado->fetch_assoc();
-                    ?>
+    if (!empty($email)) {
+
+        $sql = "SELECT * FROM usuarios WHERE email = ?";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        if ($resultado->num_rows > 0) {
+            $usuario = $resultado->fetch_assoc();
+        }
+
+        $stmt->close();
+    }
+}
+
+function limpar($valor) {
+    return htmlspecialchars((string)($valor ?? ''), ENT_QUOTES, 'UTF-8');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesquisar Usuário</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
-}
+        header {
+            height: 75px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid #ddd;
+        }
 
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            color: #0875d1;
+        }
 
+        .logo span {
+            font-size: 30px;
+        }
 
-header {
-    height: 75px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    border-bottom: 1px solid #ddd;
-}
+        .pesquisa {
+            display: flex;
+            width: 400px;
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 24px;
-    color: #0875d1;
-}
+        .pesquisa input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
 
-.logo span {
-    font-size: 30px;
-}
+        .pesquisa button {
+            width: 50px;
+            border: none;
+            background-color: #0875d1;
+            color: white;
+            border-radius: 0 5px 5px 0;
+        }
 
-.pesquisa {
-    display: flex;
-    width: 400px;
-}
+        .usuario {
+            color: #333;
+            font-size: 14px;
+        }
 
-.pesquisa input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-}
+        nav {
+            background-color: #006dcc;
+            padding: 12px 30px;
+            display: flex;
+            gap: 25px;
+        }
 
-.pesquisa button {
-    width: 50px;
-    border: none;
-    background-color: #0875d1;
-    color: white;
-    border-radius: 0 5px 5px 0;
-}
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-.usuario {
-    color: #333;
-    font-size: 14px;
-}
+        main {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
 
+        h1 {
+            color: #0875d1;
+            font-size: 28px;
+        }
 
+        .descricao {
+            margin-top: 8px;
+            color: #666;
+        }
 
+        .caixa {
+            background-color: white;
+            margin-top: 25px;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
 
-nav {
-    background-color: #006dcc;
-    padding: 12px 30px;
-    display: flex;
-    gap: 25px;
-}
+        .caixa h2 {
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-}
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
 
+        .campo-pesquisa {
+            display: flex;
+            gap: 10px;
+        }
 
+        .campo-pesquisa input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
 
-main {
-    width: 90%;
-    max-width: 1100px;
-    margin: 30px auto;
-}
+        .campo-pesquisa button {
+            background-color: #0875d1;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-h1 {
-    color: #0875d1;
-    font-size: 28px;
-}
+        .campo-pesquisa button:hover {
+            background-color: #005da8;
+        }
 
-.descricao {
-    margin-top: 8px;
-    color: #666;
-}
+        .resultado {
+            background-color: white;
+            margin-top: 20px;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
 
+        .resultado h2 {
+            color: #333;
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
 
+        .usuario-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
 
-.caixa {
-    background-color: white;
-    margin-top: 25px;
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
+        .icone {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #e8f3ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
 
-.caixa h2 {
-    margin-bottom: 20px;
-    font-size: 19px;
-}
+        .dados {
+            line-height: 1.8;
+        }
 
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
+        .dados p {
+            border-bottom: 1px solid #eee;
+            padding: 3px 0;
+        }
 
-.campo-pesquisa {
-    display: flex;
-    gap: 10px;
-}
+        .dados strong {
+            display: inline-block;
+            width: 100px;
+            color: #555;
+        }
 
-.campo-pesquisa input {
-    flex: 1;
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 15px;
-}
+        .botao-alterar {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #0875d1;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
-.campo-pesquisa button {
-    background-color: #0875d1;
-    color: white;
-    border: none;
-    padding: 0 25px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.campo-pesquisa button:hover {
-    background-color: #005da8;
-}
-
-
-
-.resultado {
-    background-color: white;
-    margin-top: 20px;
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.resultado h2 {
-    color: #333;
-    font-size: 19px;
-    margin-bottom: 20px;
-}
-
-.usuario-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.icone {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: #e8f3ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-.dados {
-    line-height: 1.8;
-}
-
-.dados p {
-    border-bottom: 1px solid #eee;
-    padding: 3px 0;
-}
-
-.dados strong {
-    display: inline-block;
-    width: 100px;
-    color: #555;
-}
-
-.botao-alterar {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #0875d1;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.botao-alterar:hover {
-    background-color: #005da8;
-}
-
+        .botao-alterar:hover {
+            background-color: #005da8;
+        }
     </style>
 </head>
 
@@ -259,37 +271,38 @@ label {
         <a href="#">Promoções</a>
     </nav>
 
-
     <main>
-
-
 
         <section class="resultado">
 
             <h2>Resultado da pesquisa</h2>
 
-             <form  method="POST" enctype="multipart/form-data"> 
- 
-        <div class="campo-grupo"> 
-            <label for="email">Confirme o Email</label> 
-            <input  
-                type="text"  
-                id="email"  
-                name="email"  
-                placeholder="Digite o seu email" 
-                required 
-            > 
-            
-            <button type="submit" class="btn-principal">Buscar</button> 
-        </div> 
-     </form> 
+            <form method="POST">
 
-            <?php
-            if (isset($resultado)) {
-                if ($resultado->num_rows > 0) {
-                    echo "Usuário encontrado!";
-                    $usuario = $resultado->fetch_assoc();
-                    ?>
+                <div class="campo-pesquisa">
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Digite o e-mail do usuário"
+                        value="<?php echo limpar($email); ?>"
+                        required
+                    >
+
+                    <button type="submit">Buscar</button>
+
+                </div>
+
+            </form>
+
+            <?php if ($pesquisou): ?>
+
+                <?php if ($usuario): ?>
+
+                    <p style="margin-top: 20px; color: green;">
+                        Usuário encontrado!
+                    </p>
 
                     <div class="usuario-card">
 
@@ -299,43 +312,51 @@ label {
 
                             <p>
                                 <strong>ID:</strong>
-                                <?php echo $usuario["id"]; ?>
+                                <?php echo limpar($usuario["id"]); ?>
                             </p>
 
                             <p>
                                 <strong>Nome:</strong>
-                                <?php echo $usuario["nome"]; ?>
+                                <?php echo limpar($usuario["nome"]); ?>
                             </p>
 
                             <p>
                                 <strong>E-mail:</strong>
-                                <?php echo $usuario["email"]; ?>
+                                <?php echo limpar($usuario["email"]); ?>
                             </p>
 
                             <p>
                                 <strong>CPF:</strong>
-                                <?php echo $usuario["cpf"]; ?>
+                                <?php echo limpar($usuario["cpf"]); ?>
                             </p>
 
                             <p>
                                 <strong>Telefone:</strong>
-                                <?php echo $usuario["telefone"]; ?>
+                                <?php echo limpar($usuario["telefone"]); ?>
                             </p>
 
                             <p>
                                 <strong>Tipo:</strong>
-                                <?php echo $usuario["tipo"]; ?>
+                                <?php echo limpar($usuario["tipo"]); ?>
                             </p>
 
-                    
+                        </div>
+
+                    </div>
+
+                <?php else: ?>
+
+                    <p style="margin-top: 20px; color: red;">
+                        Nenhum usuário encontrado com esse e-mail.
+                    </p>
+
+                <?php endif; ?>
+
+            <?php endif; ?>
+
         </section>
 
     </main>
-  <?php
-                } else {
-                    echo "ERRO!";
-                }
-            }
-            ?>
+
 </body>
 </html>

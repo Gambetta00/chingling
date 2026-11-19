@@ -92,21 +92,6 @@ unset($_SESSION['mensagem']);
 
         </a>
 
-        <form method="GET" action="Painel.php" class="busca busca-painel-topo">
-
-            <input
-                type="text"
-                name="busca_nome"
-                placeholder="Olá, o que você procura hoje?"
-                aria-label="Pesquisar móveis"
-            >
-
-            <button type="submit" aria-label="Pesquisar">
-                🔍
-            </button>
-
-        </form>
-
         <div class="atalho-saldo-topo">
 
             <span>⚙️</span>
