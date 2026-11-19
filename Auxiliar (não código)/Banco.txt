@@ -317,3 +317,7 @@ VALUES
 
 select * from usuarios;
 select * from produtos;
+
+ALTER TABLE compras
+  ADD COLUMN pedido_codigo VARCHAR(32) NULL,
+  ADD INDEX idx_compras_pedido (pedido_codigo);
