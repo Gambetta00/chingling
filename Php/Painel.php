@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once "conexao_msql.php";
@@ -26,6 +27,7 @@ function definirMensagem($texto, $tipo = 'erro') {
     $_SESSION['mensagem_painel_tipo'] = $tipo;
 }
 
+
 $sql = "SELECT tipo FROM usuarios WHERE email = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("s", $emailUsuario);
@@ -42,6 +44,7 @@ if (!$resultadoTipo) {
 $tipo = $resultadoTipo['tipo'];
 $_SESSION['tipo'] = $tipo;
 
+
 $buscaNome = trim($_GET['busca_nome'] ?? '');
 $categoriaBusca = (int)($_GET['categoria_busca'] ?? 0);
 
@@ -54,15 +57,18 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
+
 if (empty($_SESSION['csrf_painel'])) {
     $_SESSION['csrf_painel'] = bin2hex(random_bytes(32));
 }
+
 
 $mensagemPainel = $_SESSION['mensagem_painel'] ?? '';
 $tipoMensagem = $_SESSION['mensagem_painel_tipo'] ?? 'erro';
 
 unset($_SESSION['mensagem_painel']);
 unset($_SESSION['mensagem_painel_tipo']);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -76,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
+   
     if ($acao === 'adicionar_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
@@ -135,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+  
     if ($acao === 'limpar_carrinho') {
 
         $_SESSION['carrinho'] = [];
@@ -144,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    
     if ($acao === 'comprar_carrinho') {
 
         $carrinho = $_SESSION['carrinho'];
@@ -161,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conexao->begin_transaction();
             $transacaoIniciada = true;
 
+       
             $sqlUsuario = "
                 SELECT id, saldo
                 FROM usuarios
@@ -184,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $produtosCompra = [];
             $totalCentavos = 0;
 
+        
             foreach ($carrinho as $id => $quantidade) {
 
                 $id = (int)$id;
@@ -235,9 +246,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $produto['quantidade_compra'] = $quantidade;
                 $produto['preco_final'] = $preco;
+
                 $produtosCompra[] = $produto;
             }
 
+           
             $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
 
             if ($saldoCentavos < $totalCentavos) {
@@ -249,6 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
             }
 
+    
             $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
 
             $sqlSaldo = "
@@ -262,8 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSaldo->execute();
             $stmtSaldo->close();
 
-            $codigoPedido = bin2hex(random_bytes(8));
-
+   
             foreach ($produtosCompra as $produto) {
 
                 $id = (int)$produto['id'];
@@ -271,6 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $categoriaId = (int)$produto['categoria_id'];
                 $preco = (float)$produto['preco_final'];
 
+              
                 $sqlEstoque = "
                     UPDATE produtos
                     SET estoque = estoque - ?
@@ -285,6 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($stmtEstoque->affected_rows !== 1) {
                     $stmtEstoque->close();
+
                     throw new Exception(
                         "Não foi possível atualizar o estoque de " .
                         $produto['nome'] . "."
@@ -293,28 +308,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $stmtEstoque->close();
 
+                
+
                 $sqlCompra = "
                     INSERT INTO compras
                         (usuario_email, produto_id, categoria_id,
-                         preco_pago, quantidade, pedido_codigo)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                         preco_pago, quantidade)
+                    VALUES (?, ?, ?, ?, ?)
                 ";
 
                 $stmtCompra = $conexao->prepare($sqlCompra);
+
                 $stmtCompra->bind_param(
-                    "siidis",
+                    "siidi",
                     $emailUsuario,
                     $id,
                     $categoriaId,
                     $preco,
-                    $quantidade,
-                    $codigoPedido
+                    $quantidade
                 );
 
                 $stmtCompra->execute();
                 $stmtCompra->close();
             }
 
+           
             $conexao->commit();
             $transacaoIniciada = false;
 
@@ -332,16 +350,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $conexao->rollback();
             }
 
-            if ($erro instanceof Exception) {
-                definirMensagem($erro->getMessage());
-            } else {
-                definirMensagem("Ocorreu um erro ao processar sua compra. Nenhum produto foi comprado.");
-            }
+            definirMensagem($erro->getMessage());
         }
 
         header("Location: Painel.php");
         exit;
     }
+
 
     if ($acao === 'recarga') {
 
@@ -386,8 +401,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: Painel.php");
         exit;
     }
-
 }
+
 
 $sqlUsuario = "
     SELECT nome, saldo, tipo, imagem
@@ -408,9 +423,11 @@ if (!$usuarioAtual) {
     exit;
 }
 
+
 $categorias = $conexao->query(
     "SELECT id, nome FROM categorias ORDER BY nome ASC"
 );
+
 
 $filtros = ["p.ativo = 1"];
 $tipos = "s";
@@ -449,6 +466,7 @@ if ($precoMax !== null) {
     $tipos .= "d";
     $parametros[] = $precoMax;
 }
+
 
 $sqlProdutos = "
     SELECT
@@ -493,6 +511,7 @@ while ($produto = $resultadoProdutos->fetch_assoc()) {
 }
 
 $stmtProdutos->close();
+
 
 $itensCarrinho = [];
 $totalCarrinhoCentavos = 0;
@@ -989,6 +1008,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </div>
 
+  
     <aside class="carrinho-flutuante">
 
         <div class="carrinho-cabecalho">
