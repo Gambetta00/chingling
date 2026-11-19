@@ -264,6 +264,10 @@ label {
     border-color: #0875d1;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 @media (max-width: 500px) {
     .painel-caixa {
         padding: 20px;
@@ -1733,6 +1737,10 @@ main.painel .mensagem-painel,
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.045);
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 .cadastro-cabecalho {
     display: flex;
     align-items: center;
@@ -1975,6 +1983,10 @@ main.painel .mensagem-painel,
     font-size: 19px;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 #topo-beneficios .topo-direita .foto-perfil-topo {
     width: 35px !important;
     height: 35px !important;
@@ -2137,6 +2149,10 @@ main.painel .mensagem-painel,
     background: #e8edf3;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 .perfil-formulario {
     width: 100%;
 }
@@ -2570,6 +2586,10 @@ main.painel .mensagem-painel,
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 .carrinho-flutuante {
     position: fixed;
     right: 20px;
@@ -2752,6 +2772,10 @@ main.painel .mensagem-painel,
     font-size: 12px;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 .mensagem-painel.mensagem-sucesso {
     padding: 14px 18px;
     border: 1px solid #a7dfb5;
@@ -2770,6 +2794,10 @@ main.painel .mensagem-painel,
     color: #a52121;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 @media (max-width: 600px) {
     .carrinho-flutuante {
         right: 10px;
@@ -2798,13 +2826,17 @@ main.painel .mensagem-painel,
     max-width: 100%;
     box-sizing: border-box;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc
 @media (max-width: 600px) {
     .carrinho-flutuante {
         width: 100%;
         margin: 20px auto;
     }
 }
+<<<<<<< HEAD
 
 .historico-container {
     width: 100%;
@@ -3155,3 +3187,5 @@ main.painel .mensagem-painel,
     }
 
 }
+=======
+>>>>>>> 71ec9579ad9ab85a8fc882c49db7d4423c85c0dc

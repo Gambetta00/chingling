@@ -76,80 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $acao = $_POST['acao'] ?? '';
 
-    if ($acao === 'adicionar_carrinho') {
+    if ($acao === 'comprar') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
 
         if (!$produtoId || $produtoId < 1) {
-            definirMensagem("Produto inválido.");
-            header("Location: Painel.php");
-            exit;
-        }
-
-        $sqlProduto = "
-            SELECT id, nome, estoque, ativo
-            FROM produtos
-            WHERE id = ?
-            LIMIT 1
-        ";
-
-        $stmtProduto = $conexao->prepare($sqlProduto);
-        $stmtProduto->bind_param("i", $produtoId);
-        $stmtProduto->execute();
-        $produtoCarrinho = $stmtProduto->get_result()->fetch_assoc();
-        $stmtProduto->close();
-
-        if (!$produtoCarrinho || (int)$produtoCarrinho['ativo'] !== 1) {
-            definirMensagem("Este móvel não está disponível.");
-        } else {
-
-            $quantidadeAtual = (int)($_SESSION['carrinho'][$produtoId] ?? 0);
-            $novaQuantidade = $quantidadeAtual + 1;
-
-            if ((int)$produtoCarrinho['estoque'] < $novaQuantidade) {
-                definirMensagem("Não há estoque suficiente para adicionar mais unidades deste móvel.");
-            } else {
-                $_SESSION['carrinho'][$produtoId] = $novaQuantidade;
-
-                definirMensagem(
-                    $produtoCarrinho['nome'] . " foi adicionado ao carrinho!",
-                    'sucesso'
-                );
-            }
-        }
-
-        header("Location: Painel.php");
-        exit;
-    }
-
-    if ($acao === 'remover_carrinho') {
-
-        $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
-
-        if ($produtoId && isset($_SESSION['carrinho'][$produtoId])) {
-            unset($_SESSION['carrinho'][$produtoId]);
-            definirMensagem("Produto removido do carrinho.", 'sucesso');
-        }
-
-        header("Location: Painel.php");
-        exit;
-    }
-
-    if ($acao === 'limpar_carrinho') {
-
-        $_SESSION['carrinho'] = [];
-        definirMensagem("Carrinho esvaziado.", 'sucesso');
-
-        header("Location: Painel.php");
-        exit;
-    }
-
-    if ($acao === 'comprar_carrinho') {
-
-        $carrinho = $_SESSION['carrinho'];
-
-        if (empty($carrinho)) {
-            definirMensagem("Seu carrinho está vazio.");
+            $_SESSION['mensagem_painel'] = "Produto inválido.";
             header("Location: Painel.php");
             exit;
         }
@@ -262,22 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSaldo->execute();
             $stmtSaldo->close();
 
-            $codigoPedido = bin2hex(random_bytes(8));
-
-            foreach ($produtosCompra as $produto) {
-
-                $id = (int)$produto['id'];
-                $quantidade = (int)$produto['quantidade_compra'];
-                $categoriaId = (int)$produto['categoria_id'];
-                $preco = (float)$produto['preco_final'];
-
-                $sqlEstoque = "
-                    UPDATE produtos
-                    SET estoque = estoque - ?
-                    WHERE id = ?
-                      AND estoque >= ?
-                      AND ativo = 1
-                ";
+            // Diminui uma unidade do estoque.
+            $sqlEstoque = "
+                UPDATE produtos
+                SET estoque = estoque - 1
+                WHERE id = ?
+                  AND estoque > 0
+                  AND ativo = 1
+            ";
 
                 $stmtEstoque = $conexao->prepare($sqlEstoque);
                 $stmtEstoque->bind_param("iii", $quantidade, $id, $quantidade);
@@ -293,27 +217,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $stmtEstoque->close();
 
-                $sqlCompra = "
-                    INSERT INTO compras
-                        (usuario_email, produto_id, categoria_id,
-                         preco_pago, quantidade, pedido_codigo)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ";
+            $sqlCompra = "
+                INSERT INTO compras
+                    (usuario_email, produto_id, categoria_id,
+                     preco_pago, quantidade)
+                VALUES (?, ?, ?, ?, 1)
+            ";
 
-                $stmtCompra = $conexao->prepare($sqlCompra);
-                $stmtCompra->bind_param(
-                    "siidis",
-                    $emailUsuario,
-                    $id,
-                    $categoriaId,
-                    $preco,
-                    $quantidade,
-                    $codigoPedido
-                );
-
-                $stmtCompra->execute();
-                $stmtCompra->close();
-            }
+            $stmtCompra = $conexao->prepare($sqlCompra);
+            $stmtCompra->bind_param(
+                "siid",
+                $emailUsuario,
+                $produtoId,
+                $categoriaId,
+                $preco
+            );
+            $stmtCompra->execute();
+            $stmtCompra->close();
 
             $conexao->commit();
             $transacaoIniciada = false;
@@ -343,13 +263,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if ($acao === 'recarga') {
+    // =====================================
+    // RECARREGAR SALDO — MODO DE TESTE
+    // =====================================
 
-        $valorRecarga = filter_input(
-            INPUT_POST,
-            'valor_recarga',
-            FILTER_VALIDATE_FLOAT
-        );
+    
+
+if ($acao === 'recarga') {
+    $valorRecarga = filter_input(
+        INPUT_POST,
+        'valor_recarga',
+        FILTER_VALIDATE_FLOAT
+    );
 
         $valoresPermitidos = [50.0, 100.0, 200.0, 500.0];
 
@@ -595,57 +520,23 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
             </div>
 
-            <form action="Login.php" method="POST">
-                <input type="hidden" name="sinal_clique" value="ativado">
-                <button type="submit" class="botao-sair">Sair da conta</button>
+            <form action="Login.php" method="POST" style="display:inline;">
+                <input
+                    type="hidden"
+                    name="sinal_clique"
+                    value="ativado"
+                >
+
+                <button type="submit" class="botao-sair">
+                    Sair
+                </button>
             </form>
-
-            <a href="UserAlterPerfil.php" class="botao-sair">
-                Editar perfil
-            </a>
-
         </div>
-    </div>
+    </header>
 
-    <div id="barra-principal">
-
-        <a href="Painel.php" class="logo">
-            <span>🏠 Chingling</span>
-            <small>Móveis para todos os momentos</small>
-        </a>
-
-        <form method="GET" action="Painel.php" class="busca busca-painel-topo">
-
-            <input
-                type="text"
-                name="busca_nome"
-                placeholder="Olá, o que você procura hoje?"
-                value="<?= escapar($buscaNome) ?>"
-                aria-label="Pesquisar móveis pelo nome"
-            >
-
-            <input type="hidden" name="categoria_busca" value="<?= (int)$categoriaBusca ?>">
-            <input type="hidden" name="preco_min" value="<?= escapar($precoMinTexto) ?>">
-            <input type="hidden" name="preco_max" value="<?= escapar($precoMaxTexto) ?>">
-
-            <button type="submit" aria-label="Pesquisar">🔍</button>
-
-        </form>
-
-        <div class="atalho-saldo-topo">
-            <span>💳</span>
-            <div>
-                <strong>Meu saldo</strong>
-                <small>R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?></small>
-            </div>
-        </div>
-
-    </div>
-
-    <nav id="menu-categorias">
-
+    <nav>
         <a href="Painel.php">Início</a>
-        <a href="HistoricoCompras.php">Histórico de compras</a>
+        <a href="Moveis.php">Móveis</a>
 
         <?php if ($usuarioAtual['tipo'] === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
@@ -654,49 +545,12 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
     </nav>
 
-    <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
+    <main class="painel">
 
-        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
+        <div class="topo-painel">
 
-            <img
-                src="Imagem/sala_de_jantar.jpg"
-                alt="Sala de estar com móveis Chingling"
-            >
-
-            <div class="promocao-conteudo">
-                <h2>Chingling</h2>
-                <p>Encontre seu móvel ideal</p>
-                <span>Ver ofertas →</span>
-            </div>
-
-        </a>
-
-        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
-
-            <img
-                src="Imagem/quarto.jpg"
-                alt="Quarto com móveis Chingling"
-            >
-
-            <div class="promocao-conteudo">
-                <h2>Chingling</h2>
-                <p>Renove seu ambiente</p>
-                <span>Confira agora →</span>
-            </div>
-
-        </a>
-
-    </aside>
-
-    <div class="container painel-container">
-
-        <section class="banner-hero">
-
-            <div class="banner-conteudo">
-
-                <div class="banner-logo">🏠 Chingling</div>
-
-                <h1 class="banner-titulo">Seu lar, do seu jeito.</h1>
+            <section class="boas-vindas">
+                <h1>Bem-vindo ao Chingling!</h1>
 
                 <p class="banner-descricao">
                     Móveis modernos, funcionais e com ótimos preços.
@@ -718,33 +572,8 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-        <section class="regua-beneficios">
-            <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
-            <div class="item-beneficio">🔒 Compra segura</div>
-            <div class="item-beneficio">💳 Saldo integrado à sua conta</div>
-            <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
-        </section>
-
-        <?php if ($mensagemPainel !== ''): ?>
-
-            <div class="mensagem-painel <?= $tipoMensagem === 'sucesso' ? 'mensagem-sucesso' : 'mensagem-erro' ?>" role="status">
-                <?= escapar($mensagemPainel) ?>
-            </div>
-
-        <?php endif; ?>
-
-        <section class="saldo-area">
-
-            <div class="saldo-texto">
-                <span class="saldo-icone">💰</span>
-
-                <div>
-                    <h2>Seu saldo Chingling</h2>
-                    <p>Use seu saldo para comprar os móveis que desejar.</p>
-                </div>
-            </div>
-
-            <div class="saldo-caixa">
+            <!-- PAINEL LATERAL DE SALDO -->
+            <aside class="saldo-caixa">
 
                 <h2>Meu saldo</h2>
 
@@ -777,7 +606,11 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
             </div>
 
-        </section>
+        <?php if ($mensagemPainel !== ''): ?>
+            <div class="mensagem-painel" role="status">
+                <?= escapar($mensagemPainel) ?>
+            </div>
+        <?php endif; ?>
 
         <section class="secao-produtos" id="secao-produtos">
 
@@ -789,6 +622,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
                 </div>
             </div>
 
+            <!-- PESQUISA POR NOME, CATEGORIA E FAIXA DE PREÇO -->
             <form method="GET" action="Painel.php" class="pesquisa-painel">
 
                 <div class="campo-pesquisa-painel">
@@ -854,7 +688,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
                     Limpar filtros
                 </a>
 
-            </form>
+</form>
 
             <?php if (count($produtos) === 0): ?>
 
@@ -1005,159 +839,7 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 
         </section>
 
-    </div>
-
-    <aside class="carrinho-flutuante">
-
-        <div class="carrinho-cabecalho">
-            <div>
-                <h2>🛒 Meu carrinho</h2>
-                <span>
-                    <?= $quantidadeTotalCarrinho ?>
-                    unidade(s)
-                </span>
-            </div>
-        </div>
-
-        <?php if (empty($itensCarrinho)): ?>
-
-            <div class="carrinho-vazio">
-                <span>🛍️</span>
-                <p>Seu carrinho está vazio.</p>
-                <small>Adicione móveis para começar!</small>
-            </div>
-
-        <?php else: ?>
-
-            <div class="carrinho-lista">
-
-                <?php foreach ($itensCarrinho as $item): ?>
-
-                    <div class="carrinho-item">
-
-                        <div class="carrinho-item-info">
-
-                            <strong><?= escapar($item['nome']) ?></strong>
-
-                            <span>
-                                <?= (int)$item['quantidade_carrinho'] ?>x
-                                R$ <?= number_format($item['preco_carrinho'], 2, ',', '.') ?>
-                            </span>
-
-                            <b>
-                                R$ <?= number_format($item['subtotal_centavos'] / 100, 2, ',', '.') ?>
-                            </b>
-
-                            <?php if ((int)$item['ativo'] !== 1): ?>
-                                <small class="carrinho-alerta">Produto indisponível</small>
-                            <?php elseif ((int)$item['estoque'] < (int)$item['quantidade_carrinho']): ?>
-                                <small class="carrinho-alerta">Estoque insuficiente</small>
-                            <?php endif; ?>
-
-                        </div>
-
-                        <form method="POST" action="Painel.php" class="form-adicionar-carrinho">
-
-                            <input
-                                type="hidden"
-                                name="csrf_token"
-                                value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                            >
-
-                            <input type="hidden" name="acao" value="remover_carrinho">
-
-                            <input
-                                type="hidden"
-                                name="produto_id"
-                                value="<?= (int)$item['id'] ?>"
-                            >
-
-                            <button
-                                type="submit"
-                                class="carrinho-remover"
-                                title="Remover produto"
-                            >
-                                ✕
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                <?php endforeach; ?>
-
-            </div>
-
-            <div class="carrinho-total">
-                <span>Total</span>
-                <strong>
-                    R$ <?= number_format($totalCarrinhoCentavos / 100, 2, ',', '.') ?>
-                </strong>
-            </div>
-
-            <div class="carrinho-saldo">
-                Seu saldo:
-                <strong>
-                    R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?>
-                </strong>
-            </div>
-
-            <form method="POST" action="Painel.php">
-
-                <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                >
-
-                <input type="hidden" name="acao" value="comprar_carrinho">
-
-                <button type="submit" class="carrinho-comprar">
-                    Comprar todos
-                </button>
-
-            </form>
-
-            <form method="POST" action="Painel.php">
-
-                <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                >
-
-                <input type="hidden" name="acao" value="limpar_carrinho">
-
-                <button type="submit" class="carrinho-limpar">
-                    Esvaziar carrinho
-                </button>
-
-            </form>
-
-        <?php endif; ?>
-
-    </aside>
-
-    <script>
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-
-        document.querySelectorAll('.form-comprar').forEach(form => {
-            form.addEventListener('submit', function () {
-                sessionStorage.setItem('posicaoPainel', window.scrollY);
-            });
-        });
-
-        window.addEventListener('load', function () {
-            const posicao = sessionStorage.getItem('posicaoPainel');
-
-            if (posicao !== null) {
-                window.scrollTo(0, parseInt(posicao, 10));
-                sessionStorage.removeItem('posicaoPainel');
-            }
-        });
-    </script>
+    </main>
 
 </body>
 </html>
