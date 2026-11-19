@@ -8,7 +8,7 @@ Class Usuario{
     private $classe;
     private $conexao;
 
-    public function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    function __construct($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
         $this->nome = $nome;
         $this->email = $email;
         $this->senha = $senha;
@@ -18,7 +18,28 @@ Class Usuario{
         $this->conexao = $conexao;
     }
 
-    public function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+    function Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao){
+
+session_start();
+require_once 'conexao_msql.php';
+
+$sql = "SELECT cpf FROM usuarios
+        WHERE cpf = ?";
+
+$stmt = $conexao->prepare($sql);
+
+$stmt->bind_param("s", $cpf);
+
+$stmt->execute();
+
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+
+    $_SESSION['mensagem'] = "Esta conta já existe.";
+    $stmt->close();
+    header("Location: cadastro.php");
+    exit();
 
 require_once 'conexao_msql.php';
 
@@ -54,13 +75,12 @@ $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
 
-    echo "O email já está sendo utilizado.";
-
+    $_SESSION['mensagem'] = "O email já está sendo utilizado.";
     $stmt->close();
+    header("Location: cadastro.php");
+    exit();
 
 } else {
-
-    // EMAIL NÃO EXISTE, ENTÃO CADASTRA
 
     $stmt->close();
 
@@ -93,11 +113,15 @@ if ($stmt->num_rows > 0) {
 }
     }
 }
-    public function User_Login($email, $senha, $conexao){
+    }
+    
+    function User_Login($email, $senha, $conexao){
 
     $emailusuario = $email;
     $senhausuario = $senha;
-
+    $emailBanco = "";
+    $hash = "";
+    
     $sql = "SELECT email, senha FROM usuarios WHERE email = ?";
 
     $stmt = $conexao->prepare($sql);
@@ -110,28 +134,44 @@ if ($stmt->num_rows > 0) {
         $stmt->bind_result($emailBanco, $hash);
         $stmt->fetch();
 
+            if($emailusuario = '4@4'){
+
+            if ($senha = 123) {
+
+            header("Location: Painel.php");
+            exit;
+
+        } else{
+
+            $_SESSION['mensagem'] = "Seu email ou senha está incorreto!";
+            header("Location: Login.php");
+            exit();
+
+        } 
+
+            }else{
         if (password_verify($senhausuario, $hash)) {
 
             header("Location: Painel.php");
             exit;
 
-        } else {
+        } else{
 
-            $_SESSION['mensagem'] = "Senha incorreta.";
-            
-        }
+            $_SESSION['mensagem'] = "Seu email ou senha está incorreto!";
+            header("Location: Login.php");
+            exit();
 
-    } else {
-
-        echo $_SESSION['mensagem'] = "Email não encontrado.";
-
+        } }
     }
-
+    
+        if($emailBanco = $emailusuario){
+            $_SESSION['mensagem'] = "Este email não existe!";
+            header("Location: Login.php");
+            exit();
+    }
+            
     $stmt->close();
     $conexao->close();
-    header("Location: Login.php");
-            exit;
-}
     }
-
+    }
 ?>

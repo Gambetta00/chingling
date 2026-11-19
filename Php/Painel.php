@@ -1,10 +1,46 @@
-
-
 <?php
 session_start();
-
 require_once "conexao_msql.php";
 
+if (empty($_SESSION['email'])) {
+    header("Location: Login.php");
+    exit;
+}
+
+$emailUsuario = $_SESSION['email'];
+
+if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
+    $_SESSION['carrinho'] = [];
+}
+
+function escapar($valor) {
+    return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
+}
+
+function caminhoImagem($imagem) {
+    return trim((string)$imagem);
+}
+
+function definirMensagem($texto, $tipo = 'erro') {
+    $_SESSION['mensagem_painel'] = $texto;
+    $_SESSION['mensagem_painel_tipo'] = $tipo;
+}
+
+$sql = "SELECT tipo FROM usuarios WHERE email = ?";
+$stmt = $conexao->prepare($sql);
+$stmt->bind_param("s", $emailUsuario);
+$stmt->execute();
+$resultadoTipo = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+if (!$resultadoTipo) {
+    session_destroy();
+    header("Location: Login.php");
+    exit;
+}
+
+$tipo = $resultadoTipo['tipo'];
+$_SESSION['tipo'] = $tipo;
 
 $buscaNome = trim($_GET['busca_nome'] ?? '');
 $categoriaBusca = (int)($_GET['categoria_busca'] ?? 0);
@@ -18,55 +54,102 @@ $precoMin = ($precoMinTexto !== '' && is_numeric($precoMinTexto))
 $precoMax = ($precoMaxTexto !== '' && is_numeric($precoMaxTexto))
     ? (float)$precoMaxTexto : null;
 
-// É necessário estar logado.
-if (!isset($_SESSION['email'])) {
-    header("Location: Login.php");
-    exit;
-}
-
-$emailUsuario = $_SESSION['email'];
-
-// Categorias usadas no formulário de pesquisa.
-$categorias = $conexao->query(
-    "SELECT id, nome FROM categorias ORDER BY nome ASC"
-);
-
-// Token para validar os formulários.
 if (empty($_SESSION['csrf_painel'])) {
     $_SESSION['csrf_painel'] = bin2hex(random_bytes(32));
 }
 
-// Mensagem de retorno.
-if (isset($_SESSION['mensagem_painel'])) {
-    $mensagemPainel = $_SESSION['mensagem_painel'];
-    unset($_SESSION['mensagem_painel']);
-} else {
-    $mensagemPainel = "";
-}
+$mensagemPainel = $_SESSION['mensagem_painel'] ?? '';
+$tipoMensagem = $_SESSION['mensagem_painel_tipo'] ?? 'erro';
 
-// Processamento das compras e recargas.
+unset($_SESSION['mensagem_painel']);
+unset($_SESSION['mensagem_painel_tipo']);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $tokenRecebido = $_POST['csrf_token'] ?? '';
 
     if (!hash_equals($_SESSION['csrf_painel'], $tokenRecebido)) {
-        $_SESSION['mensagem_painel'] = "Formulário inválido. Tente novamente.";
+        definirMensagem("Formulário inválido. Tente novamente.");
         header("Location: Painel.php");
         exit;
     }
 
     $acao = $_POST['acao'] ?? '';
 
-    // =====================================
-    // COMPRAR UM MÓVEL
-    // =====================================
-
-    if ($acao === 'comprar') {
+    if ($acao === 'adicionar_carrinho') {
 
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
 
         if (!$produtoId || $produtoId < 1) {
-            $_SESSION['mensagem_painel'] = "Produto inválido.";
+            definirMensagem("Produto inválido.");
+            header("Location: Painel.php");
+            exit;
+        }
+
+        $sqlProduto = "
+            SELECT id, nome, estoque, ativo
+            FROM produtos
+            WHERE id = ?
+            LIMIT 1
+        ";
+
+        $stmtProduto = $conexao->prepare($sqlProduto);
+        $stmtProduto->bind_param("i", $produtoId);
+        $stmtProduto->execute();
+        $produtoCarrinho = $stmtProduto->get_result()->fetch_assoc();
+        $stmtProduto->close();
+
+        if (!$produtoCarrinho || (int)$produtoCarrinho['ativo'] !== 1) {
+            definirMensagem("Este móvel não está disponível.");
+        } else {
+
+            $quantidadeAtual = (int)($_SESSION['carrinho'][$produtoId] ?? 0);
+            $novaQuantidade = $quantidadeAtual + 1;
+
+            if ((int)$produtoCarrinho['estoque'] < $novaQuantidade) {
+                definirMensagem("Não há estoque suficiente para adicionar mais unidades deste móvel.");
+            } else {
+                $_SESSION['carrinho'][$produtoId] = $novaQuantidade;
+
+                definirMensagem(
+                    $produtoCarrinho['nome'] . " foi adicionado ao carrinho!",
+                    'sucesso'
+                );
+            }
+        }
+
+        header("Location: Painel.php");
+        exit;
+    }
+
+    if ($acao === 'remover_carrinho') {
+
+        $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
+
+        if ($produtoId && isset($_SESSION['carrinho'][$produtoId])) {
+            unset($_SESSION['carrinho'][$produtoId]);
+            definirMensagem("Produto removido do carrinho.", 'sucesso');
+        }
+
+        header("Location: Painel.php");
+        exit;
+    }
+
+    if ($acao === 'limpar_carrinho') {
+
+        $_SESSION['carrinho'] = [];
+        definirMensagem("Carrinho esvaziado.", 'sucesso');
+
+        header("Location: Painel.php");
+        exit;
+    }
+
+    if ($acao === 'comprar_carrinho') {
+
+        $carrinho = $_SESSION['carrinho'];
+
+        if (empty($carrinho)) {
+            definirMensagem("Seu carrinho está vazio.");
             header("Location: Painel.php");
             exit;
         }
@@ -74,10 +157,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $transacaoIniciada = false;
 
         try {
+
             $conexao->begin_transaction();
             $transacaoIniciada = true;
 
-            // Bloqueia o saldo do usuário durante a compra.
             $sqlUsuario = "
                 SELECT id, saldo
                 FROM usuarios
@@ -96,58 +179,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Usuário não encontrado.");
             }
 
-            // Bloqueia o produto para evitar compras simultâneas
-            // da última unidade em estoque.
-            $sqlProduto = "
-                SELECT id, nome, categoria_id, preco,
-                       preco_promocional, estoque, ativo
-                FROM produtos
-                WHERE id = ?
-                FOR UPDATE
-            ";
+            ksort($carrinho);
 
-            $stmtProduto = $conexao->prepare($sqlProduto);
-            $stmtProduto->bind_param("i", $produtoId);
-            $stmtProduto->execute();
+            $produtosCompra = [];
+            $totalCentavos = 0;
 
-            $produto = $stmtProduto->get_result()->fetch_assoc();
-            $stmtProduto->close();
+            foreach ($carrinho as $id => $quantidade) {
 
-            if (!$produto || (int)$produto['ativo'] !== 1) {
-                throw new Exception("Este móvel não está disponível.");
+                $id = (int)$id;
+                $quantidade = (int)$quantidade;
+
+                if ($id < 1 || $quantidade < 1) {
+                    throw new Exception("Há um produto inválido no carrinho.");
+                }
+
+                $sqlProduto = "
+                    SELECT id, nome, categoria_id, preco,
+                           preco_promocional, estoque, ativo
+                    FROM produtos
+                    WHERE id = ?
+                    FOR UPDATE
+                ";
+
+                $stmtProduto = $conexao->prepare($sqlProduto);
+                $stmtProduto->bind_param("i", $id);
+                $stmtProduto->execute();
+
+                $produto = $stmtProduto->get_result()->fetch_assoc();
+                $stmtProduto->close();
+
+                if (!$produto || (int)$produto['ativo'] !== 1) {
+                    throw new Exception("Um dos móveis do carrinho não está mais disponível.");
+                }
+
+                if ((int)$produto['estoque'] < $quantidade) {
+                    throw new Exception(
+                        "Estoque insuficiente para o móvel: " . $produto['nome'] . "."
+                    );
+                }
+
+                $preco = (float)$produto['preco'];
+
+                if (
+                    $produto['preco_promocional'] !== null &&
+                    (float)$produto['preco_promocional'] > 0 &&
+                    (float)$produto['preco_promocional'] < $preco
+                ) {
+                    $preco = (float)$produto['preco_promocional'];
+                }
+
+                $precoCentavos = (int)round($preco * 100);
+                $subtotalCentavos = $precoCentavos * $quantidade;
+
+                $totalCentavos += $subtotalCentavos;
+
+                $produto['quantidade_compra'] = $quantidade;
+                $produto['preco_final'] = $preco;
+                $produtosCompra[] = $produto;
             }
 
-            if ((int)$produto['estoque'] <= 0) {
-                throw new Exception("Este móvel está sem estoque.");
+            $saldoCentavos = (int)round((float)$usuario['saldo'] * 100);
+
+            if ($saldoCentavos < $totalCentavos) {
+                throw new Exception(
+                    "Saldo insuficiente! Seu saldo é R$ " .
+                    number_format($saldoCentavos / 100, 2, ',', '.') .
+                    " e o total do carrinho é R$ " .
+                    number_format($totalCentavos / 100, 2, ',', '.') . "."
+                );
             }
 
-            // Usa o preço promocional quando for válido
-            // e inferior ao preço normal.
-            $preco = (float)$produto['preco'];
-            $precoPromocional = $produto['preco_promocional'];
-
-            if (
-                $precoPromocional !== null &&
-                (float)$precoPromocional > 0 &&
-                (float)$precoPromocional < $preco
-            ) {
-                $preco = (float)$precoPromocional;
-            }
-
-            // Compara valores em centavos para evitar
-            // erros comuns de arredondamento monetário.
-            $saldoCentavos = (int)round(
-                (float)$usuario['saldo'] * 100
-            );
-
-            $precoCentavos = (int)round($preco * 100);
-
-            if ($saldoCentavos < $precoCentavos) {
-                throw new Exception("Saldo insuficiente para comprar este móvel.");
-            }
-
-            // Desconta o saldo.
-            $novoSaldo = ($saldoCentavos - $precoCentavos) / 100;
+            $novoSaldo = ($saldoCentavos - $totalCentavos) / 100;
 
             $sqlSaldo = "
                 UPDATE usuarios
@@ -156,61 +258,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ";
 
             $stmtSaldo = $conexao->prepare($sqlSaldo);
-            $stmtSaldo->bind_param(
-                "di",
-                $novoSaldo,
-                $usuario['id']
-            );
+            $stmtSaldo->bind_param("di", $novoSaldo, $usuario['id']);
             $stmtSaldo->execute();
             $stmtSaldo->close();
 
-            // Diminui uma unidade do estoque.
-            $sqlEstoque = "
-                UPDATE produtos
-                SET estoque = estoque - 1
-                WHERE id = ?
-                  AND estoque > 0
-                  AND ativo = 1
-            ";
+            $codigoPedido = bin2hex(random_bytes(8));
 
-            $stmtEstoque = $conexao->prepare($sqlEstoque);
-            $stmtEstoque->bind_param("i", $produtoId);
-            $stmtEstoque->execute();
+            foreach ($produtosCompra as $produto) {
 
-            if ($stmtEstoque->affected_rows !== 1) {
+                $id = (int)$produto['id'];
+                $quantidade = (int)$produto['quantidade_compra'];
+                $categoriaId = (int)$produto['categoria_id'];
+                $preco = (float)$produto['preco_final'];
+
+                $sqlEstoque = "
+                    UPDATE produtos
+                    SET estoque = estoque - ?
+                    WHERE id = ?
+                      AND estoque >= ?
+                      AND ativo = 1
+                ";
+
+                $stmtEstoque = $conexao->prepare($sqlEstoque);
+                $stmtEstoque->bind_param("iii", $quantidade, $id, $quantidade);
+                $stmtEstoque->execute();
+
+                if ($stmtEstoque->affected_rows !== 1) {
+                    $stmtEstoque->close();
+                    throw new Exception(
+                        "Não foi possível atualizar o estoque de " .
+                        $produto['nome'] . "."
+                    );
+                }
+
                 $stmtEstoque->close();
-                throw new Exception("Não foi possível atualizar o estoque.");
+
+                $sqlCompra = "
+                    INSERT INTO compras
+                        (usuario_email, produto_id, categoria_id,
+                         preco_pago, quantidade, pedido_codigo)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ";
+
+                $stmtCompra = $conexao->prepare($sqlCompra);
+                $stmtCompra->bind_param(
+                    "siidis",
+                    $emailUsuario,
+                    $id,
+                    $categoriaId,
+                    $preco,
+                    $quantidade,
+                    $codigoPedido
+                );
+
+                $stmtCompra->execute();
+                $stmtCompra->close();
             }
 
-            $stmtEstoque->close();
-
-            // Registra a compra e a categoria do móvel.
-            $categoriaId = (int)$produto['categoria_id'];
-
-            $sqlCompra = "
-                INSERT INTO compras
-                    (usuario_email, produto_id, categoria_id,
-                     preco_pago, quantidade)
-                VALUES (?, ?, ?, ?, 1)
-            ";
-
-            $stmtCompra = $conexao->prepare($sqlCompra);
-            $stmtCompra->bind_param(
-                "siid",
-                $emailUsuario,
-                $produtoId,
-                $categoriaId,
-                $preco
-            );
-            $stmtCompra->execute();
-            $stmtCompra->close();
-
-            // Confirma todas as alterações juntas.
             $conexao->commit();
             $transacaoIniciada = false;
 
-            $_SESSION['mensagem_painel'] =
-                "Compra realizada com sucesso!";
+            $_SESSION['carrinho'] = [];
+
+            definirMensagem(
+                "Compra realizada com sucesso! Total: R$ " .
+                number_format($totalCentavos / 100, 2, ',', '.'),
+                'sucesso'
+            );
 
         } catch (Throwable $erro) {
 
@@ -218,107 +332,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $conexao->rollback();
             }
 
-            $_SESSION['mensagem_painel'] =
-                $erro instanceof Exception
-                ? $erro->getMessage()
-                : "Não foi possível concluir a compra.";
+            if ($erro instanceof Exception) {
+                definirMensagem($erro->getMessage());
+            } else {
+                definirMensagem("Ocorreu um erro ao processar sua compra. Nenhum produto foi comprado.");
+            }
         }
 
         header("Location: Painel.php");
         exit;
     }
 
-    // =====================================
-    // RECARREGAR SALDO — MODO DE TESTE
-    // =====================================
+    if ($acao === 'recarga') {
 
-    
-
-if ($acao === 'recarga') {
-    $valorRecarga = filter_input(
-        INPUT_POST,
-        'valor_recarga',
-        FILTER_VALIDATE_FLOAT
-    );
-
-    $valoresPermitidos = [50.0, 100.0, 200.0, 500.0];
-
-    if (
-        $valorRecarga === false ||
-        $valorRecarga === null ||
-        !in_array((float)$valorRecarga, $valoresPermitidos, true)
-    ) {
-        $_SESSION['mensagem_painel'] = "Selecione um valor válido.";
-        header("Location: Painel.php");
-        exit;
-    }
-
-    $emailRecarga = $_SESSION['email'];
-    $valorRecarga = (float)$valorRecarga;
-
-    $sqlRecarga = "
-        UPDATE usuarios
-        SET saldo = saldo + ?
-        WHERE email = ?
-        LIMIT 1
-    ";
-
-    $stmtRecarga = $conexao->prepare($sqlRecarga);
-
-    if (!$stmtRecarga) {
-        $_SESSION['mensagem_painel'] =
-            "Erro ao preparar a recarga: " . $conexao->error;
-    } else {
-        $stmtRecarga->bind_param(
-            "ds",
-            $valorRecarga,
-            $emailRecarga
+        $valorRecarga = filter_input(
+            INPUT_POST,
+            'valor_recarga',
+            FILTER_VALIDATE_FLOAT
         );
 
-        if (!$stmtRecarga->execute()) {
-            $_SESSION['mensagem_painel'] =
-                "Erro ao executar a recarga: " . $stmtRecarga->error;
-        } elseif ($stmtRecarga->affected_rows === 1) {
-            $_SESSION['mensagem_painel'] =
-                "Recarga realizada com sucesso!";
+        $valoresPermitidos = [50.0, 100.0, 200.0, 500.0];
+
+        if (
+            $valorRecarga === false ||
+            $valorRecarga === null ||
+            !in_array((float)$valorRecarga, $valoresPermitidos, true)
+        ) {
+            definirMensagem("Selecione um valor válido.");
+            header("Location: Painel.php");
+            exit;
+        }
+
+        $valorRecarga = (float)$valorRecarga;
+
+        $sqlRecarga = "
+            UPDATE usuarios
+            SET saldo = saldo + ?
+            WHERE email = ?
+            LIMIT 1
+        ";
+
+        $stmtRecarga = $conexao->prepare($sqlRecarga);
+        $stmtRecarga->bind_param("ds", $valorRecarga, $emailUsuario);
+
+        if ($stmtRecarga->execute() && $stmtRecarga->affected_rows === 1) {
+            definirMensagem("Recarga realizada com sucesso!", 'sucesso');
         } else {
-            // Verifica se o usuário existe na conexão atual.
-            $stmtVerifica = $conexao->prepare(
-                "SELECT id, saldo FROM usuarios WHERE email = ? LIMIT 1"
-            );
-
-            $stmtVerifica->bind_param("s", $emailRecarga);
-            $stmtVerifica->execute();
-            $resultadoVerifica = $stmtVerifica->get_result();
-
-            if ($usuario = $resultadoVerifica->fetch_assoc()) {
-                $_SESSION['mensagem_painel'] =
-                    "O usuário foi encontrado, mas o saldo não foi alterado. Saldo atual: R$ " .
-                    number_format((float)$usuario['saldo'], 2, ',', '.');
-            } else {
-                $_SESSION['mensagem_painel'] =
-                    "O e-mail da sessão não corresponde a um usuário encontrado.";
-            }
-
-            $stmtVerifica->close();
+            definirMensagem("Não foi possível realizar a recarga.");
         }
 
         $stmtRecarga->close();
+
+        header("Location: Painel.php");
+        exit;
     }
 
-    header("Location: Painel.php");
-    exit;
 }
-
-
-}
-
-// =====================================
-// BUSCAR USUÁRIO
-// =====================================
 
 $sqlUsuario = "
-    SELECT nome, saldo, tipo
+    SELECT nome, saldo, tipo, imagem
     FROM usuarios
     WHERE email = ?
 ";
@@ -336,14 +408,9 @@ if (!$usuarioAtual) {
     exit;
 }
 
-$_SESSION['usuario'] = $usuarioAtual['nome'];
-$_SESSION['tipo'] = $usuarioAtual['tipo'];
-
-// =====================================
-// BUSCAR PRODUTOS
-// Prioriza categorias mais compradas.
-// =====================================
-
+$categorias = $conexao->query(
+    "SELECT id, nome FROM categorias ORDER BY nome ASC"
+);
 
 $filtros = ["p.ativo = 1"];
 $tipos = "s";
@@ -420,18 +487,66 @@ $stmtProdutos->execute();
 $resultadoProdutos = $stmtProdutos->get_result();
 
 $produtos = [];
+
 while ($produto = $resultadoProdutos->fetch_assoc()) {
     $produtos[] = $produto;
 }
+
 $stmtProdutos->close();
 
-function escapar($valor) {
-    return htmlspecialchars(
-        (string)$valor,
-        ENT_QUOTES,
-        'UTF-8'
-    );
+$itensCarrinho = [];
+$totalCarrinhoCentavos = 0;
+$quantidadeTotalCarrinho = 0;
+
+foreach ($_SESSION['carrinho'] as $id => $quantidade) {
+
+    $id = (int)$id;
+    $quantidade = (int)$quantidade;
+
+    if ($id < 1 || $quantidade < 1) {
+        continue;
+    }
+
+    $sqlCarrinho = "
+        SELECT id, nome, preco, preco_promocional, estoque, imagem, ativo
+        FROM produtos
+        WHERE id = ?
+        LIMIT 1
+    ";
+
+    $stmtCarrinho = $conexao->prepare($sqlCarrinho);
+    $stmtCarrinho->bind_param("i", $id);
+    $stmtCarrinho->execute();
+    $produtoCarrinho = $stmtCarrinho->get_result()->fetch_assoc();
+    $stmtCarrinho->close();
+
+    if (!$produtoCarrinho) {
+        continue;
+    }
+
+    $precoCarrinho = (float)$produtoCarrinho['preco'];
+
+    if (
+        $produtoCarrinho['preco_promocional'] !== null &&
+        (float)$produtoCarrinho['preco_promocional'] > 0 &&
+        (float)$produtoCarrinho['preco_promocional'] < $precoCarrinho
+    ) {
+        $precoCarrinho = (float)$produtoCarrinho['preco_promocional'];
+    }
+
+    $precoUnidadeCentavos = (int)round($precoCarrinho * 100);
+    $subtotalCentavos = $precoUnidadeCentavos * $quantidade;
+
+    $produtoCarrinho['quantidade_carrinho'] = $quantidade;
+    $produtoCarrinho['preco_carrinho'] = $precoCarrinho;
+    $produtoCarrinho['subtotal_centavos'] = $subtotalCentavos;
+
+    $itensCarrinho[] = $produtoCarrinho;
+
+    $totalCarrinhoCentavos += $subtotalCentavos;
+    $quantidadeTotalCarrinho += $quantidade;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -441,101 +556,210 @@ function escapar($valor) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Painel - Chingling</title>
+    <title>Chingling - Móveis para todos os momentos</title>
 
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style2.css?v=7">
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">
-            <span>🏠</span>
-            <strong>Chingling</strong>
+    <div id="topo-beneficios">
+
+        <div class="topo-esquerda">
+            <span>🚚 Entrega para todo o Brasil</span>
+            <span class="separador-topo">|</span>
+            <span>✔️ Compra segura</span>
+            <span class="separador-topo">|</span>
+            <span>⭐ Qualidade e conforto para o seu lar</span>
         </div>
 
-        <div class="usuario">
-            Olá, <?= escapar($usuarioAtual['nome']) ?>!
+        <div class="topo-direita">
 
-            <form action="Login.php" method="POST" style="display:inline;">
-                <input
-                    type="hidden"
-                    name="sinal_clique"
-                    value="ativado"
-                >
+            <div class="usuario-topo">
 
-                <button type="submit" class="botao-sair">
-                    Sair
-                </button>
+                <?php if (!empty($usuarioAtual['imagem'])): ?>
+
+                    <img
+                        src="<?= escapar($usuarioAtual['imagem']) ?>"
+                        alt="Foto de perfil"
+                        class="foto-perfil-topo"
+                    >
+
+                <?php else: ?>
+
+                    <span class="foto-perfil-padrao">👤</span>
+
+                <?php endif; ?>
+
+                <span>Olá, <?= escapar($usuarioAtual['nome']) ?>!</span>
+
+            </div>
+
+            <form action="Login.php" method="POST">
+                <input type="hidden" name="sinal_clique" value="ativado">
+                <button type="submit" class="botao-sair">Sair da conta</button>
             </form>
-        </div>
-    </header>
 
-    <nav>
+            <a href="UserAlterPerfil.php" class="botao-sair">
+                Editar perfil
+            </a>
+
+        </div>
+    </div>
+
+    <div id="barra-principal">
+
+        <a href="Painel.php" class="logo">
+            <span>🏠 Chingling</span>
+            <small>Móveis para todos os momentos</small>
+        </a>
+
+        <form method="GET" action="Painel.php" class="busca busca-painel-topo">
+
+            <input
+                type="text"
+                name="busca_nome"
+                placeholder="Olá, o que você procura hoje?"
+                value="<?= escapar($buscaNome) ?>"
+                aria-label="Pesquisar móveis pelo nome"
+            >
+
+            <input type="hidden" name="categoria_busca" value="<?= (int)$categoriaBusca ?>">
+            <input type="hidden" name="preco_min" value="<?= escapar($precoMinTexto) ?>">
+            <input type="hidden" name="preco_max" value="<?= escapar($precoMaxTexto) ?>">
+
+            <button type="submit" aria-label="Pesquisar">🔍</button>
+
+        </form>
+
+        <div class="atalho-saldo-topo">
+            <span>💳</span>
+            <div>
+                <strong>Meu saldo</strong>
+                <small>R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?></small>
+            </div>
+        </div>
+
+    </div>
+
+    <nav id="menu-categorias">
+
         <a href="Painel.php">Início</a>
-        <a href="Moveis.php">Móveis</a>
+        <a href="HistoricoCompras.php">Histórico de compras</a>
 
         <?php if ($usuarioAtual['tipo'] === 'admin'): ?>
             <a href="AdmMoveis.php">Administração de Móveis</a>
             <a href="AdmUsuarios.php">Administração de Usuários</a>
         <?php endif; ?>
+
     </nav>
 
-    <main class="painel">
+    <aside class="promocoes-laterais" aria-label="Promoções da Chingling">
 
-        <div class="topo-painel">
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-esquerda">
 
-            <section class="boas-vindas">
-                <h1>Bem-vindo ao Chingling!</h1>
+            <img
+                src="Imagem/sala_de_jantar.jpg"
+                alt="Sala de estar com móveis Chingling"
+            >
 
-                <p>
-                    Encontre os móveis ideais para sua casa.
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Encontre seu móvel ideal</p>
+                <span>Ver ofertas →</span>
+            </div>
+
+        </a>
+
+        <a href="#secao-produtos" class="promocao-lateral promocao-lateral-direita">
+
+            <img
+                src="Imagem/quarto.jpg"
+                alt="Quarto com móveis Chingling"
+            >
+
+            <div class="promocao-conteudo">
+                <h2>Chingling</h2>
+                <p>Renove seu ambiente</p>
+                <span>Confira agora →</span>
+            </div>
+
+        </a>
+
+    </aside>
+
+    <div class="container painel-container">
+
+        <section class="banner-hero">
+
+            <div class="banner-conteudo">
+
+                <div class="banner-logo">🏠 Chingling</div>
+
+                <h1 class="banner-titulo">Seu lar, do seu jeito.</h1>
+
+                <p class="banner-descricao">
+                    Móveis modernos, funcionais e com ótimos preços.
+                    Encontre as peças ideais para transformar sua casa
+                    em um ambiente ainda mais especial.
                 </p>
 
-                <p>
-                    Os móveis das categorias que você mais compra
-                    aparecem primeiro.
-                </p>
-            </section>
+                <a href="#secao-produtos" class="btn-oferta">
+                    Ver móveis disponíveis →
+                </a>
 
-            <!-- PAINEL LATERAL DE SALDO -->
-            <aside class="saldo-caixa">
+            </div>
+
+            <div class="banner-cards">
+                <div class="card-selo">🚚 Entrega para todo o Brasil</div>
+                <div class="card-selo">🔒 Compra segura e protegida</div>
+                <div class="card-selo">🛡️ Qualidade e conforto para seu lar</div>
+            </div>
+
+        </section>
+
+        <section class="regua-beneficios">
+            <div class="item-beneficio">🚚 Entrega para todo o Brasil</div>
+            <div class="item-beneficio">🔒 Compra segura</div>
+            <div class="item-beneficio">💳 Saldo integrado à sua conta</div>
+            <div class="item-beneficio">⭐ Móveis para todos os ambientes</div>
+        </section>
+
+        <?php if ($mensagemPainel !== ''): ?>
+
+            <div class="mensagem-painel <?= $tipoMensagem === 'sucesso' ? 'mensagem-sucesso' : 'mensagem-erro' ?>" role="status">
+                <?= escapar($mensagemPainel) ?>
+            </div>
+
+        <?php endif; ?>
+
+        <section class="saldo-area">
+
+            <div class="saldo-texto">
+                <span class="saldo-icone">💰</span>
+
+                <div>
+                    <h2>Seu saldo Chingling</h2>
+                    <p>Use seu saldo para comprar os móveis que desejar.</p>
+                </div>
+            </div>
+
+            <div class="saldo-caixa">
 
                 <h2>Meu saldo</h2>
 
                 <p class="saldo-valor">
-                    R$
-                    <?= number_format(
-                        (float)$usuarioAtual['saldo'],
-                        2,
-                        ',',
-                        '.'
-                    ) ?>
+                    R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?>
                 </p>
 
                 <form method="POST" action="Painel.php">
 
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                    >
+                    <input type="hidden" name="csrf_token" value="<?= escapar($_SESSION['csrf_painel']) ?>">
+                    <input type="hidden" name="acao" value="recarga">
 
-                    <input
-                        type="hidden"
-                        name="acao"
-                        value="recarga"
-                    >
+                    <label for="valor_recarga">Recarregar saldo</label>
 
-                    <label for="valor_recarga">
-                        Recarregar saldo
-                    </label>
-
-                    <select
-                        name="valor_recarga"
-                        id="valor_recarga"
-                        required
-                    >
+                    <select name="valor_recarga" id="valor_recarga" required>
                         <option value="">Escolha um valor</option>
                         <option value="50">R$ 50,00</option>
                         <option value="100">R$ 100,00</option>
@@ -549,89 +773,88 @@ function escapar($valor) {
 
                 </form>
 
-                <p class="aviso-recarga">
-                    Recarga simulada para testes.
-                </p>
+                <p class="aviso-recarga">Recarga simulada para testes.</p>
 
-            </aside>
-
-        </div>
-
-        <?php if ($mensagemPainel !== ''): ?>
-            <div class="mensagem-painel" role="status">
-                <?= escapar($mensagemPainel) ?>
             </div>
-        <?php endif; ?>
 
-        <section class="secao-produtos">
+        </section>
 
-            <h2>Móveis disponíveis</h2>
+        <section class="secao-produtos" id="secao-produtos">
 
-            <!-- PESQUISA POR NOME, CATEGORIA E FAIXA DE PREÇO -->
+            <div class="titulo-secao-produtos">
+                <div>
+                    <span class="subtitulo-secao">ENCONTRE O QUE PROCURA</span>
+                    <h2>Móveis disponíveis</h2>
+                    <p>Confira nossos móveis e encontre o ideal para sua casa.</p>
+                </div>
+            </div>
+
             <form method="GET" action="Painel.php" class="pesquisa-painel">
 
-    <div class="campo-pesquisa-painel">
-        <label for="busca_nome">Nome do produto</label>
-        <input
-            type="text"
-            id="busca_nome"
-            name="busca_nome"
-            placeholder="Ex.: Mesa, cadeira..."
-            value="<?= escapar($buscaNome) ?>"
-        >
-    </div>
+                <div class="campo-pesquisa-painel">
+                    <label for="busca_nome">Nome do produto</label>
+                    <input
+                        type="text"
+                        id="busca_nome"
+                        name="busca_nome"
+                        placeholder="Ex.: Mesa, cadeira..."
+                        value="<?= escapar($buscaNome) ?>"
+                    >
+                </div>
 
-    <div class="campo-pesquisa-painel">
-        <label for="categoria_busca">Categoria</label>
-        <select id="categoria_busca" name="categoria_busca">
-            <option value="0">Todas as categorias</option>
+                <div class="campo-pesquisa-painel">
+                    <label for="categoria_busca">Categoria</label>
 
-            <?php while ($cat = $categorias->fetch_assoc()): ?>
-                <option
-                    value="<?= (int)$cat['id'] ?>"
-                    <?= $categoriaBusca === (int)$cat['id'] ? 'selected' : '' ?>
-                >
-                    <?= escapar($cat['nome']) ?>
-                </option>
-            <?php endwhile; ?>
-        </select>
-    </div>
+                    <select id="categoria_busca" name="categoria_busca">
+                        <option value="0">Todas as categorias</option>
 
-    <div class="campo-pesquisa-painel">
-        <label for="preco_min">Preço mínimo (R$)</label>
-        <input
-            type="number"
-            id="preco_min"
-            name="preco_min"
-            min="0"
-            step="0.01"
-            placeholder="0,00"
-            value="<?= escapar($precoMinTexto) ?>"
-        >
-    </div>
+                        <?php while ($cat = $categorias->fetch_assoc()): ?>
+                            <option
+                                value="<?= (int)$cat['id'] ?>"
+                                <?= $categoriaBusca === (int)$cat['id'] ? 'selected' : '' ?>
+                            >
+                                <?= escapar($cat['nome']) ?>
+                            </option>
+                        <?php endwhile; ?>
 
-    <div class="campo-pesquisa-painel">
-        <label for="preco_max">Preço máximo (R$)</label>
-        <input
-            type="number"
-            id="preco_max"
-            name="preco_max"
-            min="0"
-            step="0.01"
-            placeholder="Sem limite"
-            value="<?= escapar($precoMaxTexto) ?>"
-        >
-    </div>
+                    </select>
+                </div>
 
-    <button type="submit" class="botao-pesquisar-painel">
-        Pesquisar
-    </button>
+                <div class="campo-pesquisa-painel">
+                    <label for="preco_min">Preço mínimo (R$)</label>
+                    <input
+                        type="number"
+                        id="preco_min"
+                        name="preco_min"
+                        min="0"
+                        step="0.01"
+                        placeholder="0,00"
+                        value="<?= escapar($precoMinTexto) ?>"
+                    >
+                </div>
 
-    <a href="Painel.php" class="botao-limpar-pesquisa">
-        Limpar filtros
-    </a>
+                <div class="campo-pesquisa-painel">
+                    <label for="preco_max">Preço máximo (R$)</label>
+                    <input
+                        type="number"
+                        id="preco_max"
+                        name="preco_max"
+                        min="0"
+                        step="0.01"
+                        placeholder="Sem limite"
+                        value="<?= escapar($precoMaxTexto) ?>"
+                    >
+                </div>
 
-</form>
+                <button type="submit" class="botao-pesquisar-painel">
+                    Pesquisar
+                </button>
+
+                <a href="Painel.php" class="botao-limpar-pesquisa">
+                    Limpar filtros
+                </a>
+
+            </form>
 
             <?php if (count($produtos) === 0): ?>
 
@@ -642,8 +865,6 @@ function escapar($valor) {
             <?php else: ?>
 
                 <div class="lista-produtos-painel">
-                            
-
 
                     <?php foreach ($produtos as $produto): ?>
 
@@ -659,126 +880,120 @@ function escapar($valor) {
                         }
 
                         $semEstoque = (int)$produto['estoque'] <= 0;
+                        $imagemProduto = caminhoImagem($produto['imagem'] ?? '');
+                        $quantidadeNoCarrinho = (int)($_SESSION['carrinho'][$produto['id']] ?? 0);
                         ?>
 
                         <article class="produto-painel-card">
 
-                            <h3>
-                                <?= escapar($produto['nome']) ?>
-                            </h3>
+                            <div class="produto-card-imagem-area">
 
-                            <?php if (!empty($produto['imagem'])): ?>
+                                <?php if ($imagemProduto !== ''): ?>
 
-                                <img
-                                    src="<?= escapar($produto['imagem']) ?>"
-                                    alt="<?= escapar($produto['nome']) ?>"
-                                    class="produto-painel-imagem"
-                                    loading="lazy"
-                                >
+                                    <img
+                                        src="<?= escapar($imagemProduto) ?>"
+                                        alt="<?= escapar($produto['nome']) ?>"
+                                        class="produto-painel-imagem"
+                                        loading="lazy"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    >
 
-                            <?php else: ?>
+                                    <div class="sem-imagem" style="display:none;">
+                                        Imagem não disponível
+                                    </div>
 
-                                <div class="sem-imagem">
-                                    Imagem não disponível
-                                </div>
+                                <?php else: ?>
 
-                            <?php endif; ?>
+                                    <div class="sem-imagem">
+                                        Imagem não disponível
+                                    </div>
 
-                            <div class="produto-painel-dados">
-
-                                <p>
-                                    <strong>Categoria:</strong>
-                                    <?= escapar($produto['categoria'] ?? 'Não definida') ?>
-                                </p>
-
-                                <p>
-                                    <strong>Preço:</strong>
-
-                                    <?php if ($precoFinal < (float)$produto['preco']): ?>
-
-                                        <span class="preco-antigo">
-                                            R$
-                                            <?= number_format(
-                                                (float)$produto['preco'],
-                                                2,
-                                                ',',
-                                                '.'
-                                            ) ?>
-                                        </span>
-
-                                    <?php endif; ?>
-
-                                    <strong>
-                                        R$
-                                        <?= number_format(
-                                            $precoFinal,
-                                            2,
-                                            ',',
-                                            '.'
-                                        ) ?>
-                                    </strong>
-                                </p>
-
-                                <p>
-                                    <strong>Estoque:</strong>
-                                    <?= (int)$produto['estoque'] ?>
-                                </p>
-
-                                <p>
-                                    <strong>Descrição:</strong>
-                                    <?= escapar(
-                                        $produto['descricao'] ?: 'Sem descrição.'
-                                    ) ?>
-                                </p>
+                                <?php endif; ?>
 
                             </div>
 
-                            <?php if ($semEstoque): ?>
+                            <div class="produto-card-conteudo">
 
-                                <button
-                                    type="button"
-                                    class="botao-comprar"
-                                    disabled
-                                >
-                                    Sem estoque
-                                </button>
+                                <span class="produto-categoria">
+                                    <?= escapar($produto['categoria'] ?? 'Não definida') ?>
+                                </span>
 
-                            <?php else: ?>
+                                <h3><?= escapar($produto['nome']) ?></h3>
 
-                                <form
-                                    method="POST"
-                                    action="Painel.php"
-                                    class="form-comprar"
-                                >
+                                <div class="produto-painel-dados">
 
-                                    <input
-                                        type="hidden"
-                                        name="csrf_token"
-                                        value="<?= escapar($_SESSION['csrf_painel']) ?>"
-                                    >
+                                    <p>
+                                        <strong>Estoque:</strong>
+                                        <?= (int)$produto['estoque'] ?> unidade(s)
+                                    </p>
 
-                                    <input
-                                        type="hidden"
-                                        name="acao"
-                                        value="comprar"
-                                    >
+                                    <p class="produto-descricao">
+                                        <?= escapar($produto['descricao'] ?: 'Sem descrição.') ?>
+                                    </p>
 
-                                    <input
-                                        type="hidden"
-                                        name="produto_id"
-                                        value="<?= (int)$produto['id'] ?>"
-                                    >
+                                </div>
 
-                                    <button
-                                        type="submit"
-                                        class="botao-comprar"
-                                    >
-                                        Comprar
-                                    </button>
+                                <div class="produto-card-rodape">
 
-                                </form>
+                                    <div class="produto-preco">
 
-                            <?php endif; ?>
+                                        <?php if ($precoFinal < (float)$produto['preco']): ?>
+                                            <span class="preco-antigo">
+                                                R$ <?= number_format((float)$produto['preco'], 2, ',', '.') ?>
+                                            </span>
+                                        <?php endif; ?>
+
+                                        <strong>
+                                            R$ <?= number_format($precoFinal, 2, ',', '.') ?>
+                                        </strong>
+
+                                    </div>
+
+                                    <?php if ($semEstoque): ?>
+
+                                        <button type="button" class="botao-comprar" disabled>
+                                            Sem estoque
+                                        </button>
+
+                                    <?php else: ?>
+
+                                        <form method="POST" action="Painel.php" class="form-comprar">
+
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="<?= escapar($_SESSION['csrf_painel']) ?>"
+                                            >
+
+                                            <input
+                                                type="hidden"
+                                                name="acao"
+                                                value="adicionar_carrinho"
+                                            >
+
+                                            <input
+                                                type="hidden"
+                                                name="produto_id"
+                                                value="<?= (int)$produto['id'] ?>"
+                                            >
+
+                                            <button type="submit" class="botao-comprar">
+                                                🛒 Adicionar ao carrinho
+                                            </button>
+
+                                        </form>
+
+                                        <?php if ($quantidadeNoCarrinho > 0): ?>
+                                            <small class="produto-no-carrinho">
+                                                <?= $quantidadeNoCarrinho ?> unidade(s) no carrinho
+                                            </small>
+                                        <?php endif; ?>
+
+                                    <?php endif; ?>
+
+                                </div>
+
+                            </div>
 
                         </article>
 
@@ -790,8 +1005,159 @@ function escapar($valor) {
 
         </section>
 
-    </main>
+    </div>
+
+    <aside class="carrinho-flutuante">
+
+        <div class="carrinho-cabecalho">
+            <div>
+                <h2>🛒 Meu carrinho</h2>
+                <span>
+                    <?= $quantidadeTotalCarrinho ?>
+                    unidade(s)
+                </span>
+            </div>
+        </div>
+
+        <?php if (empty($itensCarrinho)): ?>
+
+            <div class="carrinho-vazio">
+                <span>🛍️</span>
+                <p>Seu carrinho está vazio.</p>
+                <small>Adicione móveis para começar!</small>
+            </div>
+
+        <?php else: ?>
+
+            <div class="carrinho-lista">
+
+                <?php foreach ($itensCarrinho as $item): ?>
+
+                    <div class="carrinho-item">
+
+                        <div class="carrinho-item-info">
+
+                            <strong><?= escapar($item['nome']) ?></strong>
+
+                            <span>
+                                <?= (int)$item['quantidade_carrinho'] ?>x
+                                R$ <?= number_format($item['preco_carrinho'], 2, ',', '.') ?>
+                            </span>
+
+                            <b>
+                                R$ <?= number_format($item['subtotal_centavos'] / 100, 2, ',', '.') ?>
+                            </b>
+
+                            <?php if ((int)$item['ativo'] !== 1): ?>
+                                <small class="carrinho-alerta">Produto indisponível</small>
+                            <?php elseif ((int)$item['estoque'] < (int)$item['quantidade_carrinho']): ?>
+                                <small class="carrinho-alerta">Estoque insuficiente</small>
+                            <?php endif; ?>
+
+                        </div>
+
+                        <form method="POST" action="Painel.php" class="form-adicionar-carrinho">
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="<?= escapar($_SESSION['csrf_painel']) ?>"
+                            >
+
+                            <input type="hidden" name="acao" value="remover_carrinho">
+
+                            <input
+                                type="hidden"
+                                name="produto_id"
+                                value="<?= (int)$item['id'] ?>"
+                            >
+
+                            <button
+                                type="submit"
+                                class="carrinho-remover"
+                                title="Remover produto"
+                            >
+                                ✕
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+            <div class="carrinho-total">
+                <span>Total</span>
+                <strong>
+                    R$ <?= number_format($totalCarrinhoCentavos / 100, 2, ',', '.') ?>
+                </strong>
+            </div>
+
+            <div class="carrinho-saldo">
+                Seu saldo:
+                <strong>
+                    R$ <?= number_format((float)$usuarioAtual['saldo'], 2, ',', '.') ?>
+                </strong>
+            </div>
+
+            <form method="POST" action="Painel.php">
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= escapar($_SESSION['csrf_painel']) ?>"
+                >
+
+                <input type="hidden" name="acao" value="comprar_carrinho">
+
+                <button type="submit" class="carrinho-comprar">
+                    Comprar todos
+                </button>
+
+            </form>
+
+            <form method="POST" action="Painel.php">
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= escapar($_SESSION['csrf_painel']) ?>"
+                >
+
+                <input type="hidden" name="acao" value="limpar_carrinho">
+
+                <button type="submit" class="carrinho-limpar">
+                    Esvaziar carrinho
+                </button>
+
+            </form>
+
+        <?php endif; ?>
+
+    </aside>
+
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        document.querySelectorAll('.form-comprar').forEach(form => {
+            form.addEventListener('submit', function () {
+                sessionStorage.setItem('posicaoPainel', window.scrollY);
+            });
+        });
+
+        window.addEventListener('load', function () {
+            const posicao = sessionStorage.getItem('posicaoPainel');
+
+            if (posicao !== null) {
+                window.scrollTo(0, parseInt(posicao, 10));
+                sessionStorage.removeItem('posicaoPainel');
+            }
+        });
+    </script>
 
 </body>
 </html>
-

@@ -88,8 +88,6 @@ if (isset($_GET['pesquisar'])) {
 
     <nav>
         <a href="Painel.php">Início</a>
-        <a href="Moveis.php">Móveis</a>
-        <a href="AdmMoveis.php">Administração de Móveis (ADM ONLY)</a>
         <a href="AdmUsuarios.php">Administração de Usuários (ADM ONLY)</a>
         <a href="AdmCadastroMoveis.php">Cadastro de Móveis (ADM ONLY)</a>
     </nav>
@@ -111,8 +109,6 @@ if (isset($_GET['pesquisar'])) {
             unset($_SESSION['mensagem']);
         }
         ?>
-
-        <!-- PESQUISA DE MÓVEIS -->
 
         <div class="caixa pesquisa-caixa">
 
@@ -190,8 +186,6 @@ if (isset($_GET['pesquisar'])) {
                 </button>
 
             </form>
-
-            <!-- RESULTADOS DA PESQUISA -->
 
             <?php if (isset($_GET['pesquisar'])): ?>
 
@@ -293,8 +287,6 @@ if (isset($_GET['pesquisar'])) {
                                     ?>
                                 </p>
 
-                                <!-- BOTÃO DE EXCLUIR -->
-
                                 <form
                                     action="AdmMoveisDelete_back.php"
                                     method="POST"
@@ -319,8 +311,6 @@ if (isset($_GET['pesquisar'])) {
                                 </form>
 
                                 <br>
-
-                                <!-- BOTÃO DE EDITAR -->
 
                                 <button
                                     type="button"
@@ -363,10 +353,6 @@ if (isset($_GET['pesquisar'])) {
 
         </div>
 
-        <!-- FIM DA PESQUISA -->
-
-        <!-- FORMULÁRIO DE EDIÇÃO -->
-
         <div
             class="formularios"
             id="formulario_edicao"
@@ -385,8 +371,6 @@ if (isset($_GET['pesquisar'])) {
                     method="POST"
                     action="AdmMoveisEdit_back.php"
                 >
-
-                    <!-- ID DO MÓVEL QUE SERÁ EDITADO -->
 
                     <input
                         type="hidden"
@@ -500,17 +484,13 @@ if (isset($_GET['pesquisar'])) {
 
         </div>
 
-        <!-- FIM DO FORMULÁRIO DE EDIÇÃO -->
-
     </main>
 
     <script>
         function revelarFormulario(botao) {
 
-            // Recupera os dados do móvel selecionado.
             const movel = JSON.parse(botao.dataset.movel);
 
-            // Preenche os campos do formulário.
             document.getElementById("edit_movel_id").value = movel.id;
             document.getElementById("edit_movel_nome").value = movel.nome;
             document.getElementById("edit_movel_estoque").value = movel.estoque;
@@ -519,12 +499,10 @@ if (isset($_GET['pesquisar'])) {
             document.getElementById("edit_movel_imagem").value = movel.imagem ?? "";
             document.getElementById("edit_movel_descricao").value = movel.descricao ?? "";
 
-            // Mostra o formulário.
             const formulario = document.getElementById("formulario_edicao");
 
             formulario.style.display = "block";
 
-            // Desce a página até o formulário.
             formulario.scrollIntoView({
                 behavior: "smooth",
                 block: "start"

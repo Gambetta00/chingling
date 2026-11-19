@@ -27,6 +27,7 @@ if (isset($_POST['sinal_clique'])) {
     }
 }
 
-
+header("Location: Painel.php");
+exit;
 
 ?>
