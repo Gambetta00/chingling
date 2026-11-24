@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'conexao_msql.php';
 $nome = $_POST['nome'];
 $email = $_POST["email"];
@@ -14,9 +15,13 @@ require_once 'Classe.php';
 $usuario = new Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao);
 
 if ($usuario->Set_Usuario($nome, $email, $senha, $cpf, $telefone, $classe, $conexao)) {
-    echo "Usuário cadastrado com sucesso!";
+    $_SESSION['mensagem'] = "Usuário cadastrado com sucesso";
+    header("Location: Login.php");
+    exit();
 } else {
-    echo "Erro ao cadastrar usuário.";
+    $_SESSION['mensagem'] = "Erro ao cadastrar usuário";
+    header("Location: Login.php");
+    exit();
 }
 
 ?>
